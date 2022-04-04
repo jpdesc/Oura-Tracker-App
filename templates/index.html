@@ -1,0 +1,53 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h4>Sleep Summary:</h4>
+{% if sleep %}
+<div>
+    <ul>
+        <li>Overall Sleep Score: {{sleep.sleep_score}}</li>
+        <li>REM Score: {{sleep.rem_score}}</li>
+        <li>Deep Score: {{sleep.deep_score}}</li>
+        <li>Efficiency Score: {{sleep.sleep_efficiency}}</li>
+        <li>Restlessness Score: {{sleep.restlessness}}</li>
+        <li>Total Sleep: {{sleep.total_sleep}}</li>
+        <li>Total REM Sleep: {{sleep.total_rem_sleep}}</li>
+        <li>Total Deep Sleep: {{sleep.total_deep_sleep}}</li>
+    </ul>
+</div>
+{% else %}
+    <i> No sleep data for today. Please make sure oura ring is on and connected to bluetooth for data transfer</i>
+{% endif %}
+ 
+{% if log %}
+    <H4>Notes:</H4> 
+    <br>
+    <p>{{log.journal}}</p>
+    <ul>
+        <li>Focus: {{log.focus}}</li>
+        <li>Energy: {{log.energy}}</li>
+        <li>Mood: {{log.mood}}</li>
+    </ul>
+{% else %}
+    <br>
+    <form method="POST">
+        {{ form.hidden_tag() }}
+        {{ form.journal_entry.label(class="form-label") }}
+        {{ form.journal_entry(class="form-control") }} <br><br>
+
+        {% for field in [form.focus, form.energy, form.mood] %}
+        {{ field.label(class="form-label") }}
+        {% for subfield in field %}
+        <tr>
+            <td>{{ subfield }}</td>
+            <td>{{ subfield.label }}</td>
+        </tr>
+        {% endfor %}
+        <br>
+        {% endfor %}
+        <br>
+        {{ form.submit(class="btn btn-dark") }}
+    </form>
+{% endif %}
+{% endblock %}
+
