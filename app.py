@@ -8,7 +8,6 @@ from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
 from datetime import date, timedelta, datetime
 import fetch_oura_data
-import inspect
 
 basedir = os.path.abspath(os.path.dirname(__file__))
 
@@ -32,11 +31,6 @@ class Log(db.Model):
   energy = db.Column(db.Integer)
   journal = db.Column(db.String)
   
-
-  def __repr__(self):
-    return '<Name %r>' % self.name
-
-
 class Sleep(db.Model):
   __tablename__ = 'sleep'
 
@@ -64,6 +58,18 @@ class JournalForm(FlaskForm):
           validators=[InputRequired()])
   submit = SubmitField("Submit")
 
+
+events = []
+
+sleep_query = Sleep.query.order_by(Sleep.id).all()
+for day in sleep_query:
+  events.append({'title':'Sleep', 'date':day.id})
+
+log_query = Log.query.order_by(Log.id).all()
+for day in log_query:
+  events.append({'title':'Journal Log', 'date':day.id})
+
+print(events)
 
 @app.route('/', methods=['GET', 'POST'])
 def index():
@@ -105,7 +111,7 @@ def index():
  
 @app.route('/calendar')
 def calendar():
-  return render_template('calendar.html')
+  return render_template('calendar.html', events=events)
 
 if __name__ == '__main__':
   fetch_oura_data.setup_oura_data()
