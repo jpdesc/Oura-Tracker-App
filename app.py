@@ -1,5 +1,5 @@
 import os
-from flask import Flask, render_template, session, redirect, url_for
+from flask import Flask, render_template, session, redirect, url_for, request
 from flask_bootstrap import Bootstrap
 from flask_wtf import FlaskForm
 from wtforms import StringField, SubmitField, RadioField
@@ -69,7 +69,6 @@ log_query = Log.query.order_by(Log.id).all()
 for day in log_query:
   events.append({'title':'Journal Log', 'date':day.id})
 
-print(events)
 
 @app.route('/', methods=['GET', 'POST'])
 def index():
@@ -77,15 +76,21 @@ def index():
   focus = None
   mood = None
   energy = None
-  current_date = date.today()
+
+  if request.args.get('cal_date'):
+    selected_date = request.args.get('cal_date')
+  else:
+    selected_date = date.today()
+    
   form = JournalForm()
   try:
-    sleep = Sleep.query.filter(Sleep.id == current_date).first()
+    sleep = Sleep.query.filter(Sleep.id == selected_date).first()
+    print(sleep)
   except:
     print("Sleep = None")
     sleep = None
   try:
-    log = Log.query.filter(Log.id == current_date).first()
+    log = Log.query.filter(Log.id == selected_date).first()
   except:
     print("Log = None")
     log = None
@@ -99,13 +104,14 @@ def index():
     db.session.commit()
     form.journal_entry.data = ''
   
+  cal_date = None
   return render_template('index.html', 
     journal_entry = journal_entry,
     focus = focus, 
     mood = mood,
     energy = energy,
     form = form,
-    current_date = current_date,
+    selected_date = selected_date,
     sleep = sleep,
     log = log)
  

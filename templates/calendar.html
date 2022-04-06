@@ -17,13 +17,20 @@ import interactionPlugin from '@fullcalendar/interaction';
     ('calendar');
 
     let calendar = new FullCalendar.Calendar(calendarEl, {
-      plugins: [ interactionPlugin ],
-      events : [
-        {% for event in events %}
-      { title : '{{event['title']}}', 
-      start : '{{event['date']}}', }, 
-        {% endfor %}
+      events: [
+      {% for event in events %}
+      {
+      title : '{{event['title']}}',
+      start : '{{event['date']}}',
+      url: '{{ url_for('index', cal_date = event['date']) }}', 
+      },
+      {% endfor %}
       ],
+      eventClick: function(info) {
+        if (info.event.url) {
+          window.open(info.event.url);
+        }
+      }
     });
     calendar.render();
   </script>
