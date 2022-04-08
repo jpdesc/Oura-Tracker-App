@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 
 {% block content %}
-<h4>Sleep Summary ({{sleep.date}}):</h4>
+<h4>Sleep Summary:</h4>
 {% if sleep %}
 <div>
     <ul>
@@ -19,16 +19,7 @@
     <i> No sleep data for today. Please make sure oura ring is on and connected to bluetooth for data transfer</i>
 {% endif %}
  
-{% if log %}
-    <H4>Notes:</H4> 
-    <br>
-    <p>{{log.journal}}</p>
-    <ul>
-        <li>Focus: {{log.focus}}</li>
-        <li>Energy: {{log.energy}}</li>
-        <li>Mood: {{log.mood}}</li>
-    </ul>
-{% else %}
+    <H4> Notes:</H4> 
     <br>
     <form method="POST">
         {{ form.hidden_tag() }}
@@ -48,10 +39,5 @@
         <br>
         {{ form.submit(class="btn btn-dark") }}
     </form>
-    <br>
-    <br>
-    <a href="{{ url_for('edit_log',
-    page_id=page_id) }}">Edit Post</a>
 {% endif %}
 {% endblock %}
-
