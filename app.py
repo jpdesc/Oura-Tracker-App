@@ -68,23 +68,28 @@ def format_date(date_str):
 
 id_dict = {}
 events = []
+date_str_cal = {}
 today = date.today()
-
-all_days = [date(2022, 1, 1) + timedelta(days=x) for x in range((today - date(2022, 1, 1)).days + 5)]
-for i, day in enumerate(all_days):
-  id_dict[day] = i
 
 sleep_query = Sleep.query.order_by(Sleep.id).all()
 for day in sleep_query:
   events.append({'title':'Sleep', 'date':day.date, 'id':day.id})
+  
+
 
 log_query = Log.query.order_by(Log.id).all()
 for day in log_query:
   events.append({'title':'Journal Log', 'date':day.date, 'id':day.id})
 
+all_days = [date(2022, 1, 1) + timedelta(days=x) for x in range((today - date(2022, 1, 1)).days + 5)]
+for i, day in enumerate(all_days):
+  id_dict[day] = i
+  date_str_cal[str(day)] = id_dict[day]
+
 @app.route('/', defaults={'page_id': id_dict[today]}, methods=['GET', 'POST'])
 @app.route('/<int:page_id>', methods=['GET', 'POST'])
 def index(page_id):
+  print(page_id)
   journal_entry = None
   focus = None
   mood = None
@@ -96,6 +101,7 @@ def index(page_id):
     sleep = Sleep.query.filter(Sleep.id == page_id).first()
   except:
     sleep = None
+  print(sleep)
   try:
     log = Log.query.filter(Log.id == page_id).first()
   except:
@@ -112,6 +118,7 @@ def index(page_id):
     db.session.commit()
     form.journal_entry.data = ''
   
+  print('about to render')
   return render_template('index.html', 
     journal_entry = journal_entry,
     focus = focus, 
@@ -137,15 +144,23 @@ def edit_log(page_id):
     db.session.commit()
     return redirect(url_for('/<page_id>'))
   form.focus.data = log.focus
+  print(form.focus.data)
   form.mood.data = log.mood
   form.energy.data = log.energy
   form.journal_entry.data = log.journal
   return render_template('edit_post.html', form=form, sleep=sleep, page_id=page_id)
 
 
-@app.route('/calendar')
+@app.route('/calendar', methods = ['GET', 'POST'])
 def calendar():
   return render_template('calendar.html', events=events)
+
+@app.route('/process', methods = ['POST'] )
+def process():
+  date_str = request.form.get('date_str')
+  clicked_id = date_str_cal[date_str]
+  return redirect(url_for('index', page_id = clicked_id))
+
 
 if __name__ == '__main__':
   fetch_oura_data.setup_oura_data()

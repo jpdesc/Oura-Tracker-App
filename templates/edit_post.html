@@ -29,6 +29,7 @@
         {% for field in [form.focus, form.energy, form.mood] %}
         {{ field.label(class="form-label") }}
         {% for subfield in field %}
+        
         <tr>
             <td>{{ subfield }}</td>
             <td>{{ subfield.label }}</td>
@@ -39,5 +40,5 @@
         <br>
         {{ form.submit(class="btn btn-dark") }}
     </form>
-{% endif %}
+
 {% endblock %}

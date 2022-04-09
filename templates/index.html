@@ -28,6 +28,10 @@
         <li>Energy: {{log.energy}}</li>
         <li>Mood: {{log.mood}}</li>
     </ul>
+    <br>
+    <br>
+    <a href="{{ url_for('edit_log',
+    page_id=page_id) }}">Edit Post</a>
 {% else %}
     <br>
     <form method="POST">
@@ -49,9 +53,7 @@
         {{ form.submit(class="btn btn-dark") }}
     </form>
     <br>
-    <br>
-    <a href="{{ url_for('edit_log',
-    page_id=page_id) }}">Edit Post</a>
+    <b></b>r
 {% endif %}
 {% endblock %}
 

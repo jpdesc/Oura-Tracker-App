@@ -7,6 +7,7 @@ import interactionPlugin from '@fullcalendar/interaction';
     {{ super() }}
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/fullcalendar@5.10.2/main.min.css">
     <script src="https://cdn.jsdelivr.net/npm/fullcalendar@5.10.2/main.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.0/jquery.min.js"></script>
 {% endblock %}
 
 {% block content %}
@@ -31,6 +32,17 @@ import interactionPlugin from '@fullcalendar/interaction';
         if (info.event.url) {
           window.open(info.event.url);
         }
+      },
+      dateClick: function(date) {
+        var date_str = date.dateStr
+        $.ajax({
+          data : {date_str : date_str},
+          url : '{{url_for('process')}}',
+          type : "POST",
+        })
+        .done (function(response){
+          document.write(response);
+        })
       }
     });
     calendar.render();
