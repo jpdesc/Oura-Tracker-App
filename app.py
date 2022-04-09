@@ -7,7 +7,7 @@ from wtforms.validators import DataRequired, InputRequired
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
 from datetime import date, timedelta, datetime
-# import fetch_oura_data
+import fetch_oura_data
 
 
 
@@ -62,105 +62,105 @@ class JournalForm(FlaskForm):
           validators=[InputRequired()])
   submit = SubmitField("Submit")
 
-# def format_date(date_str):
-#   formatted_date = date.strptime(date_str, "%Y-%m-%d")
-#   return formatted_date
+def format_date(date_str):
+  formatted_date = date.strptime(date_str, "%Y-%m-%d")
+  return formatted_date
 
-# id_dict = {}
-# events = []
-# date_str_cal = {}
-# today = date.today()
+id_dict = {}
+events = []
+date_str_cal = {}
+today = date.today()
 
-# sleep_query = Sleep.query.order_by(Sleep.id).all()
-# for day in sleep_query:
-#   events.append({'title':'Sleep', 'date':day.date, 'id':day.id})
+sleep_query = Sleep.query.order_by(Sleep.id).all()
+for day in sleep_query:
+  events.append({'title':'Sleep', 'date':day.date, 'id':day.id})
   
 
 
-# log_query = Log.query.order_by(Log.id).all()
-# for day in log_query:
-#   events.append({'title':'Journal Log', 'date':day.date, 'id':day.id})
+log_query = Log.query.order_by(Log.id).all()
+for day in log_query:
+  events.append({'title':'Journal Log', 'date':day.date, 'id':day.id})
 
-# all_days = [date(2022, 1, 1) + timedelta(days=x) for x in range((today - date(2022, 1, 1)).days + 5)]
-# for i, day in enumerate(all_days):
-#   id_dict[day] = i
-#   date_str_cal[str(day)] = id_dict[day]
+all_days = [date(2022, 1, 1) + timedelta(days=x) for x in range((today - date(2022, 1, 1)).days + 5)]
+for i, day in enumerate(all_days):
+  id_dict[day] = i
+  date_str_cal[str(day)] = id_dict[day]
 
-# @app.route('/', defaults={'page_id': id_dict[today]}, methods=['GET', 'POST'])
-# @app.route('/<int:page_id>', methods=['GET', 'POST'])
-# def index(page_id):
-#   print(page_id)
-#   journal_entry = None
-#   focus = None
-#   mood = None
-#   energy = None
+@app.route('/', defaults={'page_id': id_dict[today]}, methods=['GET', 'POST'])
+@app.route('/<int:page_id>', methods=['GET', 'POST'])
+def index(page_id):
+  print(page_id)
+  journal_entry = None
+  focus = None
+  mood = None
+  energy = None
 
-#   form = JournalForm()
+  form = JournalForm()
   
-#   try:
-#     sleep = Sleep.query.filter(Sleep.id == page_id).first()
-#   except:
-#     sleep = None
-#   print(sleep)
-#   try:
-#     log = Log.query.filter(Log.id == page_id).first()
-#   except:
-#     print("Log = None")
-#     log = None
+  try:
+    sleep = Sleep.query.filter(Sleep.id == page_id).first()
+  except:
+    sleep = None
+  print(sleep)
+  try:
+    log = Log.query.filter(Log.id == page_id).first()
+  except:
+    print("Log = None")
+    log = None
     
-#   if form.validate_on_submit():
-#     journal_entry = form.journal_entry.data
-#     focus = form.focus.data
-#     mood = form.mood.data
-#     energy = form.energy.data
-#     day_info = Log(journal=journal_entry, focus=focus, mood=mood, energy=energy, date=today, id=page_id)
-#     db.session.add(day_info)
-#     db.session.commit()
-#     form.journal_entry.data = ''
+  if form.validate_on_submit():
+    journal_entry = form.journal_entry.data
+    focus = form.focus.data
+    mood = form.mood.data
+    energy = form.energy.data
+    day_info = Log(journal=journal_entry, focus=focus, mood=mood, energy=energy, date=today, id=page_id)
+    db.session.add(day_info)
+    db.session.commit()
+    form.journal_entry.data = ''
   
-#   print('about to render')
-#   return render_template('index.html', 
-#     journal_entry = journal_entry,
-#     focus = focus, 
-#     mood = mood,
-#     energy = energy,
-#     form = form,
-#     page_id = page_id,
-#     sleep = sleep,
-#     log = log)
+  print('about to render')
+  return render_template('index.html', 
+    journal_entry = journal_entry,
+    focus = focus, 
+    mood = mood,
+    energy = energy,
+    form = form,
+    page_id = page_id,
+    sleep = sleep,
+    log = log)
 
-# @app.route('/edit/<int:page_id>', methods=['GET', 'POST'])
-# def edit_log(page_id):
+@app.route('/edit/<int:page_id>', methods=['GET', 'POST'])
+def edit_log(page_id):
   
-#   sleep = Log.query.get_or_404(page_id)
-#   log = Log.query.get_or_404(page_id)
-#   form = JournalForm()
-#   if form.validate_on_submit():
-#     log.focus = form.focus.data
-#     log.mood = form.mood.data
-#     log.energy = form.energy.data
-#     log.journal = form.journal_entry.data
-#     db.session.add(log)
-#     db.session.commit()
-#     return redirect(url_for('/<page_id>'))
-#   form.focus.data = str(log.focus)
-#   form.mood.data = str(log.mood)
-#   form.energy.data = str(log.energy)
-#   form.journal_entry.data = log.journal
-#   return render_template('edit_post.html', form=form, sleep=sleep, page_id=page_id)
+  sleep = Log.query.get_or_404(page_id)
+  log = Log.query.get_or_404(page_id)
+  form = JournalForm()
+  if form.validate_on_submit():
+    log.focus = form.focus.data
+    log.mood = form.mood.data
+    log.energy = form.energy.data
+    log.journal = form.journal_entry.data
+    db.session.add(log)
+    db.session.commit()
+    return redirect(url_for('/<page_id>'))
+  form.focus.data = str(log.focus)
+  form.mood.data = str(log.mood)
+  form.energy.data = str(log.energy)
+  form.journal_entry.data = log.journal
+  return render_template('edit_post.html', form=form, sleep=sleep, page_id=page_id)
 
 
-# @app.route('/calendar', methods = ['GET', 'POST'])
-# def calendar():
-#   return render_template('calendar.html', events=events)
+@app.route('/calendar', methods = ['GET', 'POST'])
+def calendar():
+  return render_template('calendar.html', events=events)
 
-# @app.route('/process', methods = ['POST'] )
-# def process():
-#   date_str = request.form.get('date_str')
-#   clicked_id = date_str_cal[date_str]
-#   return redirect(url_for('index', page_id = clicked_id))
+@app.route('/process', methods = ['POST'] )
+def process():
+  date_str = request.form.get('date_str')
+  clicked_id = date_str_cal[date_str]
+  return redirect(url_for('index', page_id = clicked_id))
 
 
-# if __name__ == '__main__':
-#   fetch_oura_data.setup_oura_data()
-#   app.run(debug=True)
+if __name__ == '__main__':
+  fetch_oura_data.setup_oura_data()
+  app.run(debug=True)
