@@ -52,7 +52,7 @@ class Sleep(db.Model):
 class JournalForm(FlaskForm):
   journal_entry = StringField("Notes: ", validators=[DataRequired()])
   focus = RadioField('Focus: ',
-          choices=['1', '2', '3', '4', '5', '6', '7', '8', '9', '10'],
+          choices=['1', '2', '3', '4', '5', '6', '7', '8', '9', '10'], 
           validators=[InputRequired()])
   mood = RadioField('Mood: ',
           choices=['1', '2', '3', '4', '5', '6', '7', '8', '9', '10'],
@@ -74,8 +74,6 @@ today = date.today()
 sleep_query = Sleep.query.order_by(Sleep.id).all()
 for day in sleep_query:
   events.append({'title':'Sleep', 'date':day.date, 'id':day.id})
-  
-
 
 log_query = Log.query.order_by(Log.id).all()
 for day in log_query:
@@ -89,7 +87,6 @@ for i, day in enumerate(all_days):
 @app.route('/', defaults={'page_id': id_dict[today]}, methods=['GET', 'POST'])
 @app.route('/<int:page_id>', methods=['GET', 'POST'])
 def index(page_id):
-  print(page_id)
   journal_entry = None
   focus = None
   mood = None
@@ -97,28 +94,20 @@ def index(page_id):
 
   form = JournalForm()
   
-  try:
-    sleep = Sleep.query.filter(Sleep.id == page_id).first()
-  except:
-    sleep = None
-  print(sleep)
-  try:
-    log = Log.query.filter(Log.id == page_id).first()
-  except:
-    print("Log = None")
-    log = None
+  sleep = Sleep.query.filter(Sleep.id == page_id).first()
+  log = Log.query.filter(Log.id == page_id).first()
     
   if form.validate_on_submit():
     journal_entry = form.journal_entry.data
     focus = form.focus.data
     mood = form.mood.data
     energy = form.energy.data
-    day_info = Log(journal=journal_entry, focus=focus, mood=mood, energy=energy, date=today, id=page_id)
+    day_info = Log(journal=journal_entry, focus=focus, mood=mood,\
+      energy=energy, date=today, id=page_id)
     db.session.add(day_info)
     db.session.commit()
     form.journal_entry.data = ''
   
-  print('about to render')
   return render_template('index.html', 
     journal_entry = journal_entry,
     focus = focus, 
@@ -131,10 +120,9 @@ def index(page_id):
 
 @app.route('/edit/<int:page_id>', methods=['GET', 'POST'])
 def edit_log(page_id):
-  
-  sleep = Log.query.get_or_404(page_id)
-  form = JournalForm()
+  sleep = Sleep.query.get_or_404(page_id)
   log = Log.query.get_or_404(page_id)
+  form = JournalForm(focus=log.focus, mood=log.mood, energy=log.energy, journal_entry=log.journal)
   if form.validate_on_submit():
     log.focus = form.focus.data
     log.mood = form.mood.data
@@ -142,14 +130,8 @@ def edit_log(page_id):
     log.journal = form.journal_entry.data
     db.session.add(log)
     db.session.commit()
-    return redirect(url_for('/<page_id>'))
-  form.focus.data = log.focus
-  print(form.focus.data)
-  form.mood.data = log.mood
-  form.energy.data = log.energy
-  form.journal_entry.data = log.journal
+    return redirect(url_for('index', page_id = page_id))
   return render_template('edit_post.html', form=form, sleep=sleep, page_id=page_id)
-
 
 @app.route('/calendar', methods = ['GET', 'POST'])
 def calendar():
