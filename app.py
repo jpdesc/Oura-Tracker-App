@@ -108,6 +108,7 @@ def index(page_id):
     db.session.commit()
     form.journal_entry.data = ''
   
+  print('about to render')
   return render_template('index.html', 
     journal_entry = journal_entry,
     focus = focus, 
