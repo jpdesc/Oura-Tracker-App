@@ -24,12 +24,12 @@ def pull_oura_data():
     return json_data
     
 def date_hook(json_dict):
-    """ Convert string object to datetime object within json dictionary using hook. 
+    ''' Convert string object to datetime object within json dictionary using hook. 
 
     This function will allow me to compare dates within broader calendar to sleep data
     in order to match up sleep data for a given date. If not a convertible string object,
     simply passes.
-    """
+    '''
     for (key, value) in json_dict.items():
         try:
             json_dict[key] = date.strptime(value, '%Y-%m-%d')

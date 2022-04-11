@@ -24,10 +24,20 @@ import interactionPlugin from '@fullcalendar/interaction';
       id : '{{ event['id'] }}',
       title : '{{ event['title'] }}',
       start : '{{ event['date'] }}',
-      url: '{{ url_for('index', page_id = event['id']) }}'
+      url: '{{ url_for('index', page_id = event['id']) }}',
+      {% if event.title == 'Sleep' %}
+      backgroundColor: 'light-blue',
+      borderColor: 'light-blue'
+      {% else %}
+      backgroundColor: '#21610B',
+      borderColor: '#21610B'
+      {% endif %}
       },
+      
+
       {% endfor %}
       ],
+      
       eventClick: function(info) {
         if (info.event.url) {
           window.open(info.event.url);

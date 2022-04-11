@@ -9,8 +9,6 @@ from flask_migrate import Migrate
 from datetime import date, timedelta, datetime
 import fetch_oura_data
 
-
-
 basedir = os.path.abspath(os.path.dirname(__file__))
 
 app = Flask(__name__)
@@ -62,22 +60,31 @@ class JournalForm(FlaskForm):
           validators=[InputRequired()])
   submit = SubmitField("Submit")
 
-def format_date(date_str):
-  formatted_date = date.strptime(date_str, "%Y-%m-%d")
-  return formatted_date
-
 id_dict = {}
 events = []
 date_str_cal = {}
 today = date.today()
 
-sleep_query = Sleep.query.order_by(Sleep.id).all()
-for day in sleep_query:
-  events.append({'title':'Sleep', 'date':day.date, 'id':day.id})
+def format_date(date_str):
+  formatted_date = date.strptime(date_str, "%Y-%m-%d")
+  return formatted_date
 
-log_query = Log.query.order_by(Log.id).all()
-for day in log_query:
-  events.append({'title':'Journal Log', 'date':day.date, 'id':day.id})
+def get_date(page_id, id_dict):
+  for key, value in id_dict.items():
+    if value == page_id:
+      return key
+
+def create_cal_events():
+  sleep_query = Sleep.query.order_by(Sleep.id).all()
+  for day in sleep_query:
+    events.append({'title':'Sleep', 'date':day.date, 'id':day.id})
+
+  log_query = Log.query.order_by(Log.id).all()
+  for day in log_query:
+    events.append({'title':'Journal Log', 'date':day.date, 'id':day.id})
+
+def update_log_events(submitted_log):
+  events.append({'title':'Journal Log', 'date':submitted_log.date, 'id':submitted_log.id})
 
 all_days = [date(2022, 1, 1) + timedelta(days=x) for x in range((today - date(2022, 1, 1)).days + 5)]
 for i, day in enumerate(all_days):
@@ -91,9 +98,8 @@ def index(page_id):
   focus = None
   mood = None
   energy = None
-
   form = JournalForm()
-  
+
   sleep = Sleep.query.filter(Sleep.id == page_id).first()
   log = Log.query.filter(Log.id == page_id).first()
     
@@ -106,18 +112,18 @@ def index(page_id):
       energy=energy, date=today, id=page_id)
     db.session.add(day_info)
     db.session.commit()
-    form.journal_entry.data = ''
+    update_log_events()
   
-  print('about to render')
   return render_template('index.html', 
     journal_entry = journal_entry,
     focus = focus, 
     mood = mood,
     energy = energy,
     form = form,
-    page_id = page_id,
     sleep = sleep,
-    log = log)
+    log = log,
+    page_id = page_id,
+    date = get_date(page_id, id_dict))
 
 @app.route('/edit/<int:page_id>', methods=['GET', 'POST'])
 def edit_log(page_id):
@@ -147,4 +153,5 @@ def process():
 
 if __name__ == '__main__':
   fetch_oura_data.setup_oura_data()
+  create_cal_events()
   app.run(debug=True)
