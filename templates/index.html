@@ -32,8 +32,8 @@
         </ul>
         <br>
         <br>
-        <a href="{{ url_for('edit_log',
-        page_id=page_id) }}" class="btn btn-info">Edit Post</a>
+        <a href="{{ url_for('edit_log', page_id=page_id) }}" 
+        class="btn btn-info">Edit Post</a>
 
         {% else %}
         <form method="POST">
@@ -52,7 +52,7 @@
             <br>
             {% endfor %}
             <br>
-            {{ form.submit(class="btn btn-dark") }}
+            {{ form.submit1(class="btn btn-dark") }}
         </form>
         {% endif %}
         

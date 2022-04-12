@@ -1,8 +1,9 @@
 import os
-from flask import Flask, render_template, session, redirect, url_for, request
+from io import BytesIO
+from flask import Flask, render_template, session, redirect, url_for, request, send_file
 from flask_bootstrap import Bootstrap
 from flask_wtf import FlaskForm
-from wtforms import StringField, SubmitField, RadioField
+from wtforms import StringField, SubmitField, RadioField, FileField
 from wtforms.validators import DataRequired, InputRequired
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
@@ -45,7 +46,15 @@ class Sleep(db.Model):
   rem_score = db.Column(db.Integer)
   deep_score = db.Column(db.Integer)
   total_sleep = db.Column(db.String)
-  
+
+# class Workout(db.Workout):
+#   id = db.Column(db.Integer, primary_key=True)
+#   date = db.Column(db.Date)
+#   type = db.Column(db.String)
+#   filename = db.Column(db.String(50))
+#   data = db.Column(db.LargeBinary)
+
+# Model.__table__.create(session.bind)
 
 class JournalForm(FlaskForm):
   journal_entry = StringField("Notes: ", validators=[DataRequired()])
@@ -58,7 +67,17 @@ class JournalForm(FlaskForm):
   energy = RadioField('Energy: ',
           choices=['1', '2', '3', '4', '5', '6', '7', '8', '9', '10'],
           validators=[InputRequired()])
-  submit = SubmitField("Submit")
+  submit1 = SubmitField("Submit")
+
+# class WorkoutForm(FlaskForm):
+#   soreness = RadioField('Energy: ',
+#           choices=['1', '2', '3', '4', '5', '6', '7', '8', '9', '10'],
+#           validators=[InputRequired()])
+#   workout_quality = RadioField('Workout Quality',
+#           choices=['1', '2', '3', '4', '5', '6', '7', '8', '9', '10'],
+#           validators=[InputRequired()])
+
+#   file = FileField()
 
 id_dict = {}
 events = []
@@ -99,7 +118,7 @@ def index(page_id):
   mood = None
   energy = None
   form = JournalForm()
-
+  # workout_form = WorkoutForm()
   sleep = Sleep.query.filter(Sleep.id == page_id).first()
   log = Log.query.filter(Log.id == page_id).first()
     
@@ -112,7 +131,7 @@ def index(page_id):
       energy=energy, date=today, id=page_id)
     db.session.add(day_info)
     db.session.commit()
-    update_log_events()
+    update_log_events(day_info)
   
   return render_template('index.html', 
     journal_entry = journal_entry,
@@ -127,7 +146,7 @@ def index(page_id):
 
 @app.route('/edit/<int:page_id>', methods=['GET', 'POST'])
 def edit_log(page_id):
-  sleep = Sleep.query.get_or_404(page_id)
+  sleep = Sleep.query.get(page_id)
   log = Log.query.get_or_404(page_id)
   form = JournalForm(focus=log.focus, mood=log.mood, energy=log.energy, journal_entry=log.journal)
   if form.validate_on_submit():
