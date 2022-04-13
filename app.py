@@ -1,6 +1,6 @@
 import os
 from io import BytesIO
-from flask import Flask, render_template, session, redirect, url_for, request, send_file
+from flask import Flask, render_template, session, redirect, url_for, request, send_file, jsonify, make_response
 from flask_bootstrap import Bootstrap
 from flask_wtf import FlaskForm
 from wtforms import StringField, SubmitField, RadioField, FileField
@@ -9,9 +9,11 @@ from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
 from datetime import date, timedelta, datetime
 import fetch_oura_data
+import json
+
+
 
 basedir = os.path.abspath(os.path.dirname(__file__))
-
 app = Flask(__name__)
 
 app.config['SECRET_KEY'] = 'random string'
@@ -59,22 +61,22 @@ class Sleep(db.Model):
 class JournalForm(FlaskForm):
   journal_entry = StringField("Notes: ", validators=[DataRequired()])
   focus = RadioField('Focus: ',
-          choices=['1', '2', '3', '4', '5', '6', '7', '8', '9', '10'], 
+          choices=['1', '2', '3', '4', '5'], 
           validators=[InputRequired()])
   mood = RadioField('Mood: ',
-          choices=['1', '2', '3', '4', '5', '6', '7', '8', '9', '10'],
+          choices=['1', '2', '3', '4', '5'],
           validators=[InputRequired()])
   energy = RadioField('Energy: ',
-          choices=['1', '2', '3', '4', '5', '6', '7', '8', '9', '10'],
+          choices=['1', '2', '3', '4', '5'],
           validators=[InputRequired()])
   submit1 = SubmitField("Submit")
 
 # class WorkoutForm(FlaskForm):
 #   soreness = RadioField('Energy: ',
-#           choices=['1', '2', '3', '4', '5', '6', '7', '8', '9', '10'],
+#           choices=['1', '2', '3', '4', '5'],
 #           validators=[InputRequired()])
 #   workout_quality = RadioField('Workout Quality',
-#           choices=['1', '2', '3', '4', '5', '6', '7', '8', '9', '10'],
+#           choices=['1', '2', '3', '4', '5'],
 #           validators=[InputRequired()])
 
 #   file = FileField()
@@ -105,6 +107,10 @@ def create_cal_events():
 def update_log_events(submitted_log):
   events.append({'title':'Journal Log', 'date':submitted_log.date, 'id':submitted_log.id})
 
+# def clear_cache():
+#   with app.app_context():
+#         cache.clear()
+
 all_days = [date(2022, 1, 1) + timedelta(days=x) for x in range((today - date(2022, 1, 1)).days + 5)]
 for i, day in enumerate(all_days):
   id_dict[day] = i
@@ -117,6 +123,7 @@ def index(page_id):
   focus = None
   mood = None
   energy = None
+  date = get_date(page_id, id_dict)
   form = JournalForm()
   # workout_form = WorkoutForm()
   sleep = Sleep.query.filter(Sleep.id == page_id).first()
@@ -128,7 +135,7 @@ def index(page_id):
     mood = form.mood.data
     energy = form.energy.data
     day_info = Log(journal=journal_entry, focus=focus, mood=mood,\
-      energy=energy, date=today, id=page_id)
+      energy=energy, date = date, id=page_id)
     db.session.add(day_info)
     db.session.commit()
     update_log_events(day_info)
@@ -142,7 +149,7 @@ def index(page_id):
     sleep = sleep,
     log = log,
     page_id = page_id,
-    date = get_date(page_id, id_dict))
+    date = date)
 
 @app.route('/edit/<int:page_id>', methods=['GET', 'POST'])
 def edit_log(page_id):
@@ -159,16 +166,20 @@ def edit_log(page_id):
     return redirect(url_for('index', page_id = page_id))
   return render_template('edit_post.html', form=form, sleep=sleep, page_id=page_id)
 
-@app.route('/calendar', methods = ['GET', 'POST'])
+@app.route('/calendar', methods = ['GET','POST'])
 def calendar():
   return render_template('calendar.html', events=events)
 
-@app.route('/process', methods = ['POST'] )
+@app.route('/process', methods = ['POST'])
 def process():
   date_str = request.form.get('date_str')
   clicked_id = date_str_cal[date_str]
-  return redirect(url_for('index', page_id = clicked_id))
-
+  session['url'] = url_for('index', page_id = clicked_id)
+  # response = json.loads('complete')
+  # response.status_code = 200 # or 400 or whatever
+  # print(type(json.dumps(clicked_id)))
+  return redirect(session['url'])
+# use session to pass value into jinja?
 
 if __name__ == '__main__':
   fetch_oura_data.setup_oura_data()

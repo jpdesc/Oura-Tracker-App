@@ -46,12 +46,24 @@ import interactionPlugin from '@fullcalendar/interaction';
       dateClick: function(date) {
         var date_str = date.dateStr
         $.ajax({
-          data : {date_str : date_str},
+          data : {'date_str' : date_str},
           url : '{{url_for('process')}}',
-          type : "POST",
-        })
-        .done (function(response){
+          method : 'POST',
+          // dataType: 'json',
+          // success: function(){
+            
+          // }
+        }).done (function(response){
+          // var url_str = '{{ session['url'] }}';
+          // console.log(url_str)
+          // var url = new URL(response);
+          // url.append(response);
           document.write(response);
+          window.history.pushState(undefined, '', '{{ session['url'] }}');
+          
+          
+
+          // window.history.pushState(undefined, '',"response");
         })
       }
     });
