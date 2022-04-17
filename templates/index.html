@@ -6,6 +6,7 @@
 </div>
 
         {% if sleep %}
+        <H5>Sleep Summary</H5>
         <ul>
             <li>Overall Sleep Score: {{sleep.sleep_score}}</li>
             <li>REM Score: {{sleep.rem_score}}</li>
@@ -20,41 +21,122 @@
           {% else %}
         <i> No sleep data for today. Please make sure oura ring is on and connected to bluetooth for data transfer.</i>
           {% endif %}
+        <div>
+        {% if readiness %}
+        <H5>Readiness Summary</H5>
+        <ul>
+            <li>Overall Readiness Score: {{readiness.readiness_score}}</li>
+            <li>HRV Balance Score: {{readiness.hrv_balance}}</li>
+            <li>Recovery Index: {{readiness.recovery_index}}</li>
+            <li>Resting HR Score: {{readiness.resting_hr}}</li>
+            <li>Temperature Score: {{readiness.temperature}}</li>
+        </ul>
+        {% endif %}
+        </div>
       
-      
+        
+        <H5>Wellness Log</H5> 
         {% if log %}
-        <H4>Notes:</H4> 
-        <p>{{log.journal}}</p>
         <ul>
             <li>Focus: {{log.focus}}</li>
             <li>Energy: {{log.energy}}</li>
             <li>Mood: {{log.mood}}</li>
         </ul>
+        <p>{{log.journal}}</p>
         <br>
-        <br>
+        {% if not workout %}
         <a href="{{ url_for('edit_log', page_id=page_id) }}" 
-        class="btn btn-info">Edit Post</a>
+        class="btn btn-info">Edit Wellness</a>
+        {% endif %}
+        <br>
 
         {% else %}
-        <form method="POST">
-            {{ form.hidden_tag() }}
-            {{ form.journal_entry.label(class="form-label") }}
-            {{ form.journal_entry(class="form-control") }} <br><br>
+        <div>
+        <form method="POST" >
+            
+            {{ wellness_form.hidden_tag() }}
+            
 
-            {% for field in [form.focus, form.energy, form.mood] %}
+            {% for field in [wellness_form.focus, wellness_form.energy, wellness_form.mood] %}
             {{ field.label(class="form-label") }}
             {% for subfield in field %}
             <tr>
                 <td>{{ subfield }}</td>
-                <td>{{ subfield.label }}</td>
+                <td>{{ subfield.label(class="form-label") }}</td>
             </tr>
             {% endfor %}
+            <br> 
+            {% endfor %}<br>
+            {{ wellness_form.journal_entry.label(class="form-label") }} <br>
+            {{ wellness_form.journal_entry()}}
             <br>
-            {% endfor %}
             <br>
-            {{ form.submit1(class="btn btn-dark") }}
-        </form>
+            {{ wellness_form.submit1(class="btn btn-dark") }}
+            </form>
+            </div>
+            {% endif %}
+
+
+            <div>
+                <H5>Workout Log</H5>
+            {% if workout %}
+            <ul>
+                <li>Workout Type: {{workout.type}}</li>
+                <li>Soreness Level: {{workout.soreness}}</li>
+                <li>Workout Intensity: {{workout.intensity}}</li>
+                <li>Uploaded Workout: <a href="{{url_for('download', page_id=page_id)}}" >{{workout.filename}}</a></li>
+            </ul>
+            <a href="{{ url_for('edit_log', page_id=page_id) }}" 
+            class="btn btn-info">Edit Wellness</a>
+
+            {% else %}
+            <form method="POST" enctype="multipart/form-data">
+            {{ workout_form.hidden_tag() }}
+            {{ workout_form.workout_type.label(class="form-label") }} <br>
+            {{ workout_form.workout_type()}} <br>
+            <div>--or--</div>
+            {{ workout_form.specify_other.label(class="form-label")}}<br>
+            {{ workout_form.specify_other }}<br><br>
+            {{ workout_form.soreness.label(class="form-label")}}<br>
+            {% for subfield in workout_form.soreness %}
+            <tr>
+                <td>{{ subfield }}</td>
+                <td>{{ subfield.label(class="form-label") }}</td>
+            </tr>
+            {% endfor %}<br><br>
+            {{ workout_form.intensity.label(class="form-label") }}<br>
+
+            {% for subfield in workout_form.intensity %}
+            <tr>
+                <td>{{ subfield }}</td>
+                <td>{{ subfield.label(class="form-label") }}</td>
+            </tr>
+            {% endfor %}<br><br>
+            {{ workout_form.file.label(class="form-label") }}<br>
+            {{ workout_form.file }}<br>
+
+            {{ workout_form.workout_log.label(class="form-label") }}<br>
+            {{ workout_form.workout_log }}<br><br>
+            {{  workout_form.submit2(class="btn btn-dark") }}
+            {% endif %}
+            
+            </form>
+
+            {% if log and workout %}
+            <a href="{{ url_for('edit_log', page_id=page_id) }}" 
+        class="btn btn-info">Edit Logs</a>
+        </div>
+        {% elif workout and not log %}
+        <a href="{{ url_for('edit_log', page_id=page_id) }}" 
+        class="btn btn-info">Edit Workout</a>
+        </div>
+        
         {% endif %}
+
+            
+        
+
+        
         
 {% endblock %}
 

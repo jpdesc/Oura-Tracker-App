@@ -1,27 +1,27 @@
 import json
-from json import JSONEncoder
 import os
 from datetime import date, timedelta, datetime, time
 import time
 from oura import OuraClient
 from dotenv import load_dotenv
-from app import Sleep, db
+from app import Sleep, db, Readiness, id_dict, Workout
 
-id_dict = {}
 
 def pull_oura_data():
-    '''pulls oura data from beginning of 2022 to today's date.'''
+    ''' Pulls oura data from beginning of 2022 to today's date.'''
     load_dotenv()
     oura_token = os.getenv('OURA_PERSONAL_ACCESS_TOKEN')
     oura_client = OuraClient(personal_access_token=oura_token)
     start_date = date(2022, 1, 1)
     end_date = date.today()
     sleep_summary = oura_client.sleep_summary(start=str(start_date))
+    readiness_summary = oura_client.readiness_summary(start=str(start_date))
     all_days = [start_date + timedelta(days=x) for x in range((end_date-start_date).days + 500)]
     for i, day in enumerate(all_days):
         id_dict[day] = i
-    json_data = json.dumps(sleep_summary)
-    return json_data
+    sleep_json = json.dumps(sleep_summary)
+    readiness_json = json.dumps(readiness_summary)
+    return [sleep_json, readiness_json]
     
 def date_hook(json_dict):
     ''' Convert string object to datetime object within json dictionary using hook. 
@@ -52,7 +52,6 @@ def convert_seconds(total_seconds):
     
 def add_sleep_to_db(json_dict):
     ''' Commit data to sleep database model.'''
-    
     selected_data = json.loads(json_dict, object_hook=date_hook)
     for entry in (selected_data['sleep']):
         day = format_date(entry['summary_date'])
@@ -70,10 +69,28 @@ def add_sleep_to_db(json_dict):
             db.session.add(prev_night_data)
         db.session.commit()
 
+def add_readiness_to_db(json_dict):
+    ''' Commit data to sleep database model.'''
+    selected_data = json.loads(json_dict, object_hook=date_hook)
+    for entry in (selected_data['readiness']):
+        day = format_date(entry['summary_date'])
+        if db.session.query(Readiness).filter_by(date=day).count() < 1:
+            prev_night_data = Readiness(date = day,
+                id = id_dict[day],
+                hrv_balance = entry['score_hrv_balance'],
+                recovery_index = entry['score_recovery_index'],
+                resting_hr = entry['score_resting_hr'],
+                temperature = entry['score_temperature'],
+                readiness_score = entry['score'])
+            db.session.add(prev_night_data)
+    db.session.commit()
+
+
 def setup_oura_data():
     ''' Executes all functions relating to sleep data, adding data 
     to databases. 
     '''
-    formatted_dict = pull_oura_data()
-    add_sleep_to_db(formatted_dict)
+    formatted_dicts = pull_oura_data()
+    add_sleep_to_db(formatted_dicts[0])
+    add_readiness_to_db(formatted_dicts[1])
 
