@@ -12,9 +12,6 @@ from datetime import date, timedelta, datetime
 import fetch_oura_data
 
 
-
-
-
 basedir = os.path.abspath(os.path.dirname(__file__))
 app = Flask(__name__)
 
@@ -73,10 +70,9 @@ class Workout(db.Model):
   data = db.Column(db.LargeBinary)
   workout_log = db.Column(db.String)
 
-# Model.__table__.create(session.bind)
 
 class JournalForm(FlaskForm):
-  journal_entry = StringField('Notes:', validators=[DataRequired()], widget=TextArea(), render_kw={'cols':35, 'rows':4})
+  journal_entry = StringField('Notes:', validators=[DataRequired()], widget=TextArea(), render_kw={'cols':25, 'rows':4})
   focus = RadioField('Focus: ',
           choices=['1', '2', '3', '4', '5'], 
           validators=[InputRequired()])
@@ -96,17 +92,15 @@ class WorkoutForm(FlaskForm):
           choices=['1', '2', '3', '4', '5'])
   workout_type = SelectField(choices=['Swim', 'Weights', 'Other'])
   specify_other = StringField("Specify other: ")
-  file = FileField('Upload Workout File')
-  workout_log = StringField('Notes:', widget=TextArea(), render_kw={'cols':35, 'rows':4})
+  file = FileField('Upload Workout File:')
+  workout_log = StringField('Workout Notes:', widget=TextArea(), render_kw={'cols':25, 'rows':4})
   submit2 = SubmitField("Submit Workout")
   
-
 
 id_dict = {}
 events = []
 date_str_cal = {}
 today = date.today()
-
 
 
 def format_date(date_str):
@@ -120,12 +114,16 @@ def get_date(page_id, id_dict):
 
 def create_cal_events():
   sleep_query = Sleep.query.order_by(Sleep.id).all()
-  for day in sleep_query:
-    events.append({'title':'Sleep', 'date':day.date, 'id':day.id})
+  for sleep in sleep_query:
+    events.append({'title':'Sleep', 'date':sleep.date, 'id':sleep.id})
 
   log_query = Log.query.order_by(Log.id).all()
-  for day in log_query:
-    events.append({'title':'Journal Log', 'date':day.date, 'id':day.id})
+  for log in log_query:
+    events.append({'title':'Wellness Log', 'date':log.date, 'id':log.id})
+
+  workout_query = Workout.query.order_by(Workout.id).all()
+  for workout in workout_query:
+    events.append({'title':workout.type, 'date':workout.date, 'id':workout.id})
 
 def update_log_events(submitted_log):
   events.append({'title':'Journal Log', 'date':submitted_log.date, 'id':submitted_log.id})
@@ -197,7 +195,7 @@ def edit_log(page_id):
   else:
     wellness_form = JournalForm()
   if workout:
-    workout_form = WorkoutForm(soreness=workout.soreness, intensity=workout.intensity,workout_type=workout.type, file=workout.file, workout_log=workout.workout_log)
+    workout_form = WorkoutForm(soreness=workout.soreness, intensity=workout.intensity,workout_type=workout.type, file=workout.data, workout_log=workout.workout_log)
   else:
     workout_form = WorkoutForm()
   if wellness_form.validate_on_submit():

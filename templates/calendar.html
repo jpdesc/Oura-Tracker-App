@@ -3,17 +3,27 @@
 import { Calendar } from '@fullcalendar/core';
 import interactionPlugin from '@fullcalendar/interaction';
 
+
+
 {% block head %}
-    {{ super() }}
+    
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/fullcalendar@5.10.2/main.min.css">
     <script src="https://cdn.jsdelivr.net/npm/fullcalendar@5.10.2/main.min.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.0/jquery.min.js"></script>
 {% endblock %}
 
 {% block content %}
+
+
 <div class="container">
   <div id="calendar"></div>
   <script>
+  const sleep_color = 'black';
+  const swim_color = 'light-blue';
+  const journal_color = '#08088A';
+  const weights_color = 'blue';
+
+
     let calendarEl = document.getElementById
     ('calendar');
 
@@ -26,11 +36,17 @@ import interactionPlugin from '@fullcalendar/interaction';
       start : '{{ event['date'] }}',
       url: '{{ url_for('index', page_id = event['id']) }}',
       {% if event.title == 'Sleep' %}
-      backgroundColor: 'light-blue',
-      borderColor: 'light-blue'
+      backgroundColor: sleep_color,
+      borderColor: sleep_color,
+      {% elif event.title == 'Wellness Log' %}
+      backgroundColor: journal_color,
+      borderColor: journal_color,
+      {% elif event.title == 'Weights' %}
+      backgroundColor: weights_color,
+      borderColor: weights_color,
       {% else %}
-      backgroundColor: '#21610B',
-      borderColor: '#21610B'
+      backgroundColor: swim_color,
+      borderColor: swim_color,
       {% endif %}
       },
       
