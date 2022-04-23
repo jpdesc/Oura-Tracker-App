@@ -60,18 +60,23 @@ import interactionPlugin from '@fullcalendar/interaction';
         }
       },
       dateClick: function(date) {
-        var date_str = date.dateStr
+        var date_str = date.dateStr;
+        var xhr = new XMLHttpRequest();
         $.ajax({
           data : {'date_str' : date_str},
           url : '{{url_for('process')}}',
           method : 'POST',
+          cache: false,
+          xhr: function(){
+            return xhr;
+          }
         }).done (function(response){
-          document.write(response);
-          window.history.pushState(undefined, '', '{{ session['url'] }}');
+          document.write(response)
+          window.history.pushState(undefined, '', xhr.responseURL)
         })
       }
     });
-    calendar.render();
+  calendar.render();
   </script>
 </div>
 {% endblock %}

@@ -1,5 +1,6 @@
-import os
 from io import BytesIO
+import os
+import click
 from flask import Flask, render_template, session, redirect, url_for, request, send_file, jsonify, make_response
 from flask_bootstrap import Bootstrap
 from flask_wtf import FlaskForm
@@ -10,12 +11,12 @@ from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
 from datetime import date, timedelta, datetime
 import fetch_oura_data
-
+from weights_data import *
 
 basedir = os.path.abspath(os.path.dirname(__file__))
 app = Flask(__name__)
 
-app.config['SECRET_KEY'] = 'random string'
+app.config['SECRET_KEY'] = 'random string' #TODO: Change to actual password.
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///' + os.path.join(basedir, 'data.sqlite')
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
@@ -23,7 +24,6 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 bootstrap = Bootstrap(app)
 db = SQLAlchemy(app)
 migrate = Migrate(app, db)
-
 
 class Log(db.Model):
   __tablename__ = 'log'
@@ -69,10 +69,12 @@ class Workout(db.Model):
   filename = db.Column(db.String(50))
   data = db.Column(db.LargeBinary)
   workout_log = db.Column(db.String)
+  workout_id = db.Column(db.Integer)
+  workout_week = db.Column(db.Integer)
 
 
 class JournalForm(FlaskForm):
-  journal_entry = StringField('Notes:', validators=[DataRequired()], widget=TextArea(), render_kw={'cols':25, 'rows':4})
+  journal = StringField('Notes:', validators=[DataRequired()], widget=TextArea(), render_kw={'cols':25, 'rows':4})
   focus = RadioField('Focus: ',
           choices=['1', '2', '3', '4', '5'], 
           validators=[InputRequired()])
@@ -102,7 +104,6 @@ events = []
 date_str_cal = {}
 today = date.today()
 
-
 def format_date(date_str):
   formatted_date = date.strptime(date_str, "%Y-%m-%d")
   return formatted_date
@@ -126,7 +127,26 @@ def create_cal_events():
     events.append({'title':workout.type, 'date':workout.date, 'id':workout.id})
 
 def update_log_events(submitted_log):
-  events.append({'title':'Journal Log', 'date':submitted_log.date, 'id':submitted_log.id})
+  events.append({'title':'Wellness Log', 'date':submitted_log.date, 'id':submitted_log.id})
+  
+def update_workout_events(submitted_log, type):
+  events.append({'title': type, 'date':submitted_log.date, 'id':submitted_log.id})
+
+def get_workout_week_num():
+  last_workout = Workout.query.order_by(Workout.type == "Weights", Workout.id.desc()).first()
+  if last_workout.workout_id == 4:
+    week = last_workout.workout_week + 1
+  else:
+    week = last_workout.workout_week
+  return week
+
+def get_workout_id():
+  last_workout = Workout.query.order_by(Workout.type == "Weights", Workout.id.desc()).first()
+  if last_workout.workout_id == 4:
+    workout_id = 1
+  else:
+    workout_id = last_workout.workout_id + 1
+  return workout_id
 
 all_days = [date(2022, 1, 1) + timedelta(days=x) for x in range((today - date(2022, 1, 1)).days + 5)]
 for i, day in enumerate(all_days):
@@ -147,11 +167,11 @@ def index(page_id):
     
   if wellness_form.validate_on_submit():
     
-    journal_entry = wellness_form.journal_entry.data
+    journal = wellness_form.journal.data
     focus = wellness_form.focus.data
     mood = wellness_form.mood.data
     energy = wellness_form.energy.data
-    wellness_info = Log(journal=journal_entry, focus=focus, mood=mood,\
+    wellness_info = Log(journal=journal, focus=focus, mood=mood,\
       energy=energy, date=date, id=page_id)
     db.session.add(wellness_info)
     db.session.commit()
@@ -168,10 +188,11 @@ def index(page_id):
     workout_log = workout_form.workout_log.data
     workout_info = Workout(data=file.read(), date=date, id=page_id,\
       filename=file.filename, type=type, soreness=soreness, 
-      intensity=intensity, workout_log=workout_log)
+      intensity=intensity, workout_log=workout_log,\
+      workout_week = get_workout_week_num(), workout_id=get_workout_id())
     db.session.add(workout_info)
     db.session.commit()
-    #TODO: Implement workout events.
+    update_workout_events(workout_info, type)
     return redirect(url_for('index', page_id=page_id))
 
   return render_template('index.html', 
@@ -191,7 +212,7 @@ def edit_log(page_id):
   log = Log.query.get(page_id)
   workout = Workout.query.get(page_id)
   if log:
-    wellness_form = JournalForm(focus=log.focus, mood=log.mood, energy=log.energy, journal_entry=log.journal)
+    wellness_form = JournalForm(focus=log.focus, mood=log.mood, energy=log.energy, journal=log.journal)
   else:
     wellness_form = JournalForm()
   if workout:
@@ -199,18 +220,18 @@ def edit_log(page_id):
   else:
     workout_form = WorkoutForm()
   if wellness_form.validate_on_submit():
-    wellness_form.focus = wellness_form.focus.data
-    wellness_form.mood = wellness_form.mood.data
-    wellness_form.energy = wellness_form.energy.data
-    wellness_form.journal_entry = wellness_form.journal_entry.data
+    log.focus = wellness_form.focus.data
+    log.mood = wellness_form.mood.data
+    log.energy = wellness_form.energy.data
+    log.journal = wellness_form.journal.data
     db.session.add(log)
     db.session.commit()
     return redirect(url_for('index', page_id = page_id))
   if workout_form.validate_on_submit():
-    workout_form.soreness = workout_form.soreness.data
-    workout_form.intensity = workout_form.intensity.data
-    workout_form.workout_type = workout_form.workout_type.data
-    workout_form.file = workout_form.file.data
+    workout.soreness = workout_form.soreness.data
+    workout.intensity = workout_form.intensity.data
+    workout.workout_type = workout_form.workout_type.data
+    workout.file = workout_form.file.data
     db.session.add(workout)
     db.session.commit()
     return redirect(url_for('index', page_id = page_id))
@@ -218,26 +239,28 @@ def edit_log(page_id):
 
 @app.route('/calendar', methods = ['GET','POST'])
 def calendar():
+  session['url'] = url_for('index', page_id = None)
   return render_template('calendar.html', events=events)
 
 @app.route('/process', methods = ['POST'])
 def process():
   ''' Used to process ajax call for calendar event clicks.
   Routes to the correct index page based on the page_id/dates. 
-  Session['url'] gets used by ajax call in calendar.html
-  to update URL concurrently.
   '''
   date_str = request.form.get('date_str')
   clicked_id = date_str_cal[date_str]
-  session['url'] = None
-  session['url'] = url_for('index', page_id = clicked_id)
-  return redirect(session['url'])
+  return redirect(url_for('index', page_id = clicked_id))
 
 @app.route('/download/<page_id>')
 def download(page_id):
     workout = Workout.query.filter_by(id=page_id).first()
     return send_file(BytesIO(workout.data), attachment_filename=workout.filename, as_attachment = True)
 
+@app.route('/weights/<page_id>')
+def weights(page_id):
+  workout = Workout.query.filter_by(id=page_id).first()
+  workout_data = get_weights_data(workout.workout_id, workout.workout_week)
+  return render_template('workout.html', page_id=page_id, workout=workout, workout_data=workout_data)
 
 if __name__ == '__main__':
   fetch_oura_data.setup_oura_data()

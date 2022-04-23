@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+
+{% block content %}
+<table class="table">
+    <thead>
+      <tr>
+        <th scope="col">Exercises</th>
+        <th scope="col">Set Range</th>
+        <th scope="col">Reps</th>
+        <th scope="col">Weight</th>
+      </tr>
+    </thead>
+    <tbody>
+    {% for i in range(workout_data[0]| length) %}
+      <tr>
+        <th scope="row">{{workout_data[0][i]}}</th>
+        <td>{{workout_data[1][i]}}</td>
+        <td>{{workout_data[2][i]}}</td>
+        <td>{{workout_data[3][i]}}</td>
+      </tr>
+    {% endfor %}
+    </tbody>
+  </table>
+{% endblock %}

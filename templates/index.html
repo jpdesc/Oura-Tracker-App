@@ -17,7 +17,9 @@
         <div class="col">
         
         <div class="p-3 border bg-light">
+              
         <H5>Sleep Summary</H5>
+    
         </div>
         
         <div class="p-3 border">
@@ -88,13 +90,14 @@
             <li>Energy: {{log.energy}}</li>
             <li>Mood: {{log.mood}}</li>
         </ul>
-        <p>{{log.journal}}</p>
-        <br>
+        <div>Wellness Notes:<hr><i>{{log.journal}}</i></div>
+        
         {% if not workout %}
+        <br>
         <a href="{{ url_for('edit_log', page_id=page_id) }}" 
         class="btn btn-info">Edit Wellness</a>
         {% endif %}
-        <br>
+
 
         {% else %}
         <div>
@@ -113,8 +116,8 @@
             {% endfor %}
             <br> 
             {% endfor %}<br>
-            {{ wellness_form.journal_entry.label(class="form-label") }} <br>
-            {{ wellness_form.journal_entry()}}
+            {{ wellness_form.journal.label(class="form-label") }} <br>
+            {{ wellness_form.journal()}}
             <br>
             <br>
             {{ wellness_form.submit1(class="btn btn-dark") }}
@@ -134,8 +137,15 @@
                 <li>Workout Type: {{workout.type}}</li>
                 <li>Soreness Level: {{workout.soreness}}</li>
                 <li>Workout Intensity: {{workout.intensity}}</li>
+                {% if workout.filename %}
                 <li>Uploaded Workout: <a href="{{url_for('download', page_id=page_id)}}" >{{workout.filename}}</a></li>
+                {% endif %}
             </ul>
+            <div>Workout Notes:<hr> <i>{{workout.workout_log}}</i>
+            {% if workout.type == "Weights" %}
+            <a href={{url_for('weights', page_id=page_id)}}>View Workout</a>
+            {% endif %}
+            </div>
            
 
             {% else %}
