@@ -1,0 +1,15 @@
+.button-left {
+    float: left;
+    padding: 10px;
+ }
+ .button-right{
+     float: right;
+     padding: 10px;
+ }
+.wrapper{
+    width: 100%;
+  /* height: 400px; */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}

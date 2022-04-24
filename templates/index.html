@@ -151,8 +151,8 @@
             {% else %}
             <form method="POST" enctype="multipart/form-data">
             {{ workout_form.hidden_tag() }}
-            {{ workout_form.workout_type.label(class="form-label") }}:<br>
-            {{ workout_form.workout_type()}} <br><br>
+            {{ workout_form.type.label(class="form-label") }}:<br>
+            {{ workout_form.type()}} <br><br>
             <i><div>--or--</div><br></i>
             {{ workout_form.specify_other.label(class="form-label")}}<br>
             {{ workout_form.specify_other }}<br><br>
@@ -194,9 +194,19 @@
     </div>
 </div><br>
 {% if log and workout %}
-            <a href="{{ url_for('edit_log', page_id=page_id) }}" 
+    <div class="wrapper">
+        <a href="{{ url_for('edit_log', page_id=page_id) }}" 
         class="btn btn-info">Edit Logs</a>
+    </div>
         {% endif %}
+<br>
+<br>
+</div>
+<div class="button-left">
+<button class="btn btn-outline-secondary" id="back" onclick="window.location.href='{{ url_for('index', page_id=page_id-1) }}'">Previous Day</button>
+</div>
+<div class="button-right">
+<button class="btn btn-outline-secondary" id="forward" onclick="window.location.href='{{ url_for('index', page_id=page_id+1) }}'">Next Day</button>
 </div>
 </div>
 {% endblock %}

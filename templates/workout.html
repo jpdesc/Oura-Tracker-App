@@ -11,12 +11,14 @@
       </tr>
     </thead>
     <tbody>
-    {% for i in range(workout_data[0]| length) %}
+    {% for i in range(formatted_workout[0]| length) %}
+    
       <tr>
-        <th scope="row">{{workout_data[0][i]}}</th>
-        <td>{{workout_data[1][i]}}</td>
-        <td>{{workout_data[2][i]}}</td>
-        <td>{{workout_data[3][i]}}</td>
+        <th scope="row"> 
+            {{formatted_workout[0][i]}}</th>
+        <td>{{formatted_workout[1][i]}}</td>
+        <td>{{formatted_workout[2][i]}}</td>
+        <td>{{formatted_workout[3][i]}}</td>
       </tr>
     {% endfor %}
     </tbody>

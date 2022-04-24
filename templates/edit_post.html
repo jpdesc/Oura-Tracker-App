@@ -141,8 +141,8 @@
             {% else %}
             <form method="POST" enctype="multipart/form-data">
             {{ workout_form.hidden_tag() }}
-            {{ workout_form.workout_type.label(class="form-label") }}:<br>
-            {{ workout_form.workout_type()}} <br><br>
+            {{ workout_form.type.label(class="form-label") }}:<br>
+            {{ workout_form.type()}} <br><br>
             <i><div>--or--</div><br></i>
             {{ workout_form.specify_other.label(class="form-label")}}<br>
             {{ workout_form.specify_other }}<br><br>

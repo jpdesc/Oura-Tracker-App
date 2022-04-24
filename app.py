@@ -1,6 +1,5 @@
 from io import BytesIO
 import os
-import click
 from flask import Flask, render_template, session, redirect, url_for, request, send_file, jsonify, make_response
 from flask_bootstrap import Bootstrap
 from flask_wtf import FlaskForm
@@ -92,7 +91,7 @@ class WorkoutForm(FlaskForm):
   workout = BooleanField("Did you work out today?")
   intensity = RadioField('Workout Intensity:',
           choices=['1', '2', '3', '4', '5'])
-  workout_type = SelectField(choices=['Swim', 'Weights', 'Other'])
+  type = SelectField(choices=['Swim', 'Weights', 'Other'])
   specify_other = StringField("Specify other: ")
   file = FileField('Upload Workout File:')
   workout_log = StringField('Workout Notes:', widget=TextArea(), render_kw={'cols':25, 'rows':4})
@@ -180,8 +179,8 @@ def index(page_id):
 
   if workout_form.validate_on_submit():
     file = request.files[str(workout_form.file.name)]
-    type = workout_form.workout_type.data
-    if not type:
+    type = workout_form.type.data
+    if type == "Other":
       type = workout_form.specify_other.data
     soreness = workout_form.soreness.data
     intensity = workout_form.intensity.data
@@ -216,7 +215,7 @@ def edit_log(page_id):
   else:
     wellness_form = JournalForm()
   if workout:
-    workout_form = WorkoutForm(soreness=workout.soreness, intensity=workout.intensity,workout_type=workout.type, file=workout.data, workout_log=workout.workout_log)
+    workout_form = WorkoutForm(soreness=workout.soreness, intensity=workout.intensity,type=workout.type, specify_other= None, file=workout.data, workout_log=workout.workout_log)
   else:
     workout_form = WorkoutForm()
   if wellness_form.validate_on_submit():
@@ -230,7 +229,10 @@ def edit_log(page_id):
   if workout_form.validate_on_submit():
     workout.soreness = workout_form.soreness.data
     workout.intensity = workout_form.intensity.data
-    workout.workout_type = workout_form.workout_type.data
+    if workout.type == 'Other':
+      workout.type = workout_form.specify_other.data
+    else:
+      workout.type = workout_form.type
     workout.file = workout_form.file.data
     db.session.add(workout)
     db.session.commit()
@@ -260,7 +262,8 @@ def download(page_id):
 def weights(page_id):
   workout = Workout.query.filter_by(id=page_id).first()
   workout_data = get_weights_data(workout.workout_id, workout.workout_week)
-  return render_template('workout.html', page_id=page_id, workout=workout, workout_data=workout_data)
+  formatted_workout = substitutions(workout_data)
+  return render_template('workout.html', page_id=page_id, workout=workout, formatted_workout=formatted_workout)
 
 if __name__ == '__main__':
   fetch_oura_data.setup_oura_data()
