@@ -10,19 +10,21 @@ from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
 from datetime import date, timedelta, datetime
 import fetch_oura_data
-from weights_data import *
+import json
+from weights_data import get_weights_data
+
 
 basedir = os.path.abspath(os.path.dirname(__file__))
 app = Flask(__name__)
 
 app.config['SECRET_KEY'] = 'random string' #TODO: Change to actual password.
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///' + os.path.join(basedir, 'data.sqlite')
+app.config['SQLALCHEMY_DATABASE_URI'] = "postgresql://@localhost:5432/oura_db"
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-
+# jpdesc:{POSTGRES_PASSWORD}
 
 bootstrap = Bootstrap(app)
 db = SQLAlchemy(app)
-migrate = Migrate(app, db)
+migrate = Migrate(app, db, compare_type=True)
 
 class Log(db.Model):
   __tablename__ = 'log'
@@ -60,6 +62,7 @@ class Readiness(db.Model):
   temperature = db.Column(db.Integer)
   
 class Workout(db.Model):
+  __tablename__ = 'workout'
   id = db.Column(db.Integer, primary_key=True)
   date = db.Column(db.Date)
   type = db.Column(db.String)
@@ -68,6 +71,15 @@ class Workout(db.Model):
   filename = db.Column(db.String(50))
   data = db.Column(db.LargeBinary)
   workout_log = db.Column(db.String)
+  
+
+class Weights(db.Model):
+  id = db.Column(db.Integer, primary_key=True)
+  exercises = db.Column(db.ARRAY(db.String))
+  set_ranges = db.Column(db.ARRAY(db.String))
+  reps = db.Column(db.ARRAY(db.String))
+  weight = db.Column(db.ARRAY(db.String))
+  subbed = db.Column(db.String)
   workout_id = db.Column(db.Integer)
   workout_week = db.Column(db.Integer)
 
@@ -132,7 +144,7 @@ def update_workout_events(submitted_log, type):
   events.append({'title': type, 'date':submitted_log.date, 'id':submitted_log.id})
 
 def get_workout_week_num():
-  last_workout = Workout.query.order_by(Workout.type == "Weights", Workout.id.desc()).first()
+  last_workout = Weights.query.order_by(Weights.id.desc()).first()
   if last_workout.workout_id == 4:
     week = last_workout.workout_week + 1
   else:
@@ -140,12 +152,46 @@ def get_workout_week_num():
   return week
 
 def get_workout_id():
-  last_workout = Workout.query.order_by(Workout.type == "Weights", Workout.id.desc()).first()
+  last_workout = Weights.query.order_by(Weights.id.desc()).first()
   if last_workout.workout_id == 4:
     workout_id = 1
   else:
     workout_id = last_workout.workout_id + 1
   return workout_id
+
+def add_weights_to_db(subs_made, id, workout_id, workout_week):
+    db_dict = {}
+    for i, val in enumerate(subs_made):
+        db_dict[i] = val
+    # weight = Weights.query.filter_by(id = id).first()
+    # weight.exercises = db_dict[0]
+    # weight.set_ranges = db_dict[1]
+    # weight.reps = db_dict[2]
+    # weight.weight = db_dict[3]
+    weights_info = Weights(id=id, exercises = db_dict[0], set_ranges = db_dict[1],\
+      reps = db_dict[2], weight = db_dict[3], workout_week = workout_week, workout_id=workout_id)
+    db.session.add(weights_info)
+    db.session.commit()
+
+def check_improvement(this_week, last_week):
+  reps_improvement, weight_improvement = [], []
+  for i, exercise in enumerate(this_week.exercises):
+    reps_improved = False
+    weight_improved = False
+    check_empty_reps = (this_week.reps[i] and last_week.reps[i]) != ''
+    check_empty_weight = (this_week.reps[i] and last_week.reps[i]) != ''
+    exercises_match = exercise == last_week.exercises[i]
+    if exercises_match and check_empty_reps:
+      reps_check = int(this_week.reps[i]) > int(last_week.reps[i]) and int(this_week.weight[i]) >= int(last_week.weight[i])
+      if reps_check:
+        reps_improved = True
+    if exercises_match and check_empty_weight:
+      weight_check = float(this_week.weight[i]) > float(last_week.weight[i])
+      if weight_check:
+        weight_improved = True
+    reps_improvement.append(reps_improved)
+    weight_improvement.append(weight_improved)
+  return reps_improvement, weight_improvement
 
 all_days = [date(2022, 1, 1) + timedelta(days=x) for x in range((today - date(2022, 1, 1)).days + 5)]
 for i, day in enumerate(all_days):
@@ -187,8 +233,9 @@ def index(page_id):
     workout_log = workout_form.workout_log.data
     workout_info = Workout(data=file.read(), date=date, id=page_id,\
       filename=file.filename, type=type, soreness=soreness, 
-      intensity=intensity, workout_log=workout_log,\
-      workout_week = get_workout_week_num(), workout_id=get_workout_id())
+      intensity=intensity, workout_log=workout_log)
+    if type == "Weights":
+      get_weights_data(get_workout_id(), get_workout_week_num(), page_id)
     db.session.add(workout_info)
     db.session.commit()
     update_workout_events(workout_info, type)
@@ -226,6 +273,7 @@ def edit_log(page_id):
     db.session.add(log)
     db.session.commit()
     return redirect(url_for('index', page_id = page_id))
+
   if workout_form.validate_on_submit():
     workout.soreness = workout_form.soreness.data
     workout.intensity = workout_form.intensity.data
@@ -260,10 +308,15 @@ def download(page_id):
 
 @app.route('/weights/<page_id>')
 def weights(page_id):
-  workout = Workout.query.filter_by(id=page_id).first()
-  workout_data = get_weights_data(workout.workout_id, workout.workout_week)
-  formatted_workout = substitutions(workout_data)
-  return render_template('workout.html', page_id=page_id, workout=workout, formatted_workout=formatted_workout)
+  this_week = Weights.query.filter_by(id=page_id).first()
+  try:
+    last_week = Weights.query.filter_by(workout_id=this_week.workout_id, workout_week=(this_week.workout_week - 1)).first()
+    reps_improve, weight_improve = check_improvement(this_week, last_week)
+  except(AttributeError):
+    reps_improve, weight_improve = None, None
+
+
+  return render_template('workout.html', page_id=page_id, weights=this_week, reps_improve = reps_improve, weight_improve = weight_improve)
 
 if __name__ == '__main__':
   fetch_oura_data.setup_oura_data()

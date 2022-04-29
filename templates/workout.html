@@ -11,14 +11,31 @@
       </tr>
     </thead>
     <tbody>
-    {% for i in range(formatted_workout[0]| length) %}
+    {% for i in range(weights.exercises| length) %}
     
       <tr>
         <th scope="row"> 
-            {{formatted_workout[0][i]}}</th>
-        <td>{{formatted_workout[1][i]}}</td>
-        <td>{{formatted_workout[2][i]}}</td>
-        <td>{{formatted_workout[3][i]}}</td>
+            {{weights.exercises[i]}}</th>
+        
+        <td>{{weights.set_ranges[i]}}</td>
+        
+        {% if reps_improve %} 
+        {% if reps_improve[i] == True %}
+        <td class="table-success">
+        {{weights.reps[i]}}</td>
+        {% else %}
+        <td>{{weights.reps[i]}}</td>
+        {% endif %}
+        {% endif %}
+
+        {% if weight_improve %} 
+        {% if weight_improve[i] == True %}
+        <td class="table-success">
+        {{weights.weight[i]}}</td>
+        {% else %}
+        <td>{{weights.weight[i]}}</td>
+        {% endif %}
+        {% endif %}
       </tr>
     {% endfor %}
     </tbody>
