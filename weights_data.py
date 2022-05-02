@@ -3,7 +3,6 @@ from google.oauth2 import service_account
 from googleapiclient.discovery import build
 import string
 import re
-import json
 import app
 
 
@@ -98,8 +97,6 @@ def subs(workout_data):
                 exercises[i] = substitutions[1]
     return workout_data[:-2]
 
-
-
 def get_weights_data(workout_id, workout_week, id):
     ''' Formats the exercise data from google sheet based on 
     the workout id and week id of the Workout database object.
@@ -138,24 +135,7 @@ def get_weights_data(workout_id, workout_week, id):
 
 
 
-def check_improvement(this_week, last_week):
-    reps_improvement, weight_improvement = [], []
-    for i, exercise in enumerate(this_week.exercises):
-        reps_improved = False
-        weight_improved = False
-        check_empty_reps = (this_week.reps[i] and last_week.reps[i]) != ''
-        check_empty_weights = (this_week.reps[i] and last_week.reps[i]) != ''
-        if exercise == last_week.exercises[i] and check_empty_reps:
-            reps_check = int(this_week.reps[i]) > int(last_week.reps[i]) and int(this_week.weight[i]) >= int(last_week.weight[i])
-            if reps_check:
-                reps_improved = True
-        if exercise == last_week.exercises[i] and check_empty_weights:
-            weights_check = float(this_week.weight[i]) > float(last_week.weight[i])
-            if weights_check:
-                weight_improved = True
-        reps_improvement.append(reps_improved)
-        weight_improvement.append(weight_improved)
-    return reps_improvement, weight_improvement
+
 
 
 

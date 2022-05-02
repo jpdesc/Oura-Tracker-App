@@ -3,14 +3,14 @@ import os
 from flask import Flask, render_template, session, redirect, url_for, request, send_file, jsonify, make_response
 from flask_bootstrap import Bootstrap
 from flask_wtf import FlaskForm
-from wtforms import StringField, SubmitField, RadioField, FileField, BooleanField, SelectField, FormField
+from wtforms import StringField, SubmitField, RadioField, FileField, BooleanField, SelectField
 from wtforms.widgets import TextArea
 from wtforms.validators import DataRequired, InputRequired
 from flask_sqlalchemy import SQLAlchemy
+from wtforms_sqlalchemy.fields import QuerySelectMultipleField
 from flask_migrate import Migrate
 from datetime import date, timedelta, datetime
 import fetch_oura_data
-import json
 from weights_data import get_weights_data
 
 
@@ -26,19 +26,33 @@ bootstrap = Bootstrap(app)
 db = SQLAlchemy(app)
 migrate = Migrate(app, db, compare_type=True)
 
+
+tags = db.Table('tags',
+  db.Column('tag_id', db.Integer, db.ForeignKey('tag.id'), primary_key=True),
+  db.Column('log_id', db.Integer, db.ForeignKey('log.id'), primary_key=True))
+
+
+class Tag(db.Model):
+  __tablename__ = 'tag'
+  id = db.Column(db.Integer, primary_key=True, unique=True)
+  tag = db.Column(db.String, unique=True)
+
+  def __repr__(self):
+    return f'{self.tag}'
+
 class Log(db.Model):
   __tablename__ = 'log'
-
   id = db.Column(db.Integer, primary_key=True)
   date = db.Column(db.Date)
   focus = db.Column(db.Integer)
   mood = db.Column(db.Integer)
   energy = db.Column(db.Integer)
   journal = db.Column(db.String)
+  tags = db.relationship('Tag', secondary=tags, lazy='subquery',backref=db.backref('logs', lazy=True))
   
+
 class Sleep(db.Model):
   __tablename__ = 'sleep'
-
   id = db.Column(db.Integer, primary_key=True)
   date = db.Column(db.Date)
   sleep_score = db.Column(db.Integer)
@@ -50,9 +64,9 @@ class Sleep(db.Model):
   deep_score = db.Column(db.Integer)
   total_sleep = db.Column(db.String)
 
+
 class Readiness(db.Model):
   __tablename__ = 'readiness'
-
   id = db.Column(db.Integer, primary_key=True)
   date = db.Column(db.Date)
   readiness_score = db.Column(db.Integer)
@@ -61,6 +75,7 @@ class Readiness(db.Model):
   resting_hr = db.Column(db.Integer)
   temperature = db.Column(db.Integer)
   
+
 class Workout(db.Model):
   __tablename__ = 'workout'
   id = db.Column(db.Integer, primary_key=True)
@@ -74,6 +89,7 @@ class Workout(db.Model):
   
 
 class Weights(db.Model):
+  __tablename__ = 'weights'
   id = db.Column(db.Integer, primary_key=True)
   exercises = db.Column(db.ARRAY(db.String))
   set_ranges = db.Column(db.ARRAY(db.String))
@@ -83,6 +99,8 @@ class Weights(db.Model):
   workout_id = db.Column(db.Integer)
   workout_week = db.Column(db.Integer)
 
+def tag_query():
+  return Tag.query.order_by(Tag.tag)
 
 class JournalForm(FlaskForm):
   journal = StringField('Notes:', validators=[DataRequired()], widget=TextArea(), render_kw={'cols':25, 'rows':4})
@@ -95,6 +113,8 @@ class JournalForm(FlaskForm):
   energy = RadioField('Energy: ',
           choices=['1', '2', '3', '4', '5'],
           validators=[InputRequired()])
+  new_tags = StringField('Add new tags:', widget=TextArea(), render_kw={'cols':15, 'rows':1})
+  select_tags = QuerySelectMultipleField(query_factory=tag_query)
   submit1 = SubmitField("Submit Wellness")
 
 class WorkoutForm(FlaskForm):
@@ -182,16 +202,37 @@ def check_improvement(this_week, last_week):
     check_empty_weight = (this_week.reps[i] and last_week.reps[i]) != ''
     exercises_match = exercise == last_week.exercises[i]
     if exercises_match and check_empty_reps:
-      reps_check = int(this_week.reps[i]) > int(last_week.reps[i]) and int(this_week.weight[i]) >= int(last_week.weight[i])
+      reps_check = int(this_week.reps[i]) > int(last_week.reps[i]) \
+                  and int(this_week.weight[i]) >= int(last_week.weight[i])
       if reps_check:
         reps_improved = True
     if exercises_match and check_empty_weight:
-      weight_check = float(this_week.weight[i]) > float(last_week.weight[i])
+      try:
+        weight_check = float(this_week.weight[i]) > float(last_week.weight[i])
+      except ValueError:
+        weight_check = None
       if weight_check:
         weight_improved = True
     reps_improvement.append(reps_improved)
     weight_improvement.append(weight_improved)
   return reps_improvement, weight_improvement
+
+def get_tags(added_tags, selected_tags):
+    tags = []
+    if added_tags:
+      for word in added_tags.split(','):
+        stripped = word.strip(', ').lower()
+        tags.append(stripped)
+    if selected_tags:
+      for tag in selected_tags:
+        if tag not in tags:
+          tags.append(tag)
+    return tags
+
+def add_tags(added_tags, selected_tags, db_obj):
+  for tag in get_tags(added_tags, selected_tags):
+    tag_obj = Tag(tag = tag)
+    db_obj.tags.append(tag_obj)  
 
 all_days = [date(2022, 1, 1) + timedelta(days=x) for x in range((today - date(2022, 1, 1)).days + 5)]
 for i, day in enumerate(all_days):
@@ -211,13 +252,16 @@ def index(page_id):
   workout = Workout.query.filter(Workout.id == page_id).first()
     
   if wellness_form.validate_on_submit():
-    
     journal = wellness_form.journal.data
     focus = wellness_form.focus.data
     mood = wellness_form.mood.data
     energy = wellness_form.energy.data
+    added_tags = wellness_form.new_tags.data
+    selected_tags = wellness_form.select_tags.data
     wellness_info = Log(journal=journal, focus=focus, mood=mood,\
-      energy=energy, date=date, id=page_id)
+                        energy=energy, date=date, id=page_id)
+    if selected_tags or added_tags:
+      add_tags(added_tags, selected_tags, wellness_info)
     db.session.add(wellness_info)
     db.session.commit()
     update_log_events(wellness_info)
@@ -232,8 +276,9 @@ def index(page_id):
     intensity = workout_form.intensity.data
     workout_log = workout_form.workout_log.data
     workout_info = Workout(data=file.read(), date=date, id=page_id,\
-      filename=file.filename, type=type, soreness=soreness, 
-      intensity=intensity, workout_log=workout_log)
+                          filename=file.filename, type=type,\
+                          soreness=soreness, intensity=intensity,\
+                          workout_log=workout_log)
     if type == "Weights":
       get_weights_data(get_workout_id(), get_workout_week_num(), page_id)
     db.session.add(workout_info)
@@ -242,14 +287,14 @@ def index(page_id):
     return redirect(url_for('index', page_id=page_id))
 
   return render_template('index.html', 
-    wellness_form = wellness_form,
-    workout_form = workout_form,
-    sleep = sleep,
-    log = log,
-    page_id = page_id,
-    date = date,
-    readiness = readiness,
-    workout = workout)
+                        wellness_form = wellness_form,
+                        workout_form = workout_form,
+                        sleep = sleep,
+                        log = log,
+                        page_id = page_id,
+                        date = date,
+                        readiness = readiness,
+                        workout = workout)
 
 @app.route('/edit/<int:page_id>', methods=['GET', 'POST'])
 def edit_log(page_id):
@@ -258,11 +303,12 @@ def edit_log(page_id):
   log = Log.query.get(page_id)
   workout = Workout.query.get(page_id)
   if log:
-    wellness_form = JournalForm(focus=log.focus, mood=log.mood, energy=log.energy, journal=log.journal)
+    wellness_form = JournalForm(focus=log.focus, mood=log.mood, energy=log.energy, journal=log.journal, select_tags=log.tags)
   else:
     wellness_form = JournalForm()
   if workout:
-    workout_form = WorkoutForm(soreness=workout.soreness, intensity=workout.intensity,type=workout.type, specify_other= None, file=workout.data, workout_log=workout.workout_log)
+    workout_form = WorkoutForm(soreness=workout.soreness, intensity=workout.intensity, type=workout.type,\
+                                specify_other= None, file=workout.data, workout_log=workout.workout_log)
   else:
     workout_form = WorkoutForm()
   if wellness_form.validate_on_submit():
@@ -270,6 +316,11 @@ def edit_log(page_id):
     log.mood = wellness_form.mood.data
     log.energy = wellness_form.energy.data
     log.journal = wellness_form.journal.data
+    log.tags = wellness_form.select_tags.data
+    added_tags = wellness_form.new_tags.data
+    selected_tags = None
+    if added_tags:
+      add_tags(added_tags, selected_tags, log)
     db.session.add(log)
     db.session.commit()
     return redirect(url_for('index', page_id = page_id))
@@ -285,7 +336,8 @@ def edit_log(page_id):
     db.session.add(workout)
     db.session.commit()
     return redirect(url_for('index', page_id = page_id))
-  return render_template('edit_post.html', wellness_form=wellness_form, workout_form=workout_form, sleep=sleep, page_id=page_id, readiness=readiness)
+  return render_template('edit_post.html', wellness_form=wellness_form, workout_form=workout_form,\
+                                            sleep=sleep, page_id=page_id, readiness=readiness)
 
 @app.route('/calendar', methods = ['GET','POST'])
 def calendar():
@@ -310,12 +362,10 @@ def download(page_id):
 def weights(page_id):
   this_week = Weights.query.filter_by(id=page_id).first()
   try:
-    last_week = Weights.query.filter_by(workout_id=this_week.workout_id, workout_week=(this_week.workout_week - 1)).first()
+    last_week = Weights.query.filter_by(workout_id=this_week.workout_id, workout_week= (this_week.workout_week - 1)).first()
     reps_improve, weight_improve = check_improvement(this_week, last_week)
   except(AttributeError):
     reps_improve, weight_improve = None, None
-
-
   return render_template('workout.html', page_id=page_id, weights=this_week, reps_improve = reps_improve, weight_improve = weight_improve)
 
 if __name__ == '__main__':

@@ -112,6 +112,10 @@
             {% endfor %}<br>
             {{ wellness_form.journal.label(class="form-label") }} <br>
             {{ wellness_form.journal()}}
+            {{ wellness_form.select_tags.label(class="form-label") }} <br>
+            {{ wellness_form.select_tags()}}<br>
+            {{ wellness_form.new_tags.label(class="form-label") }} <br>
+            {{ wellness_form.new_tags()}}
             <br>
             <br>
             {{ wellness_form.submit1(class="btn btn-dark") }}
