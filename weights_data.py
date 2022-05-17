@@ -1,15 +1,12 @@
-
-from google.oauth2 import service_account
-from googleapiclient.discovery import build
 import string
 import re
-import app
-
+from google.oauth2 import service_account
+from googleapiclient.discovery import build
+from database import db, Weights
 
 
 SCOPES = ['https://www.googleapis.com/auth/spreadsheets']
 SERVICE_ACCOUNT_FILE = 'keys.json'
-# creds = None
 creds = service_account.Credentials.from_service_account_file(SERVICE_ACCOUNT_FILE, scopes=SCOPES)
 SPREADSHEET_ID = '1AdnxSengjtM0zwTgG7NtX1nBUdK0w4-368n8852WNPs'
 sheet_prefix = 'meetPrep!'
@@ -57,11 +54,11 @@ def parse_reps_weight(reps_weight):
 
         reps_list.append(reps)
         weights_list.append(weight)
-        
+
     return reps_list, weights_list, subbed_list
 
 def format_output(raw_output):
-    '''Format google sheets data such that it is a plain string 
+    '''Format google sheets data such that it is a plain string
     without quotes or brackets.
     '''
     formatted_list = re.findall(r"[^\[\]\'\"]", raw_output)
@@ -72,13 +69,13 @@ def init_sheets_api(range_names):
     service = build('sheets', 'v4', credentials=creds)
         # Call the Sheets API
     sheet = service.spreadsheets()
-    result = sheet.values().batchGet(spreadsheetId=SPREADSHEET_ID,\
-            ranges=range_names).execute()
+    result = sheet.values().batchGet(spreadsheetId=SPREADSHEET_ID,
+                ranges=range_names).execute()
     return result
 
 def subs(workout_data):
-    ''' Substitutes up to two exercises per workout.If an 
-    exercise field ends with * or **, that exercise will be 
+    ''' Substitutes up to two exercises per workout.If an
+    exercise field ends with * or **, that exercise will be
     replaced. Returns the workout data with substitutions made.
     '''
     exercises = workout_data[0]
@@ -90,27 +87,42 @@ def subs(workout_data):
                 first_substitution = (subbed[i] == '*')
                 second_substitution = (subbed[i] == '**')
             except IndexError:
-                pass
+                first_substitution = None
+                second_substitution = None
             if first_substitution:
                 exercises[i] = substitutions[0]
             elif second_substitution:
                 exercises[i] = substitutions[1]
     return workout_data[:-2]
 
+def add_weights_to_db(subs_made, id, workout_id, workout_week):
+    db_dict = {}
+    for i, val in enumerate(subs_made):
+        db_dict[i] = val
+    # weight = Weights.query.filter_by(id = id).first()
+    # weight.exercises = db_dict[0]
+    # weight.set_ranges = db_dict[1]
+    # weight.reps = db_dict[2]
+    # weight.weight = db_dict[3]
+    weights_info = Weights(id=id, exercises=db_dict[0], set_ranges = db_dict[1],\
+      reps = db_dict[2], weight = db_dict[3], workout_week = workout_week, workout_id=workout_id)
+    db.session.add(weights_info)
+    db.session.commit()
+
 def get_weights_data(workout_id, workout_week, id):
-    ''' Formats the exercise data from google sheet based on 
+    ''' Formats the exercise data from google sheet based on
     the workout id and week id of the Workout database object.
     '''
     row = workout_row.get(workout_id)
     col = weeks_column.get(workout_week)
     total_exercises = exercises_by_workout.get(workout_id)
-    
+
     subs_row = row + total_exercises + 1
-    
+
     range_names = [f"{sheet_prefix}A{row}:A{row + total_exercises}",
-    f"{sheet_prefix}B{row}:B{row + total_exercises}",
-    f"{sheet_prefix}{col}{row}:{col}{row + total_exercises}",
-    f"{sheet_prefix}{col}{subs_row}:{col}{subs_row+2}"]
+                    f"{sheet_prefix}B{row}:B{row + total_exercises}",
+                    f"{sheet_prefix}{col}{row}:{col}{row + total_exercises}",
+                    f"{sheet_prefix}{col}{subs_row}:{col}{subs_row+2}"]
     sheets_data = init_sheets_api(range_names)
     ranges = sheets_data.get('valueRanges', [])
     exercises = ranges[0].get('values')
@@ -118,24 +130,16 @@ def get_weights_data(workout_id, workout_week, id):
     reps_weight = ranges[2].get('values')
     substitutions = ranges[3].get('values')
     reps, weight, subbed = parse_reps_weight(reps_weight)
-    
-    for i in range(len(exercises)):
-        exercises[i] = format_output(str(exercises[i]))
+
+    for i, exercise in enumerate(exercises):
+        exercises[i] = format_output(str(exercise))
         try:
             set_ranges[i] = str(format_output(str(set_ranges[i])))
         except IndexError:
             pass
     if substitutions:
-        for i in range(len(substitutions)):
-            substitutions[i] = format_output(str(substitutions[i]))
+        for i, substitution in enumerate(substitutions):
+            substitutions[i] = format_output(str(substitution))
     parsed_data = exercises, set_ranges, reps, weight, substitutions, subbed
     subs_made = subs(parsed_data)
-    app.add_weights_to_db(subs_made, id, workout_id, workout_week)
-    
-
-
-
-
-
-
-
+    add_weights_to_db(subs_made, id, workout_id, workout_week)

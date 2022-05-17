@@ -1,13 +1,24 @@
 * Implement tags
     * ~~add form field to select tags~~
     * ~~add form field to add a tag~~
-    * edit html to include tag form fields
-    * edit past pages with tags
+    * ~~edit html to include tag form fields~~
+    * ~~edit past pages with tags~~
+
+* Random
+    * ~~add last meal to sleep~~
+    * ~~Add workout quality~~
 
 * Create insights
-    * add links to trends page from tags
+    * ~~Display tags for each day if tags exist~~
+    * ~~add links to trends page from tags~~
     * create dropdown for:
-        * tags
+        * ~~tags~~
         * sleep and readiness parameters
         * workout type
+    * calendar to select a date range
+    * Graphs?
     * HTML for results page
+
+* Create workout comparisons
+    * Link to last comparison
+    * Create HTML page with differences

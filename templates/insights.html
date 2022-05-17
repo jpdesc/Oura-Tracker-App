@@ -1,0 +1,135 @@
+{% extends "base.html" %}
+
+
+{% block content %}
+<script>
+    function secondField(field_name) {
+
+        // let strSecond = new String(second_field);
+        var showField = document.getElementById(field_name);
+        // console.log(field_name)
+        console.log(showField.value)
+        if (showField.value === 'between') {
+            alert('showField = between')
+            showField.style.display = 'initial'
+        } else {
+            alert('showField != between')
+            console.log(showField.value)
+            showField.style.display = 'none'
+        }
+
+    }
+
+        // let sleep_operator = document.getElementById('sleep_operator');
+        // sleep_operator.onchange = function () {
+        //     if (sleep_operator.value == 'between') {
+        //         console.log(sleep_operator)
+        //     }
+        // }
+</script>
+
+<form method="POST">
+    {{ filter_form.csrf_token() }}
+    {{ filter_form.hidden_tag() }}
+    {{filter_form.start_date.label}} {{filter_form.start_date(class='datepicker')}} {{filter_form.hidden_tag()}}
+    {{filter_form.end_date.label}} {{filter_form.end_date(class='datepicker')}} {{filter_form.hidden_tag()}}<br><br>
+    {{ filter_form.tag_filter.label(class="form-label") }}
+    {{ filter_form.tag_filter()}}
+    <br>
+    {{ filter_form.sleep_filter.label(class="form-label") }}
+    {{ filter_form.sleep_filter()}}
+    {{ filter_form.sleep_operator()}}
+    {{ filter_form.sleep_first()}}
+    {{ filter_form.sleep_second() }}
+
+
+    <br><br>
+    {{ filter_form.readiness_filter.label(class="form-label") }}
+    {{ filter_form.readiness_filter()}}
+    {{ filter_form.readiness_operator()}}
+    {{ filter_form.readiness_first()}}
+    {{ filter_form.readiness_second()}}
+    <br><br>
+    {{ filter_form.wellness_filter.label(class="form-label") }}
+    {{ filter_form.wellness_filter()}}
+    {{ filter_form.wellness_operator()}}
+    {{ filter_form.wellness_first()}}
+    {{ filter_form.wellness_second()}}
+    <br><br>
+    {{ filter_form.workout_filter.label(class="form-label") }}
+    {{ filter_form.workout_filter()}}
+    {{ filter_form.workout_operator()}}
+    {{ filter_form.workout_first()}}
+    {{ filter_form.workout_second()}}
+    {{ filter_form.submit(class="btn btn-dark") }}
+</form>
+
+<hr>
+
+<table class="table table-dark">
+    <thead>
+        <tr>
+            <th scope="col">Category</th>
+            <th scope="col">Overall Average </th>
+            <!-- <th scope="col">Last</th>
+            <th scope="col">Handle</th> -->
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <th scope="row">Total Sleep</th>
+            <td>{{averages['avg_total_sleep']}}</td>
+            <!-- <td></td>
+                    <td></td> -->
+        </tr>
+        <tr>
+            <th scope="row">Sleep Score</th>
+            <td>{{averages['avg_sleep_score']}}</td>
+            <!-- <td></td>
+            <td></td> -->
+        </tr>
+        <tr>
+            <th scope="row">REM Score</th>
+            <td>{{averages['avg_rem_score']}}</td>
+            <!-- <td>Thornton</td>
+            <td>@fat</td> -->
+        </tr>
+        <tr>
+            <th scope="row">Deep Score</th>
+            <td>{{averages['avg_deep_score']}}</td>
+            <!-- <td>the Bird</td>
+            <td>@twitter</td> -->
+        </tr>
+        <tr>
+            <th scope="row">Sleep Efficiency</th>
+            <td>{{averages['avg_sleep_efficiency']}}</td>
+            <!-- <td>the Bird</td>
+            <td>@twitter</td> -->
+        </tr>
+        <tr>
+            <th scope="row">Readiness Score</th>
+            <td>{{averages['avg_readiness_score']}}</td>
+            <!-- <td>the Bird</td>
+            <td>@twitter</td> -->
+        </tr>
+        <tr>
+            <th scope="row">Recovery Index</th>
+            <td>{{averages['avg_recovery_index']}}</td>
+            <!-- <td>the Bird</td>
+            <td>@twitter</td> -->
+        </tr>
+        <tr>
+            <th scope="row">HRV Balance</th>
+            <td>{{averages['avg_hrv_balance']}}</td>
+            <!-- <td>the Bird</td>
+            <td>@twitter</td> -->
+        </tr>
+        <tr>
+            <th scope="row">Food Cutoff</th>
+            <td>{{averages['avg_food_cutoff']}}</td>
+            <!-- <td>the Bird</td>
+            <td>@twitter</td> -->
+        </tr>
+    </tbody>
+</table>
+{% endblock %}

@@ -5,182 +5,195 @@
 
 <div class="container">
 
-<h2>Report for {{date}}</h2><hr>
+    <h2>Report for {{date}}</h2>
+    <hr>
 </div>
 
+
+<div class="container">
+    <div class="container overflow-hidden">
+        {% if sleep %}
+        <div class="row row-cols-2">
+            <div class="col">
+
+                <div class="p-3 border bg-light">
+
+                    <H5>Sleep Summary</H5>
+
+                </div>
+
+                <div class="p-3 border">
+                    <ul>
+                        <li>Overall Sleep Score: {{sleep.sleep_score}}</li>
+                        <li>REM Score: {{sleep.rem_score}}</li>
+                        <li>Deep Score: {{sleep.deep_score}}</li>
+                        <li>Efficiency Score: {{sleep.sleep_efficiency}}</li>
+                        <li>Restlessness Score: {{sleep.restlessness}}</li>
+                        <li>Total Sleep: {{sleep.total_sleep}}</li>
+                        <li>Total REM Sleep: {{sleep.total_rem_sleep}}</li>
+                        <li>Total Deep Sleep: {{sleep.total_deep_sleep}}</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="col">
+                <div>
+                    {% if readiness %}
+                    <div class="p-3 border bg-light">
+                        <H5>Readiness Summary</H5>
+                    </div>
+                    <div class="p-3 border">
+                        <ul>
+                            <li>Overall Readiness Score: {{readiness.readiness_score}}</li>
+                            <li>HRV Balance Score: {{readiness.hrv_balance}}</li>
+                            <li>Recovery Index: {{readiness.recovery_index}}</li>
+                            <li>Resting HR Score: {{readiness.resting_hr}}</li>
+                            <li>Temperature Score: {{readiness.temperature}}</li>
+                        </ul>
+                    </div>
+                    {% endif %}
+
+                </div>
+            </div>
+
+
+
+            {% else %}
+
+            <div class="row row-cols-1">
+                <div class="col">
+                    <div class="p-3 border bg-light">
+                        <H5>Sleep Summary</H5>
+                    </div>
+                    <div class="p-3 border">
+                        <i> No sleep data for today. Please make sure oura ring is on and connected to bluetooth for
+                            data transfer.</i>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <br>
 
     <div class="container">
         <div class="container overflow-hidden">
-        {% if sleep %}
-        <div class="row row-cols-2">
-        <div class="col">
-        
-        <div class="p-3 border bg-light">
-              
-        <H5>Sleep Summary</H5>
-    
-        </div>
-        
-        <div class="p-3 border">
-        <ul>
-            <li>Overall Sleep Score: {{sleep.sleep_score}}</li>
-            <li>REM Score: {{sleep.rem_score}}</li>
-            <li>Deep Score: {{sleep.deep_score}}</li>
-            <li>Efficiency Score: {{sleep.sleep_efficiency}}</li>
-            <li>Restlessness Score: {{sleep.restlessness}}</li>
-            <li>Total Sleep: {{sleep.total_sleep}}</li>
-            <li>Total REM Sleep: {{sleep.total_rem_sleep}}</li>
-            <li>Total Deep Sleep: {{sleep.total_deep_sleep}}</li>
-        </ul>
-    </div>
-        </div>
-        <div class="col">
-            <div>
-                {% if readiness %}
-                <div class="p-3 border bg-light">
-                <H5>Readiness Summary</H5>
+            <div class="row row-cols-2">
+                <div class="col">
+
+                    <div class="p-3 border bg-light">
+                        <H5>Wellness Log</H5>
+                    </div>
+                    <div class="p-3 border">
+                        {% if log %}
+                        <ul>
+                            <li>Focus: {{log.focus}}</li>
+                            <li>Energy: {{log.energy}}</li>
+                            <li>Mood: {{log.mood}}</li>
+                            <li>Stress: {{log.stress}}</li>
+                        </ul>
+                        <div>Wellness Notes:
+                            <hr><i>{{log.journal}}</i>
+                        </div>
+                        <br>
+                        <br>
+
+                        {% else %}
+                        <div>
+                            <form method="POST">
+
+                                {{ wellness_form.hidden_tag() }}
+
+
+                                {% for field in [wellness_form.focus, wellness_form.energy, wellness_form.mood,
+                                wellness_form.stress] %}
+                                {{ field.label(class="form-label") }}
+                                {% for subfield in field %}
+                                <tr>
+                                    <td>{{ subfield }}</td>
+                                    <td>{{ subfield.label(class="form-label") }}</td>
+                                </tr>
+                                {% endfor %}
+                                <br>
+                                {% endfor %}<br>
+                                {{ wellness_form.food_cutoff.label(class="form-label") }} <br>
+                                {{ wellness_form.food_cutoff()}}<br><br>
+                                {{ wellness_form.journal.label(class="form-label") }} <br>
+                                {{ wellness_form.journal()}}
+                                {{ wellness_form.select_tags.label(class="form-label") }} <br>
+                                {{ wellness_form.select_tags()}}<br>
+                                {{ wellness_form.new_tags.label(class="form-label") }} <br>
+                                {{ wellness_form.new_tags()}}
+                                <br>
+                                <br>
+                                {{ wellness_form.submit1(class="btn btn-dark") }}
+                            </form>
+                        </div>
+                        {% endif %}
+                    </div>
                 </div>
-                <div class="p-3 border">
-                <ul>
-                    <li>Overall Readiness Score: {{readiness.readiness_score}}</li>
-                    <li>HRV Balance Score: {{readiness.hrv_balance}}</li>
-                    <li>Recovery Index: {{readiness.recovery_index}}</li>
-                    <li>Resting HR Score: {{readiness.resting_hr}}</li>
-                    <li>Temperature Score: {{readiness.temperature}}</li>
-                </ul>
-            </div>
-                {% endif %}
-            
-            </div>
-        </div>
-        
-    
-    
-    {% else %}
-    
-    <div class="row row-cols-1">
-        <div class="col">
-            <div class="p-3 border bg-light">
-    <H5>Sleep Summary</H5>
-    </div>
-    <div class="p-3 border">
-    <i> No sleep data for today. Please make sure oura ring is on and connected to bluetooth for data transfer.</i>
-      {% endif %}
-      </div>
-      </div>
-      </div>
-</div>
-</div>
+                <div class="col">
+                    <div>
+                        <div class="p-3 border bg-light">
+                            <H5>Workout Log</H5>
+                        </div>
+                        <div class="p-3 border">
+                            {% if workout %}
+                            <ul>
+                                <li>Workout Type: {{workout.type}}</li>
+                                <li>Soreness Level: {{workout.soreness}}</li>
+                                <li>Workout Grade: {{workout.grade}}</li>
+                                {% if workout.filename %}
+                                <li>Uploaded Workout: <a
+                                        href="{{url_for('download', page_id=page_id)}}">{{workout.filename}}</a></li>
+                                {% endif %}
+                            </ul>
+                            <div>Workout Notes:
+                                <hr> <i>{{workout.workout_log}}</i>
+                            </div>
 
-<br>
 
-    <div class="container">
-    <div class="container overflow-hidden">
-    <div class="row row-cols-2">
-        <div class="col">
-            
-            <div class="p-3 border bg-light">
-            <H5>Wellness Log</H5> 
-            </div>
-            <div class="p-3 border">
-        {% if log %}
-        <ul>
-            <li>Focus: {{log.focus}}</li>
-            <li>Energy: {{log.energy}}</li>
-            <li>Mood: {{log.mood}}</li>
-        </ul>
-        <div>Wellness Notes:<hr><i>{{log.journal}}</i></div>
-        <br>
-        <br>
+                            {% else %}
+                            <form method="POST" enctype="multipart/form-data">
+                                {{ workout_form.hidden_tag() }}
+                                {{ workout_form.type.label(class="form-label") }}:<br>
+                                {{ workout_form.type()}} <br><br>
+                                <i>
+                                    <div>--or--</div><br>
+                                </i>
+                                {{ workout_form.specify_other.label(class="form-label")}}<br>
+                                {{ workout_form.specify_other }}<br><br>
+                                {{ workout_form.soreness.label(class="form-label")}}<br>
+                                {% for subfield in workout_form.soreness %}
+                                <tr>
+                                    <td>{{ subfield }}</td>
+                                    <td>{{ subfield.label(class="form-label") }}</td>
+                                </tr>
+                                {% endfor %}<br><br>
+                                {{ workout_form.grade.label(class="form-label") }}<br>
 
-        {% else %}
-        <div>
-        <form method="POST" >
-            
-            {{ wellness_form.hidden_tag() }}
-            
+                                {% for subfield in workout_form.grade %}
+                                <tr>
+                                    <td>{{ subfield }}</td>
+                                    <td>{{ subfield.label(class="form-label") }}</td>
+                                </tr>
+                                {% endfor %}<br><br>
+                                {{ workout_form.file.label(class="form-label") }}<br>
+                                {{ workout_form.file }}<br><br>
 
-            {% for field in [wellness_form.focus, wellness_form.energy, wellness_form.mood] %}
-            {{ field.label(class="form-label") }}
-            {% for subfield in field %}
-            <tr>
-                <td>{{ subfield }}</td>
-                <td>{{ subfield.label(class="form-label") }}</td>
-            </tr>
-            {% endfor %}
-            <br> 
-            {% endfor %}<br>
-            {{ wellness_form.journal.label(class="form-label") }} <br>
-            {{ wellness_form.journal()}}
-            {{ wellness_form.select_tags.label(class="form-label") }} <br>
-            {{ wellness_form.select_tags()}}<br>
-            {{ wellness_form.new_tags.label(class="form-label") }} <br>
-            {{ wellness_form.new_tags()}}
-            <br>
-            <br>
-            {{ wellness_form.submit1(class="btn btn-dark") }}
-            </form>
-            </div>
-            {% endif %}
-        </div>
-        </div>
-        <div class="col">
-            <div>
-                <div class="p-3 border bg-light">
-                <H5>Workout Log</H5>
+                                {{ workout_form.workout_log.label(class="form-label") }}<br>
+                                {{ workout_form.workout_log }}<br><br>
+                                {{ workout_form.submit2(class="btn btn-dark") }}
+                                {% endif %}
+
+                            </form>
+
+
+                        </div>
+                    </div>
                 </div>
-                <div class="p-3 border">
-            {% if workout %}
-            <ul>
-                <li>Workout Type: {{workout.type}}</li>
-                <li>Soreness Level: {{workout.soreness}}</li>
-                <li>Workout Intensity: {{workout.intensity}}</li>
-                {% if workout.filename %}
-                <li>Uploaded Workout: <a href="{{url_for('download', page_id=page_id)}}" >{{workout.filename}}</a></li>
-                {% endif %}
-            </ul>
-            <div>Workout Notes:<hr> <i>{{workout.workout_log}}</i></div>
-           
-
-            {% else %}
-            <form method="POST" enctype="multipart/form-data">
-            {{ workout_form.hidden_tag() }}
-            {{ workout_form.type.label(class="form-label") }}:<br>
-            {{ workout_form.type()}} <br><br>
-            <i><div>--or--</div><br></i>
-            {{ workout_form.specify_other.label(class="form-label")}}<br>
-            {{ workout_form.specify_other }}<br><br>
-            {{ workout_form.soreness.label(class="form-label")}}<br>
-            {% for subfield in workout_form.soreness %}
-            <tr>
-                <td>{{ subfield }}</td>
-                <td>{{ subfield.label(class="form-label") }}</td>
-            </tr>
-            {% endfor %}<br><br>
-            {{ workout_form.intensity.label(class="form-label") }}<br>
-
-            {% for subfield in workout_form.intensity %}
-            <tr>
-                <td>{{ subfield }}</td>
-                <td>{{ subfield.label(class="form-label") }}</td>
-            </tr>
-            {% endfor %}<br><br>
-            {{ workout_form.file.label(class="form-label") }}<br>
-            {{ workout_form.file }}<br><br>
-
-            {{ workout_form.workout_log.label(class="form-label") }}<br>
-            {{ workout_form.workout_log }}<br><br>
-            {{  workout_form.submit2(class="btn btn-dark") }}
-            {% endif %}
-            
-            </form>
-
-            
-        </div>
+            </div>
+        </div><br>
     </div>
-</div>
-</div>
-</div><br>
-</div>
 </div>
 {% endblock %}
