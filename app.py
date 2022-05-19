@@ -6,12 +6,13 @@ from flask_wtf import FlaskForm
 from wtforms import StringField, SubmitField, RadioField, FileField, SelectField, BooleanField, FloatField
 from wtforms.widgets import TextArea
 from wtforms.validators import DataRequired, InputRequired
+# from insights import get_filtered_avgs
 from wtforms_sqlalchemy.fields import QuerySelectMultipleField
 from datetime import date, timedelta
 from fetch_oura_data import setup_oura_data, today, date_str_cal, id_dict
 from weights_data import get_weights_data
 from database import db, Sleep, Log, Tag, Readiness, Workout, Weights, app
-from insights import FilterForm, get_overall_averages, get_filters, get_date_range
+from insights import FilterForm, get_overall_averages, get_filters, get_date_range, get_filtered_avgs
 
 basedir = os.path.abspath(os.path.dirname(__file__))
 bootstrap = Bootstrap(app)
@@ -380,8 +381,12 @@ def insights():
     averages = get_overall_averages()
     if request.method == "POST":
         date_range = get_date_range(filter_form)
-        get_filters(filter_form, date_range)
-        return redirect(url_for('insights'))
+        filter_objs = get_filters(filter_form, date_range)
+        filter_avgs = get_filtered_avgs(filter_objs)
+        return redirect(
+            url_for('insights',
+                    filter_obj=filter_objs,
+                    filter_avgs=filter_avgs))
 
     return render_template('insights.html',
                            averages=averages,

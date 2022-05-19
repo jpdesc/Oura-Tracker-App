@@ -5,13 +5,13 @@ from yaml import TagToken
 from wtforms_sqlalchemy.fields import QuerySelectMultipleField
 from database import Tag, Sleep, Readiness, Log, Workout, db, tags
 from datetime import date
-from sqlalchemy import and_
+from sqlalchemy import and_, func, cast, Numeric
 
 db_fields = {
     'sleep_score': Sleep.sleep_score,
     'rem_score': Sleep.rem_score,
     'deep_score': Sleep.deep_score,
-    'total_sleep': Sleep.seconds_sleep,
+    'seconds_sleep': Sleep.seconds_sleep,
     'total_rem_sleep': Sleep.total_rem_sleep,
     'total_deep_sleep': Sleep.total_deep_sleep,
     'food_cutoff': Sleep.food_cutoff,
@@ -32,15 +32,15 @@ db_fields = {
 }
 
 avg_fields = {
-    'avg_total_sleep': 'total_sleep',
-    'avg_sleep_score': 'sleep_score',
-    'avg_rem_score': 'rem_score',
-    'avg_deep_score': 'deep_score',
-    'avg_sleep_efficiency': 'sleep_efficiency',
-    'avg_readiness_score': 'readiness_score',
-    'avg_recovery_index': 'recovery_index',
-    'avg_hrv_balance': 'hrv_balance',
-    'avg_food_cutoff': 'food_cutoff'
+    'avg_total_sleep': ('seconds_sleep', Sleep),
+    'avg_sleep_score': ('sleep_score', Sleep),
+    'avg_rem_score': ('rem_score', Sleep),
+    'avg_deep_score': ('deep_score', Sleep),
+    'avg_sleep_efficiency': ('sleep_efficiency', Sleep),
+    'avg_readiness_score': ('readiness_score', Readiness),
+    'avg_recovery_index': ('recovery_index', Readiness),
+    'avg_hrv_balance': ('hrv_balance', Readiness),
+    'avg_food_cutoff': ('food_cutoff', Sleep)
 }
 
 
@@ -106,17 +106,44 @@ def get_filters(form, date_range):
     for selected in form.tag_filter.data:
         selected_tags.append(str(selected))
     conditions = []
+    second_conditions = []
     for tag in selected_tags:
         conditions.append(Log.tags.any(Tag.tag == tag))
     conditions.append(Log.date >= date_range[0])
     conditions.append(Log.date <= date_range[1])
     for statement in format_filters(form):
-        conditions.append(statement)
+        second_conditions.append(statement)
     condition = and_(*conditions)
+    second_condition = and_(*second_conditions)
     # print(f'condition: {condition}')
-    filter_result = Log.query.join(Log.tags).filter(condition).all()
-    # print(f'queried {filter_result}')
+    filter_result = Log.query.join(
+        Log.tags).filter(condition).filter(second_condition).all()
+    print(f'queried {filter_result}')
     return filter_result
+
+
+def get_filtered_avgs(filtered_objs):
+    averages = {}
+    id_nums = [log.id for log in filtered_objs]
+    for key, value in avg_fields.items():
+        db_attr = db_fields[value[0]]
+        attr = value[0]
+        db_class = value[1]
+        id_attr = db_class.id
+        db_objs = db_class.query.filter(id_attr.in_(id_nums)).order_by(id_attr)
+        subquery = db_objs.with_entities(db_attr).subquery()
+        subquery_c = getattr(subquery.c, attr)
+        if key == 'avg_food_cutoff':
+            averages[key] = db.session.query(
+                func.round(func.avg(subquery_c).cast(Numeric), 1)).scalar()
+            print(averages[key])
+        elif key == 'avg_total_sleep':
+            averages[key] = convert_seconds(
+                db.session.query(func.avg(subquery_c)).scalar())
+        else:
+            averages[key] = db.session.query(
+                func.round(func.avg(subquery_c), 1)).scalar()
+    return averages
 
 
 def format_filters(form):
@@ -139,22 +166,23 @@ def format_filters(form):
         ]
     }
     form_db_dict = {
-        'Sleep Score': Sleep.sleep_score,
-        'Efficiency Score': Sleep.sleep_efficiency,
-        'Readiness': Readiness.readiness_score,
-        'Recovery Index': Readiness.recovery_index,
-        'Temperature Score': Readiness.temperature,
-        'Focus': Log.focus,
-        'Energy': Log.energy,
-        'Mood': Log.mood,
-        'Stress': Log.stress,
-        'Grade': Workout.grade,
-        'Soreness': Workout.soreness
+        'Sleep Score': (Sleep.sleep_score, Sleep.id),
+        'Efficiency Score': (Sleep.sleep_efficiency, Sleep.id),
+        'Readiness': (Readiness.readiness_score, Readiness.id),
+        'Recovery Index': (Readiness.recovery_index, Readiness.id),
+        'Temperature Score': (Readiness.temperature, Readiness.id),
+        'Focus': (Log.focus, Log.id),
+        'Energy': (Log.energy, Log.id),
+        'Mood': (Log.mood, Log.id),
+        'Stress': (Log.stress, Log.id),
+        'Grade': (Workout.grade, Workout.id),
+        'Soreness': (Workout.soreness, Workout.id)
     }
     filters = []
     for key, val in filter_fields.items():
         if val[0] != '':
-            db_attr = form_db_dict[val[0]]
+            db_attr = form_db_dict[val[0]][0]
+            id_num = form_db_dict[val[0]][1]
             if val[1] == 'between':
                 query = db_attr > val[2], db_attr < val[3]
             elif val[1] == '>':
@@ -164,8 +192,9 @@ def format_filters(form):
                 query = db_attr < val[2]
             else:
                 query = None
+            id_check = id_num == Log.id
             filters.append(query)
-    print(filters[0])
+            filters.append(id_check)
     return filters
 
 
@@ -176,38 +205,39 @@ def convert_seconds(seconds):
     return "%d:%02d" % (hour, minutes)
 
 
-def get_db_objs(date_range):
-    sleep_objs = []
-    readiness_objs = []
-    workout_objs = []
-    log_objs = []
-    sleep = Sleep.query.filter_by(Sleep.date >= f'{date_range[0]}',
-                                  Sleep.date <= f'{date_range[1]}')
-    sleep_objs.append(sleep)
-    readiness = Readiness.query.filter_by(Readiness.date >= f'{date_range[0]}',
-                                          Readiness.date <= f'{date_range[1]}')
-    readiness_objs.append(readiness)
-    workout = Sleep.query.filter_by(Workout.date >= f'{date_range[0]}',
-                                    Workout.date <= f'{date_range[1]}')
-    workout_objs.append(workout)
-    log = Sleep.query.filter_by(Log.date >= f'{date_range[0]}',
-                                Log.date <= f'{date_range[1]}')
-    log_objs.append(log)
-    return sleep_objs, readiness_objs, workout_objs, log_objs
+# def get_db_objs(date_range):
+#     sleep_objs = []
+#     readiness_objs = []
+#     workout_objs = []
+#     log_objs = []
+#     sleep = Sleep.query.filter_by(Sleep.date >= f'{date_range[0]}',
+#                                   Sleep.date <= f'{date_range[1]}')
+#     sleep_objs.append(sleep)
+#     readiness = Readiness.query.filter_by(Readiness.date >= f'{date_range[0]}',
+#                                           Readiness.date <= f'{date_range[1]}')
+#     readiness_objs.append(readiness)
+#     workout = Sleep.query.filter_by(Workout.date >= f'{date_range[0]}',
+#                                     Workout.date <= f'{date_range[1]}')
+#     workout_objs.append(workout)
+#     log = Sleep.query.filter_by(Log.date >= f'{date_range[0]}',
+#                                 Log.date <= f'{date_range[1]}')
+#     log_objs.append(log)
+#     return sleep_objs, readiness_objs, workout_objs, log_objs
 
 
 def get_overall_averages():
     averages = {}
     for key, value in avg_fields.items():
-        db_attr = db_fields[value]
+        db_attr = db_fields[value[0]]
         if key == 'avg_food_cutoff':
-            averages[key] = db.session.query(db.func.avg(db_attr)).scalar()
+            averages[key] = db.session.query(
+                func.round(func.avg(db_attr).cast(Numeric), 1)).scalar()
         elif key == 'avg_total_sleep':
             averages[key] = convert_seconds(
-                db.session.query(db.func.avg((db_attr))).scalar())
+                db.session.query(func.avg((db_attr))).scalar())
         else:
             averages[key] = db.session.query(
-                db.func.round(db.func.avg(db_attr), 1)).scalar()
+                db.func.round(func.avg(db_attr), 1)).scalar()
     return averages
 
 
