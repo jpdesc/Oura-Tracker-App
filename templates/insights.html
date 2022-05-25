@@ -70,7 +70,10 @@
     <thead>
         <tr>
             <th scope="col">Category</th>
-            <th scope="col">Overall Average </th>
+            <th scope="col">Overall Average ({{total_days}}) </th>
+            {% if filter_avgs %}
+            <th scop="col">Filtered Average ({{filtered_days}})</th>
+            {% endif %}
             <!-- <th scope="col">Last</th>
             <th scope="col">Handle</th> -->
         </tr>
@@ -79,54 +82,77 @@
         <tr>
             <th scope="row">Total Sleep</th>
             <td>{{averages['avg_total_sleep']}}</td>
-            <!-- <td></td>
-                    <td></td> -->
+            {% if filter_avgs %}
+            <td>{{filter_avgs['avg_total_sleep']}}</td>
+            {% endif %}
+            <!-- <td></td> -->
         </tr>
         <tr>
             <th scope="row">Sleep Score</th>
             <td>{{averages['avg_sleep_score']}}</td>
-            <!-- <td></td>
-            <td></td> -->
+            {% if filter_avgs %}
+            <td>{{filter_avgs['avg_sleep_score']}}</td>
+            {% endif %}
+            <!-- <td></td> -->
         </tr>
         <tr>
             <th scope="row">REM Score</th>
             <td>{{averages['avg_rem_score']}}</td>
-            <!-- <td>Thornton</td>
-            <td>@fat</td> -->
+            {% if filter_avgs %}
+            <td>{{filter_avgs['avg_rem_score']}}</td>
+            {% endif %}
+            <!-- <td>@fat</td> -->
         </tr>
         <tr>
             <th scope="row">Deep Score</th>
             <td>{{averages['avg_deep_score']}}</td>
-            <!-- <td>the Bird</td>
-            <td>@twitter</td> -->
+            {% if filter_avgs %}
+            <td>{{filter_avgs['avg_deep_score']}}</td>
+            {% endif %}
+            <!-- <td>@twitter</td> -->
         </tr>
         <tr>
             <th scope="row">Sleep Efficiency</th>
             <td>{{averages['avg_sleep_efficiency']}}</td>
+            {% if filter_avgs %}
+            <td>{{filter_avgs['avg_sleep_efficiency']}}</td>
+            {% endif %}
             <!-- <td>the Bird</td>
             <td>@twitter</td> -->
         </tr>
         <tr>
             <th scope="row">Readiness Score</th>
             <td>{{averages['avg_readiness_score']}}</td>
+            {% if filter_avgs %}
+            <td>{{filter_avgs['avg_readiness_score']}}</td>
+            {% endif %}
             <!-- <td>the Bird</td>
             <td>@twitter</td> -->
         </tr>
         <tr>
             <th scope="row">Recovery Index</th>
             <td>{{averages['avg_recovery_index']}}</td>
+            {% if filter_avgs %}
+            <td>{{filter_avgs['avg_recovery_index']}}</td>
+            {% endif %}
             <!-- <td>the Bird</td>
             <td>@twitter</td> -->
         </tr>
         <tr>
             <th scope="row">HRV Balance</th>
             <td>{{averages['avg_hrv_balance']}}</td>
+            {% if filter_avgs %}
+            <td>{{filter_avgs['avg_hrv_balance']}}</td>
+            {% endif %}
             <!-- <td>the Bird</td>
             <td>@twitter</td> -->
         </tr>
         <tr>
             <th scope="row">Food Cutoff</th>
             <td>{{averages['avg_food_cutoff']}}</td>
+            {% if filter_avgs %}
+            <td>{{filter_avgs['avg_food_cutoff']}}</td>
+            {% endif %}
             <!-- <td>the Bird</td>
             <td>@twitter</td> -->
         </tr>

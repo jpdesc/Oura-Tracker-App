@@ -42,8 +42,7 @@ class JournalForm(FlaskForm):
     stress = RadioField('Stress: ',
                         choices=['1', '2', '3', '4', '5'],
                         validators=[InputRequired()])
-    food_cutoff = FloatField('How many hours before bed was your last meal?',
-                             validators=[InputRequired()])
+    food_cutoff = FloatField('How many hours before bed was your last meal?')
     new_tags = StringField('Add new tags:',
                            widget=TextArea(),
                            render_kw={
@@ -379,18 +378,23 @@ def weights(page_id):
 def insights():
     filter_form = FilterForm()
     averages = get_overall_averages()
+    total_days = len(Sleep.query.order_by(Sleep.id).all())
+    filter_objs = None
+    filter_avgs = None
+    filtered_days = None
     if request.method == "POST":
         date_range = get_date_range(filter_form)
         filter_objs = get_filters(filter_form, date_range)
         filter_avgs = get_filtered_avgs(filter_objs)
-        return redirect(
-            url_for('insights',
-                    filter_obj=filter_objs,
-                    filter_avgs=filter_avgs))
-
+        filtered_days = len(filter_objs)
+        # total_entries = get_num_objects()
     return render_template('insights.html',
                            averages=averages,
-                           filter_form=filter_form)
+                           filter_form=filter_form,
+                           filter_objs=filter_objs,
+                           filter_avgs=filter_avgs,
+                           filtered_days=filtered_days,
+                           total_days=total_days)
 
 
 if __name__ == '__main__':

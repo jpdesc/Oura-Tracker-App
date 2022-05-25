@@ -115,16 +115,14 @@ def get_filters(form, date_range):
         second_conditions.append(statement)
     condition = and_(*conditions)
     second_condition = and_(*second_conditions)
-    # print(f'condition: {condition}')
     filter_result = Log.query.join(
         Log.tags).filter(condition).filter(second_condition).all()
-    print(f'queried {filter_result}')
     return filter_result
 
 
 def get_filtered_avgs(filtered_objs):
-    averages = {}
-    id_nums = [log.id for log in filtered_objs]
+    filter_avgs = {}
+    id_nums = [log.id + 1 for log in filtered_objs]
     for key, value in avg_fields.items():
         db_attr = db_fields[value[0]]
         attr = value[0]
@@ -134,16 +132,19 @@ def get_filtered_avgs(filtered_objs):
         subquery = db_objs.with_entities(db_attr).subquery()
         subquery_c = getattr(subquery.c, attr)
         if key == 'avg_food_cutoff':
-            averages[key] = db.session.query(
+            filter_avgs[key] = db.session.query(
                 func.round(func.avg(subquery_c).cast(Numeric), 1)).scalar()
-            print(averages[key])
+            print(filter_avgs[key])
         elif key == 'avg_total_sleep':
-            averages[key] = convert_seconds(
+            filter_avgs[key] = convert_seconds(
                 db.session.query(func.avg(subquery_c)).scalar())
         else:
-            averages[key] = db.session.query(
+            filter_avgs[key] = db.session.query(
                 func.round(func.avg(subquery_c), 1)).scalar()
-    return averages
+    return filter_avgs
+
+
+# def get_data_count()
 
 
 def format_filters(form):
@@ -205,26 +206,6 @@ def convert_seconds(seconds):
     return "%d:%02d" % (hour, minutes)
 
 
-# def get_db_objs(date_range):
-#     sleep_objs = []
-#     readiness_objs = []
-#     workout_objs = []
-#     log_objs = []
-#     sleep = Sleep.query.filter_by(Sleep.date >= f'{date_range[0]}',
-#                                   Sleep.date <= f'{date_range[1]}')
-#     sleep_objs.append(sleep)
-#     readiness = Readiness.query.filter_by(Readiness.date >= f'{date_range[0]}',
-#                                           Readiness.date <= f'{date_range[1]}')
-#     readiness_objs.append(readiness)
-#     workout = Sleep.query.filter_by(Workout.date >= f'{date_range[0]}',
-#                                     Workout.date <= f'{date_range[1]}')
-#     workout_objs.append(workout)
-#     log = Sleep.query.filter_by(Log.date >= f'{date_range[0]}',
-#                                 Log.date <= f'{date_range[1]}')
-#     log_objs.append(log)
-#     return sleep_objs, readiness_objs, workout_objs, log_objs
-
-
 def get_overall_averages():
     averages = {}
     for key, value in avg_fields.items():
@@ -239,9 +220,3 @@ def get_overall_averages():
             averages[key] = db.session.query(
                 db.func.round(func.avg(db_attr), 1)).scalar()
     return averages
-
-
-# def get_filtered_averages(filters_list, date_range):
-
-# def compare_averages():
-#     pass

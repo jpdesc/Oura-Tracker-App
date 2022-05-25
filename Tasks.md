@@ -11,14 +11,22 @@
 * Create insights
     * ~~Display tags for each day if tags exist~~
     * ~~add links to trends page from tags~~
-    * create dropdown for:
+    * ~~create dropdown for:~~
         * ~~tags~~
-        * sleep and readiness parameters
-        * workout type
-    * calendar to select a date range
-    * Graphs?
-    * HTML for results page
+        * ~~sleep and readiness parameters~~
+        * ~~workout type~~
+    * ~~calendar to select a date range~~
+    * ~~Fix the date number for averages~~
+    * Add number of data entry results for filters and overall
+    * Display all of pages in table
+
+* Create trends
 
 * Create workout comparisons
     * Link to last comparison
     * Create HTML page with differences
+    * Add PR field
+
+* Improve UI
+    * Dynamic hide/display groups of info
+    * Theme colors
