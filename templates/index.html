@@ -181,7 +181,8 @@
                                 </i>
                                 {{ workout_form.specify_other.label(class="form-label")}}<br>
                                 {{ workout_form.specify_other }}<br><br>
-                                {{ workout_form.soreness.label(class="form-label")}}<br>
+                                <a href={{url_for('template', page_id=page_id)}}>Start New Weights Template</a><br><br>
+                                {{ workout_form.soreness.label(class="form-label" )}}<br>
                                 {% for subfield in workout_form.soreness %}
                                 <tr>
                                     <td>{{ subfield }}</td>
@@ -202,6 +203,8 @@
                                 {{ workout_form.workout_log.label(class="form-label") }}<br>
                                 {{ workout_form.workout_log }}<br><br>
                                 {{ workout_form.submit2(class="btn btn-dark") }}
+
+
                                 {% endif %}
 
                             </form>

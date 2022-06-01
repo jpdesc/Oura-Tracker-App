@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+
+{% block content %}
+<form method="POST">
+    {{ template_form.hidden_tag() }}
+
+    {{ template_form.template_name.label(class="form-label") }} <br>
+    {{ template_form.template_name()}}<br>
+    {{ template_form.total_days.label(class="form-label") }} <br>
+    {{ template_form.total_days()}}<br>
+    {{ template_form.day_one.label(class="form-label") }} <br>
+    {{ template_form.day_one()}}<br>
+    {{ template_form.one_excs.label(class="form-label") }} <br>
+    {{ template_form.one_excs()}}<br>
+    {{ template_form.day_two.label(class="form-label") }} <br>
+    {{ template_form.day_two()}}<br>
+    {{ template_form.two_excs.label(class="form-label") }} <br>
+    {{ template_form.two_excs()}}<br>
+    {{ template_form.day_three.label(class="form-label") }} <br>
+    {{ template_form.day_three()}}<br>
+    {{ template_form.three_excs.label(class="form-label") }} <br>
+    {{ template_form.three_excs()}}<br>
+    {{ template_form.day_four.label(class="form-label") }} <br>
+    {{ template_form.day_four()}}<br>
+    {{ template_form.four_excs.label(class="form-label") }} <br>
+    {{ template_form.four_excs()}}<br>
+    {{ template_form.submit(class="btn btn-dark")}}
+</form>
+{% endblock %}

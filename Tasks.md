@@ -17,8 +17,15 @@
         * ~~workout type~~
     * ~~calendar to select a date range~~
     * ~~Fix the date number for averages~~
-    * Add number of data entry results for filters and overall
+    * ~~add number of data entry results for filters and overall~~
     * Display all of pages in table
+
+* Create edit workout template functionality
+    * ~~Create form~~
+    * ~~Create flask route~~
+    * ~~Create HTML~~
+    * Create dynamic javascript form.
+
 
 * Create trends
 

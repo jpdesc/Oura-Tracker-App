@@ -3,41 +3,45 @@
 {% block content %}
 <table class="table">
     <thead>
-      <tr>
-        <th scope="col">Exercises</th>
-        <th scope="col">Set Range</th>
-        <th scope="col">Reps</th>
-        <th scope="col">Weight</th>
-      </tr>
+        <tr>
+            <th scope="col">Exercises</th>
+            <th scope="col">Set Range</th>
+            <th scope="col">Reps</th>
+            <th scope="col">Weight</th>
+        </tr>
     </thead>
     <tbody>
-    {% for i in range(weights.exercises| length) %}
-    
-      <tr>
-        <th scope="row"> 
-            {{weights.exercises[i]}}</th>
-        
-        <td>{{weights.set_ranges[i]}}</td>
-        
-        {% if reps_improve %} 
-        {% if reps_improve[i] == True %}
-        <td class="table-success">
-        {{weights.reps[i]}}</td>
-        {% else %}
-        <td>{{weights.reps[i]}}</td>
-        {% endif %}
-        {% endif %}
+        {% for i in range(weights.exercises| length) %}
 
-        {% if weight_improve %} 
-        {% if weight_improve[i] == True %}
-        <td class="table-success">
-        {{weights.weight[i]}}</td>
-        {% else %}
-        <td>{{weights.weight[i]}}</td>
-        {% endif %}
-        {% endif %}
-      </tr>
-    {% endfor %}
+        <tr>
+            <th scope="row">
+                {{weights.exercises[i]}}</th>
+
+            <td>{{weights.set_ranges[i]}}</td>
+
+            {% if reps_improve %}
+            {% if reps_improve[i] == True %}
+            <td class="table-success">
+                {{weights.reps[i]}}</td>
+            {% else %}
+            <td>{{weights.reps[i]}}</td>
+            {% endif %}
+            {% else %}
+            <td>{{weights.reps[i]}}</td>
+            {% endif %}
+
+            {% if weight_improve %}
+            {% if weight_improve[i] == True %}
+            <td class="table-success">
+                {{weights.weight[i]}}</td>
+            {% else %}
+            <td>{{weights.weight[i]}}</td>
+            {% endif %}
+            {% else %}
+            <td>{{weights.weight[i]}}</td>
+            {% endif %}
+        </tr>
+        {% endfor %}
     </tbody>
-  </table>
+</table>
 {% endblock %}

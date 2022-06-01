@@ -1,72 +1,17 @@
 from io import BytesIO
 import os
+from re import T
 from flask import render_template, session, redirect, url_for, request, send_file
 from flask_bootstrap import Bootstrap
-from flask_wtf import FlaskForm
-from wtforms import StringField, SubmitField, RadioField, FileField, SelectField, BooleanField, FloatField
-from wtforms.widgets import TextArea
-from wtforms.validators import DataRequired, InputRequired
-# from insights import get_filtered_avgs
-from wtforms_sqlalchemy.fields import QuerySelectMultipleField
 from datetime import date, timedelta
 from fetch_oura_data import setup_oura_data, today, date_str_cal, id_dict
 from weights_data import get_weights_data
-from database import db, Sleep, Log, Tag, Readiness, Workout, Weights, app
+from database import db, Sleep, Log, Tag, Readiness, Workout, Weights, app, Template
 from insights import FilterForm, get_overall_averages, get_filters, get_date_range, get_filtered_avgs
+from forms import *
 
 basedir = os.path.abspath(os.path.dirname(__file__))
 bootstrap = Bootstrap(app)
-
-
-def tag_query():
-    return Tag.query.order_by(Tag.tag)
-
-
-class JournalForm(FlaskForm):
-    journal = StringField('Notes:',
-                          validators=[DataRequired()],
-                          widget=TextArea(),
-                          render_kw={
-                              'cols': 25,
-                              'rows': 4
-                          })
-    focus = RadioField('Focus: ',
-                       choices=['1', '2', '3', '4', '5'],
-                       validators=[InputRequired()])
-    mood = RadioField('Mood: ',
-                      choices=['1', '2', '3', '4', '5'],
-                      validators=[InputRequired()])
-    energy = RadioField('Energy: ',
-                        choices=['1', '2', '3', '4', '5'],
-                        validators=[InputRequired()])
-    stress = RadioField('Stress: ',
-                        choices=['1', '2', '3', '4', '5'],
-                        validators=[InputRequired()])
-    food_cutoff = FloatField('How many hours before bed was your last meal?')
-    new_tags = StringField('Add new tags:',
-                           widget=TextArea(),
-                           render_kw={
-                               'cols': 15,
-                               'rows': 1
-                           })
-    select_tags = QuerySelectMultipleField(query_factory=tag_query)
-    submit1 = SubmitField("Submit Wellness")
-
-
-class WorkoutForm(FlaskForm):
-    soreness = RadioField('Soreness:', choices=['1', '2', '3', '4', '5'])
-    grade = RadioField('Workout Grade:', choices=['1', '2', '3', '4', '5'])
-    type = SelectField(choices=['Swim', 'Weights', 'Other'])
-    specify_other = StringField("Specify other: ")
-    file = FileField('Upload Workout File:')
-    workout_log = StringField('Workout Notes:',
-                              widget=TextArea(),
-                              render_kw={
-                                  'cols': 25,
-                                  'rows': 4
-                              })
-    submit2 = SubmitField("Submit Workout")
-
 
 events = []
 
@@ -117,7 +62,9 @@ def update_workout_events(submitted_log, type):
 
 def get_workout_week_num():
     last_workout = Weights.query.order_by(Weights.id.desc()).first()
-    if last_workout.workout_id == 4:
+    template = Template.query.order_by(Template.id.desc()).first()
+
+    if last_workout.workout_id == template.num_days:
         week = last_workout.workout_week + 1
     else:
         week = last_workout.workout_week
@@ -125,8 +72,10 @@ def get_workout_week_num():
 
 
 def get_workout_id():
+    template = Template.query.order_by(Template.id.desc()).first()
     last_workout = Weights.query.order_by(Weights.id.desc()).first()
-    if last_workout.workout_id == 4:
+    print(template.num_days)
+    if last_workout.workout_id == template.num_days:
         workout_id = 1
     else:
         workout_id = last_workout.workout_id + 1
@@ -207,6 +156,7 @@ def index(page_id):
     log = Log.query.filter(Log.id == page_id).first()
     readiness = Readiness.query.filter(Readiness.id == page_id).first()
     workout = Workout.query.filter(Workout.id == page_id).first()
+    new_template = Weights.query.filter(Weights.id == page_id).first()
 
     if wellness_form.validate_on_submit():
         journal = wellness_form.journal.data
@@ -250,7 +200,7 @@ def index(page_id):
                                soreness=soreness,
                                grade=grade,
                                workout_log=workout_log)
-        if type == "Weights":
+        if type == "Weights" and not new_template:
             get_weights_data(get_workout_id(), get_workout_week_num(), page_id)
         db.session.add(workout_info)
         db.session.commit()
@@ -379,15 +329,12 @@ def insights():
     filter_form = FilterForm()
     averages = get_overall_averages()
     total_days = len(Sleep.query.order_by(Sleep.id).all())
-    filter_objs = None
-    filter_avgs = None
-    filtered_days = None
+    filter_objs, filter_avgs, filtered_days = None, None, None
     if request.method == "POST":
         date_range = get_date_range(filter_form)
         filter_objs = get_filters(filter_form, date_range)
         filter_avgs = get_filtered_avgs(filter_objs)
         filtered_days = len(filter_objs)
-        # total_entries = get_num_objects()
     return render_template('insights.html',
                            averages=averages,
                            filter_form=filter_form,
@@ -395,6 +342,32 @@ def insights():
                            filter_avgs=filter_avgs,
                            filtered_days=filtered_days,
                            total_days=total_days)
+
+
+@app.route('/template/<page_id>', methods=['GET', 'POST'])
+def template(page_id):
+    template_form = TemplateForm()
+
+    if request.method == "POST":
+        rows = [
+            template_form.day_one.data, template_form.day_two.data,
+            template_form.day_three.data, template_form.day_four.data
+        ]
+        excs = [
+            template_form.one_excs.data, template_form.two_excs.data,
+            template_form.three_excs.data, template_form.four_excs.data
+        ]
+        template_data = Template(
+            start_id=page_id,
+            template_name=template_form.template_name.data,
+            row_nums=rows,
+            num_excs=excs,
+            num_days=template_form.total_days.data)
+        db.session.add(template_data)
+        db.session.commit()
+        get_weights_data(1, 1, page_id)
+        return redirect(url_for('index', page_id=page_id))
+    return render_template('update_template.html', template_form=template_form)
 
 
 if __name__ == '__main__':
