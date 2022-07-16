@@ -6,7 +6,7 @@
 
 <div class="container">
 
-    <h2>Report for {{date}}</h2>
+    <h2>{{date}}</h2>
     <hr>
 </div>
 
@@ -19,7 +19,7 @@
 
                 <div class="p-3 border bg-light">
 
-                    <H5>Sleep Summary</H5>
+                    <H5>Sleep <i class="fa-solid fa-bed"></i></H5>
 
                 </div>
 
@@ -43,7 +43,7 @@
                 <div>
                     {% if readiness %}
                     <div class="p-3 border bg-light">
-                        <H5>Readiness Summary</H5>
+                        <H5>Readiness <i class="fa-solid fa-bolt"></i></H5>
                     </div>
                     <div class="p-3 border">
                         <ul>
@@ -66,7 +66,7 @@
             <div class="row row-cols-1">
                 <div class="col">
                     <div class="p-3 border bg-light">
-                        <H5>Sleep Summary</H5>
+                        <H5>Sleep <i class="fa-solid fa-bed"></i></H5>
                     </div>
                     <div class="p-3 border">
                         <i> No sleep data for today. Please make sure oura ring is on and connected to bluetooth for
@@ -86,7 +86,7 @@
                 <div class="col">
 
                     <div class="p-3 border bg-light">
-                        <H5>Wellness Log</H5>
+                        <H5>Wellness <i class="fa-solid fa-spa"></i></H5>
                     </div>
                     <div class="p-3 border">
                         {% if log %}
@@ -96,10 +96,13 @@
                             <li>Mood: {{log.mood}}</li>
                             <li>Stress: {{log.stress}}</li>
                         </ul>
-                        <div>Wellness Notes:
-                            <hr><i>{{log.journal}}</i>
+                        <hr>
+                        <div>
+                            <h6>Log <i class="fa-solid fa-pen-to-square"></i></h6>
                             <hr>
-                            Tags:
+                            <i>{{log.journal}}</i>
+                            <hr>
+                            <i class="fa-regular fa-tags"></i>
                             {% for tag in log.tags %}
                             <a href="{{ url_for('insights', filters=[tag]) }}">{{tag}}</a>
                             {% endfor %}
@@ -118,16 +121,18 @@
 
                                 {{ wellness_form.hidden_tag() }}
 
-
                                 {% for field in [wellness_form.focus, wellness_form.energy, wellness_form.mood,
                                 wellness_form.stress]
                                 %}
                                 {{ field.label(class="form-label") }}
                                 {% for subfield in field %}
+
+
                                 <tr>
                                     <td>{{ subfield }}</td>
                                     <td>{{ subfield.label(class="form-label") }}</td>
                                 </tr>
+
                                 {% endfor %}
                                 <br>
                                 {% endfor %}<br>
@@ -150,7 +155,7 @@
                 <div class="col">
                     <div>
                         <div class="p-3 border bg-light">
-                            <H5>Workout Log</H5>
+                            <H5>Workout <i class="fa-solid fa-person-running"></i></H5>
                         </div>
                         <div class="p-3 border">
                             {% if workout %}
@@ -163,7 +168,7 @@
                                         href="{{url_for('download', page_id=page_id)}}">{{workout.filename}}</a></li>
                                 {% endif %}
                             </ul>
-                            <div>Workout Notes:
+                            <div><i class="fa-thin fa-pen-to-square"></i>
                                 <hr> <i>{{workout.workout_log}}</i>
                                 {% if workout.type == "Weights" %}
                                 <a href={{url_for('weights', page_id=page_id)}}>View Workout</a>
@@ -181,7 +186,8 @@
                                 </i>
                                 {{ workout_form.specify_other.label(class="form-label")}}<br>
                                 {{ workout_form.specify_other }}<br><br>
-                                <a href={{url_for('template', page_id=page_id)}}>Start New Weights Template</a><br><br>
+                                <a href={{url_for('template', page_id=page_id)}} class="link-success">Start New Weights
+                                    Template</a><br><br>
                                 {{ workout_form.soreness.label(class="form-label" )}}<br>
                                 {% for subfield in workout_form.soreness %}
                                 <tr>
@@ -212,7 +218,8 @@
 
                         </div>
                         {% if workout and not log %}
-                        <a href="{{ url_for('edit_log', page_id=page_id) }}" class="btn btn-info">Edit Workout</a>
+                        <a href="{{ url_for('edit_log', page_id=page_id) }}" class="btn btn-info">Edit <i
+                                class="fa-solid fa-person-running"></i></a>
                     </div>
 
                     {% endif %}
@@ -222,7 +229,8 @@
     </div><br>
     {% if log and workout %}
     <div class="wrapper">
-        <a href="{{ url_for('edit_log', page_id=page_id) }}" class="btn btn-info">Edit Logs</a>
+        <a href="{{ url_for('edit_log', page_id=page_id) }}" class="btn btn-info">Edit <i
+                class="fa-solid fa-spa"></i></a>
     </div>
     {% endif %}
     <br>
@@ -230,11 +238,13 @@
 </div>
 <div class="button-left">
     <button class="btn btn-outline-secondary" id="back"
-        onclick="window.location.href='{{ url_for('index', page_id=page_id-1) }}'">Previous Day</button>
+        onclick="window.location.href='{{ url_for('index', page_id=page_id-1) }}'"><i
+            class="fa-solid fa-angles-left"></i> Previous Day</button>
 </div>
 <div class="button-right">
     <button class="btn btn-outline-secondary" id="forward"
-        onclick="window.location.href='{{ url_for('index', page_id=page_id+1) }}'">Next Day</button>
+        onclick="window.location.href='{{ url_for('index', page_id=page_id+1) }}'">Next Day <i
+            class="fa-solid fa-angles-right"></i></button>
 </div>
 </div>
 {% endblock %}

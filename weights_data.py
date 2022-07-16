@@ -115,7 +115,8 @@ def add_weights_to_db(subs_made, id, workout_id, workout_week):
     # weight.reps = db_dict[2]
     # weight.weight = db_dict[3]
     weights_info = Weights(id=id, exercises=db_dict[0], set_ranges = db_dict[1],\
-      reps = db_dict[2], weight = db_dict[3], workout_week = workout_week, workout_id=workout_id)
+      reps = db_dict[2], weight = db_dict[3], workout_week = workout_week, workout_id=workout_id,
+      template_id=current_template.id)
     db.session.add(weights_info)
     db.session.commit()
 
@@ -124,13 +125,9 @@ def get_weights_data(workout_id, workout_week, id):
     ''' Formats the exercise data from google sheet based on
     the workout id and week id of the Workout database object.
     '''
-    print(workout_id)
-    print(workout_week)
     index = workout_id - 1
-    print(index)
     row = current_template.row_nums[index]
     col = weeks_column.get(workout_week)
-    print(col)
     total_exercises = current_template.num_excs[index]
     subs_row = row + total_exercises + 1
 
@@ -145,10 +142,8 @@ def get_weights_data(workout_id, workout_week, id):
     exercises = ranges[0].get('values')
     set_ranges = ranges[1].get('values')
     reps_weight = ranges[2].get('values')
-    print(reps_weight)
     substitutions = ranges[3].get('values')
     reps, weight, subbed = parse_reps_weight(reps_weight)
-    print(reps, weight, subbed)
     for i, exercise in enumerate(exercises):
         exercises[i] = format_output(str(exercise))
         try:

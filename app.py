@@ -22,15 +22,42 @@ def get_date(page_id, id_dict):
             return key
 
 
+def format_date(date):
+    '''Format date for display on wellness dashboard.'''
+    return date.strftime("%A, %B %-dth")
+
+
+def get_wellness_score(log):
+    if log.stress:
+        return (log.focus + log.mood + log.energy + (6 - log.stress)) / 4
+    else:
+        return None
+
+
 def create_cal_events():
     sleep_query = Sleep.query.order_by(Sleep.id).all()
     for sleep in sleep_query:
-        events.append({'title': 'Sleep', 'date': sleep.date, 'id': sleep.id})
+        readiness = Readiness.query.filter_by(id=sleep.id).first()
+        events.append({
+            'title': 'Sleep',
+            'score': sleep.sleep_score,
+            'date': sleep.date,
+            'id': sleep.id,
+            'subclass': 'Oura'
+        })
+        events.append({
+            'title': 'Readiness',
+            'score': readiness.readiness_score,
+            'date': readiness.date,
+            'id': readiness.id,
+            'subclass': 'Oura'
+        })
 
     log_query = Log.query.order_by(Log.id).all()
     for log in log_query:
         events.append({
-            'title': 'Wellness Log',
+            'title': 'Wellness',
+            'score': get_wellness_score(log),
             'date': log.date,
             'id': log.id
         })
@@ -39,6 +66,7 @@ def create_cal_events():
     for workout in workout_query:
         events.append({
             'title': workout.type,
+            'score': workout.grade,
             'date': workout.date,
             'id': workout.id
         })
@@ -46,7 +74,8 @@ def create_cal_events():
 
 def update_log_events(submitted_log):
     events.append({
-        'title': 'Wellness Log',
+        'title': 'Wellness',
+        'score': get_wellness_score(submitted_log),
         'date': submitted_log.date,
         'id': submitted_log.id
     })
@@ -74,7 +103,6 @@ def get_workout_week_num():
 def get_workout_id():
     template = Template.query.order_by(Template.id.desc()).first()
     last_workout = Weights.query.order_by(Weights.id.desc()).first()
-    print(template.num_days)
     if last_workout.workout_id == template.num_days:
         workout_id = 1
     else:
@@ -213,7 +241,7 @@ def index(page_id):
                            sleep=sleep,
                            log=log,
                            page_id=page_id,
-                           date=date,
+                           date=format_date(date),
                            readiness=readiness,
                            workout=workout)
 
@@ -313,6 +341,7 @@ def weights(page_id):
     try:
         last_week = Weights.query.filter_by(
             workout_id=this_week.workout_id,
+            template_id=this_week.template.id,
             workout_week=(this_week.workout_week - 1)).first()
         reps_improve, weight_improve = check_improvement(this_week, last_week)
     except (AttributeError):

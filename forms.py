@@ -1,7 +1,7 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, SubmitField, RadioField, FileField, SelectField, BooleanField, FloatField, IntegerField
+from wtforms import StringField, SubmitField, RadioField, FileField, SelectField, DateField, FloatField, IntegerField
 from wtforms.widgets import TextArea
-from wtforms.validators import DataRequired, InputRequired
+from wtforms.validators import DataRequired, InputRequired, Optional
 from database import Tag
 from wtforms_sqlalchemy.fields import QuerySelectMultipleField
 
@@ -44,7 +44,8 @@ class JournalForm(FlaskForm):
 class WorkoutForm(FlaskForm):
     soreness = RadioField('Soreness:', choices=['1', '2', '3', '4', '5'])
     grade = RadioField('Workout Grade:', choices=['1', '2', '3', '4', '5'])
-    type = SelectField(choices=['Swim', 'Weights', 'Other'])
+    type = SelectField(
+        choices=['Swim', 'Weights', 'Calisthenics', 'Yoga', 'Other'])
     specify_other = StringField("Specify other: ")
     file = FileField('Upload Workout File:')
     workout_log = StringField('Workout Notes:',
@@ -72,3 +73,41 @@ class TemplateForm(FlaskForm):
     day_six = IntegerField("Day 6 Row: ")
     six_excs = IntegerField("Day 6 Total Exercises")
     submit = SubmitField("Submit")
+
+
+class FilterForm(FlaskForm):
+    tag_filter = QuerySelectMultipleField('Tags ', query_factory=tag_query)
+
+    sleep_filter = SelectField('Sleep ',
+                               choices=[
+                                   '', 'Sleep Score', 'Efficiency Score',
+                                   'Food Timing 0-1.5', 'Food Timing 1.5-3',
+                                   'Food Timing 3-4.5', 'Food Timing 4.5+'
+                               ])
+    sleep_operator = SelectField(
+        choices=['', '>', '<', 'between'],
+        render_kw={'onchange': "secondField('sleep_second')"})
+    sleep_first = IntegerField()
+    sleep_second = IntegerField(validators=[Optional()])
+
+    readiness_filter = SelectField(
+        'Readiness ',
+        choices=['', 'Readiness', 'Recovery Index', 'Temperature Score'])
+    readiness_operator = SelectField(choices=['', '>', '<', 'between'])
+    readiness_first = IntegerField()
+    readiness_second = IntegerField(validators=[Optional()])
+
+    wellness_filter = SelectField(
+        'Wellness ', choices=['', 'Focus', 'Energy', 'Mood', 'Stress'])
+    wellness_operator = SelectField(choices=['', '>', '<', 'between'])
+    wellness_first = IntegerField()
+    wellness_second = IntegerField(validators=[Optional()])
+
+    workout_filter = SelectField('Workout ', choices=['', 'Grade', 'Soreness'])
+    workout_operator = SelectField(choices=['', '>', '<', 'between'])
+    workout_first = IntegerField()
+    workout_second = IntegerField(validators=[Optional()])
+    start_date = DateField('Date Range:', format='%Y-%m-%d')
+    end_date = DateField(format='%Y-%m-%d')
+
+    submit = SubmitField("Submit Filters")

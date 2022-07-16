@@ -35,5 +35,6 @@
     * Add PR field
 
 * Improve UI
+    *
     * Dynamic hide/display groups of info
     * Theme colors
