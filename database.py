@@ -12,7 +12,7 @@ app = Flask(__name__)
 db = SQLAlchemy(app)
 migrate = Migrate(app, db, compare_type=True)
 
-app.config['SECRET_KEY'] = 'random string'  # TODO: Change to actual password.
+app.config['SECRET_KEY'] = 'iauye8uhO8UF28h28c8uwcp8387AFG283HDJK'
 app.config['SQLALCHEMY_DATABASE_URI'] = "postgresql://@localhost:5432/oura_db"
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 

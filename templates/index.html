@@ -168,7 +168,9 @@
                                         href="{{url_for('download', page_id=page_id)}}">{{workout.filename}}</a></li>
                                 {% endif %}
                             </ul>
-                            <div><i class="fa-thin fa-pen-to-square"></i>
+                            <div>
+                                <hr>
+                                <h6>Log <i class="fa-solid fa-pen-to-square"></i></h6>
                                 <hr> <i>{{workout.workout_log}}</i>
                                 {% if workout.type == "Weights" %}
                                 <a href={{url_for('weights', page_id=page_id)}}>View Workout</a>
