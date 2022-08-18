@@ -13,6 +13,8 @@ pg_dump oura_db > "$filename"
 
 cd /Users/jackdescombes/db_backups/
 
+chmod 777 *
+
 aws s3 sync /Users/jackdescombes/db_backups/ s3://ouradbbackups
 
 file_count=$(aws s3 ls --recursive s3://ouradbbackups | wc -l)
@@ -24,3 +26,5 @@ then
 ls -t | tail -$excess | xargs rm
 aws s3 sync . s3://ouradbbackups --delete
 fi
+
+rsync -avp /Users/jackdescombes/db_backups/* root@server.jpdesc.com:/var/lib/ouraapp/backups/uploads/
