@@ -1,5 +1,10 @@
 #!/bin/bash
 
-. oura_env/bin/activate
+cd /srv/jwa/ouraapp
 
-python3.9 app.py > run_err.log
+mkdir logs
+
+. /jwa_env/bin/activate
+
+
+python3.9 app.py >> ./logs/run_err.log
