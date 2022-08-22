@@ -229,7 +229,8 @@ def index(page_id):
                                grade=grade,
                                workout_log=workout_log)
         if type == "Weights" and not new_template:
-            get_weights_data(get_workout_id(), get_workout_week_num(), page_id)
+            get_weights_data(get_workout_id(), get_workout_week_num(), page_id,
+                             current_template)
         db.session.add(workout_info)
         db.session.commit()
         update_workout_events(workout_info, type)
@@ -394,7 +395,8 @@ def template(page_id):
             num_days=template_form.total_days.data)
         db.session.add(template_data)
         db.session.commit()
-        get_weights_data(1, 1, page_id)
+        current_template = Template.query.order_by(Template.id.desc()).first()
+        get_weights_data(1, 1, page_id, current_template)
         return redirect(url_for('index', page_id=page_id))
     return render_template('update_template.html', template_form=template_form)
 

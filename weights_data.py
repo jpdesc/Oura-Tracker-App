@@ -121,7 +121,7 @@ def add_weights_to_db(subs_made, id, workout_id, workout_week):
     db.session.commit()
 
 
-def get_weights_data(workout_id, workout_week, id):
+def get_weights_data(workout_id, workout_week, id, current_template):
     ''' Formats the exercise data from google sheet based on
     the workout id and week id of the Workout database object.
     '''

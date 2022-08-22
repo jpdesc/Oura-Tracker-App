@@ -103,9 +103,6 @@ def get_filtered_avgs(filtered_objs):
     return filter_avgs
 
 
-# def get_data_count()
-
-
 def format_filters(form):
     filter_fields = {
         'sleep': [
