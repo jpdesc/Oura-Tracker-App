@@ -6,6 +6,7 @@ from datetime import datetime
 from sqlalchemy.ext.hybrid import hybrid_property
 from sqlalchemy.orm import column_property
 from sqlalchemy import func, cast, Integer
+import os
 import time
 
 app = Flask(__name__)
@@ -14,8 +15,9 @@ migrate = Migrate(app, db, compare_type=True)
 
 #TODO: Move secret key to .env and make a new one.
 app.config['SECRET_KEY'] = 'iauye8uhO8UF28h28c8uwcp8387AFG283HDJK'
+password = os.getenv('POSTGRES_PASSWORD')
 app.config[
-    'SQLALCHEMY_DATABASE_URI'] = "postgresql://@localhost:5432/oura_db?user=jwa"
+    'SQLALCHEMY_DATABASE_URI'] = f"postgresql://jwa:{password}@localhost:5432/oura_db?user=jwa"
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 tags = db.Table(
