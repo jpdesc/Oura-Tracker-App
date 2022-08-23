@@ -17,7 +17,7 @@ migrate = Migrate(app, db, compare_type=True)
 app.config['SECRET_KEY'] = 'iauye8uhO8UF28h28c8uwcp8387AFG283HDJK'
 password = os.getenv('POSTGRES_PASSWORD')
 app.config[
-    'SQLALCHEMY_DATABASE_URI'] = f"postgresql://@localhost:5432/oura_db?user=jwa&password={password}"
+    'SQLALCHEMY_DATABASE_URI'] = "postgresql://@localhost:5432/oura_db?user=jwa"
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 tags = db.Table(
