@@ -2,7 +2,6 @@
 
 cd /srv/jwa/ouraapp
 
-mkdir logs
 
 . /jwa_env/bin/activate
 
