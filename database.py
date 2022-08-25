@@ -7,7 +7,10 @@ from sqlalchemy.ext.hybrid import hybrid_property
 from sqlalchemy.orm import column_property
 from sqlalchemy import func, cast, Integer
 import os
+from dotenv import load_dotenv
 import time
+
+load_dotenv()
 
 app = Flask(__name__)
 db = SQLAlchemy(app)
@@ -15,7 +18,8 @@ migrate = Migrate(app, db, compare_type=True)
 
 #TODO: Move secret key to .env and make a new one.
 app.config['SECRET_KEY'] = 'iauye8uhO8UF28h28c8uwcp8387AFG283HDJK'
-app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get('DATABASE_URL')
+app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv('DATABASE_URL')
+print(app.config['SQLALCHEMY_DATABASE_URI'])
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 tags = db.Table(
