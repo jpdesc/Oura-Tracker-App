@@ -15,9 +15,9 @@ migrate = Migrate(app, db, compare_type=True)
 
 #TODO: Move secret key to .env and make a new one.
 app.config['SECRET_KEY'] = 'iauye8uhO8UF28h28c8uwcp8387AFG283HDJK'
-password = os.getenv('POSTGRES_PASSWORD')
+# password = os.getenv('POSTGRES_PASSWORD')
 app.config[
-    'SQLALCHEMY_DATABASE_URI'] = f"postgresql://jwa:{password}@127.0.0.1:5432/oura_db"
+    'SQLALCHEMY_DATABASE_URI'] = f"postgresql://jwa:doggo@127.0.0.1:5432/oura_db"
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 tags = db.Table(
