@@ -1,14 +1,9 @@
-from time import time
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
-from datetime import datetime
-from sqlalchemy.ext.hybrid import hybrid_property
 from sqlalchemy.orm import column_property
-from sqlalchemy import func, cast, Integer
 import os
 from dotenv import load_dotenv
-import time
 
 load_dotenv()
 

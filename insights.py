@@ -1,12 +1,7 @@
-from flask_wtf import FlaskForm
-from wtforms import SubmitField, SelectField, BooleanField, FloatField, IntegerField, DateField
-from wtforms.validators import DataRequired, InputRequired, Optional
-from yaml import TagToken
 from wtforms_sqlalchemy.fields import QuerySelectMultipleField
 from database import Tag, Sleep, Readiness, Log, Workout, db, tags
 from datetime import date
 from sqlalchemy import and_, func, cast, Numeric
-from forms import FilterForm
 
 db_fields = {
     'sleep_score': Sleep.sleep_score,

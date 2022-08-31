@@ -1,6 +1,5 @@
 from io import BytesIO
 import os
-from re import T
 from flask import render_template, session, redirect, url_for, request, send_file
 from flask_bootstrap import Bootstrap
 from datetime import date, timedelta
