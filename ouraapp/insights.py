@@ -1,5 +1,5 @@
 from wtforms_sqlalchemy.fields import QuerySelectMultipleField
-from database import Tag, Sleep, Readiness, Log, Workout, db, tags
+from ouraapp.database import Tag, Sleep, Readiness, Log, Workout, db, tags
 from datetime import date
 from sqlalchemy import and_, func, cast, Numeric
 

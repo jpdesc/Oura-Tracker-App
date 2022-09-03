@@ -1,16 +1,14 @@
 from io import BytesIO
-import os
 from flask import render_template, session, redirect, url_for, request, send_file
-from flask_bootstrap import Bootstrap
 from datetime import date, timedelta
-from fetch_oura_data import setup_oura_data, today, date_str_cal, id_dict
-from weights_data import get_weights_data
-from database import db, Sleep, Log, Tag, Readiness, Workout, Weights, app, Template
-from insights import FilterForm, get_overall_averages, get_filters, get_date_range, get_filtered_avgs
-from forms import *
-
-basedir = os.path.abspath(os.path.dirname(__file__))
-bootstrap = Bootstrap(app)
+from ouraapp.fetch_oura_data import today, date_str_cal, id_dict
+from ouraapp.weights_data import get_weights_data
+from ouraapp.database import Sleep, Log, Tag, Readiness, Workout, Weights, Template
+from ouraapp.insights import get_overall_averages, get_filters, get_date_range, get_filtered_avgs
+from ouraapp.fetch_oura_data import setup_oura_data
+from ouraapp.forms import *
+from ouraapp import db
+from run import app
 
 events = []
 
@@ -36,19 +34,22 @@ def get_wellness_score(log):
 def create_cal_events():
     sleep_query = Sleep.query.order_by(Sleep.id).all()
     for sleep in sleep_query:
+
         readiness = Readiness.query.filter_by(id=sleep.id).first()
+        if readiness:
+            events.append({
+                'title': 'Readiness',
+                'score': readiness.readiness_score,
+                'date': readiness.date,
+                'id': readiness.id,
+                'subclass': 'Oura'
+            })
+
         events.append({
             'title': 'Sleep',
             'score': sleep.sleep_score,
             'date': sleep.date,
             'id': sleep.id,
-            'subclass': 'Oura'
-        })
-        events.append({
-            'title': 'Readiness',
-            'score': readiness.readiness_score,
-            'date': readiness.date,
-            'id': readiness.id,
             'subclass': 'Oura'
         })
 
@@ -176,6 +177,8 @@ def create_id_dict():
 @app.route('/', defaults={'page_id': id_dict[today]}, methods=['GET', 'POST'])
 @app.route('/<int:page_id>', methods=['GET', 'POST'])
 def index(page_id):
+    setup_oura_data()
+    create_cal_events()
     date = get_date(page_id, id_dict)
     wellness_form = JournalForm()
     workout_form = WorkoutForm()
@@ -398,9 +401,3 @@ def template(page_id):
         get_weights_data(1, 1, page_id, current_template)
         return redirect(url_for('index', page_id=page_id))
     return render_template('update_template.html', template_form=template_form)
-
-
-if __name__ == '__main__':
-    setup_oura_data()
-    create_cal_events()
-    app.run(debug=True)

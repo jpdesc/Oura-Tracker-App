@@ -4,7 +4,8 @@ from datetime import date, timedelta, datetime
 import time
 from oura import OuraClient
 from dotenv import load_dotenv
-from database import *
+from ouraapp import database
+from ouraapp import db
 
 today = date.today()
 date_str_cal = {}
@@ -81,12 +82,12 @@ def add_sleep_to_db(json_dict):
     for entry in (selected_data['sleep']):
         day = format_date(entry['summary_date'])
         # print(selected_data)
-        if db.session.query(Sleep).filter_by(date=day).count() < 1:
+        if db.session.query(database.Sleep).filter_by(date=day).count() < 1:
             # obj = Sleep.query.filter_by(date=day).first()
             # if obj:
             #     obj.seconds_sleep = entry['total']
             #     obj.sleep_score = entry['score']
-            prev_night_data = Sleep(
+            prev_night_data = database.Sleep(
                 date=day,
                 id=id_dict[day],
                 sleep_score=entry['score'],
@@ -107,8 +108,9 @@ def add_readiness_to_db(json_dict):
     selected_data = json.loads(json_dict, object_hook=date_hook)
     for entry in (selected_data['readiness']):
         day = format_date(entry['summary_date'])
-        if db.session.query(Readiness).filter_by(date=day).count() < 1:
-            prev_night_data = Readiness(
+        if db.session.query(
+                database.Readiness).filter_by(date=day).count() < 1:
+            prev_night_data = database.Readiness(
                 date=day,
                 id=id_dict[day],
                 hrv_balance=entry['score_hrv_balance'],

@@ -1,10 +1,8 @@
 import string
 import re
-
-from attr import Attribute
 from google.oauth2 import service_account
 from googleapiclient.discovery import build
-from database import db, Weights, Template
+from ouraapp.database import db, Weights, Template
 
 SCOPES = ['https://www.googleapis.com/auth/spreadsheets']
 SERVICE_ACCOUNT_FILE = 'keys.json'
@@ -12,21 +10,25 @@ creds = service_account.Credentials.from_service_account_file(
     SERVICE_ACCOUNT_FILE, scopes=SCOPES)
 SPREADSHEET_ID = '1AdnxSengjtM0zwTgG7NtX1nBUdK0w4-368n8852WNPs'
 
-# Dictionaries with key as the id number and value as row/column/number of exercises.
-weeks_column = {}
 
-current_template = Template.query.order_by(Template.id.desc()).first()
-print(f'current_template: {current_template}')
-try:
-    sheet_prefix = f'{current_template.template_name}!'
-except AttributeError:
-    sheet_prefix = None
-alphabet_string = string.ascii_uppercase
-alphabet_list = list(alphabet_string[3:])
+def create_weeks_column():
+    # Dictionaries with key as the id number and value as row/column/number of exercises.
+    weeks_column = {}
+    alphabet_string = string.ascii_uppercase
+    alphabet_list = list(alphabet_string[3:])
 
-# Create a dict with the google sheets column letter for each week.
-for i, letter in enumerate(alphabet_list):
-    weeks_column[i + 1] = letter
+    # Create a dict with the google sheets column letter for each week.
+    for i, letter in enumerate(alphabet_list):
+        weeks_column[i + 1] = letter
+    return weeks_column
+
+
+def get_sheet_prefix():
+    current_template = Template.query.order_by(Template.id.desc()).first()
+    try:
+        return f'{current_template.template_name}!'
+    except AttributeError:
+        return None
 
 
 def parse_reps_weight(reps_weight):
@@ -125,9 +127,10 @@ def get_weights_data(workout_id, workout_week, id, current_template):
     ''' Formats the exercise data from google sheet based on
     the workout id and week id of the Workout database object.
     '''
+    sheet_prefix = get_sheet_prefix()
     index = workout_id - 1
     row = current_template.row_nums[index]
-    col = weeks_column.get(workout_week)
+    col = create_weeks_column().get(workout_week)
     total_exercises = current_template.num_excs[index]
     subs_row = row + total_exercises + 1
 
