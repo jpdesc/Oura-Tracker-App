@@ -110,12 +110,16 @@ def add_readiness_to_db(json_dict):
         day = format_date(entry['summary_date'])
         if db.session.query(
                 database.Readiness).filter_by(date=day).count() < 1:
+            try:
+                resting_hr_score = entry['score_resting_hr']
+            except KeyError:
+                resting_hr_score = None
             prev_night_data = database.Readiness(
                 date=day,
                 id=id_dict[day],
                 hrv_balance=entry['score_hrv_balance'],
                 recovery_index=entry['score_recovery_index'],
-                resting_hr=entry['score_resting_hr'],
+                resting_hr=resting_hr_score,
                 temperature=entry['score_temperature'],
                 readiness_score=entry['score'])
             db.session.add(prev_night_data)
