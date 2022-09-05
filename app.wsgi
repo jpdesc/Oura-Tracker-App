@@ -4,5 +4,5 @@ import logging
 import sys
 
 logging.basicConfig(stream=sys.stderr)
-sys.path.insert(0, '/srv/jwa/oura_proj')
+sys.path.insert(0, '/srv/jwa')
 import run as application
