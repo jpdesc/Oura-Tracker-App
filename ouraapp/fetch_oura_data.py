@@ -113,7 +113,7 @@ def add_readiness_to_db(json_dict):
             try:
                 resting_hr_score = entry['score_resting_hr']
             except KeyError:
-                resting_hr_score = None
+                resting_hr_score = 75
             prev_night_data = database.Readiness(
                 date=day,
                 id=id_dict[day],
