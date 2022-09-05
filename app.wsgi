@@ -5,4 +5,4 @@ import sys
 
 logging.basicConfig(stream=sys.stderr)
 sys.path.insert(0, '/srv/jwa')
-from jwa import run as application
+from run import app as application
