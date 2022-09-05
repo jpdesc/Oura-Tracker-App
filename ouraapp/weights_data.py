@@ -1,11 +1,15 @@
 import string
+import os
 import re
 from google.oauth2 import service_account
 from googleapiclient.discovery import build
 from ouraapp.database import db, Weights, Template
 
+dir_path = os.path.dirname(os.path.realpath(__file__))
+print(dir_path)
+
 SCOPES = ['https://www.googleapis.com/auth/spreadsheets']
-SERVICE_ACCOUNT_FILE = '../keys.json'
+SERVICE_ACCOUNT_FILE = f'{dir_path}/keys.json'
 creds = service_account.Credentials.from_service_account_file(
     SERVICE_ACCOUNT_FILE, scopes=SCOPES)
 SPREADSHEET_ID = '1AdnxSengjtM0zwTgG7NtX1nBUdK0w4-368n8852WNPs'
