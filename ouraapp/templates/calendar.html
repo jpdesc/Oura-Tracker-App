@@ -69,7 +69,7 @@ import interactionPlugin from '@fullcalendar/interaction';
       {% elif event.title[:2] == 'Sw' %}
       backgroundColor: swim_color,
       borderColor: swim_color,
-      {% if event.title == 'Hike' %}
+      {% elif event.title == 'Hike' %}
       backgroundColor: hike_color,
         borderColor: hike_color,
       {% endif %}
