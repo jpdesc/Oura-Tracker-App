@@ -2,7 +2,7 @@ from io import BytesIO
 from flask import render_template, session, redirect, url_for, request, send_file
 from datetime import date, timedelta
 from ouraapp.fetch_oura_data import today, date_str_cal, id_dict
-from ouraapp.weights_data import get_weights_data
+from ouraapp.weights_data import get_weights_data, get_current_template
 from ouraapp.database import Sleep, Log, Tag, Readiness, Workout, Weights, Template
 from ouraapp.insights import get_overall_averages, get_filters, get_date_range, get_filtered_avgs
 from ouraapp.fetch_oura_data import setup_oura_data
@@ -177,8 +177,8 @@ def create_id_dict():
 @app.route('/', defaults={'page_id': id_dict[today]}, methods=['GET', 'POST'])
 @app.route('/<int:page_id>', methods=['GET', 'POST'])
 def index(page_id):
-    setup_oura_data()
-    create_cal_events()
+    if not events:
+        create_cal_events()
     date = get_date(page_id, id_dict)
     wellness_form = JournalForm()
     workout_form = WorkoutForm()
@@ -231,6 +231,7 @@ def index(page_id):
                                grade=grade,
                                workout_log=workout_log)
         if type == "Weights" and not new_template:
+            current_template = get_current_template()
             get_weights_data(get_workout_id(), get_workout_week_num(), page_id,
                              current_template)
         db.session.add(workout_info)
@@ -397,7 +398,7 @@ def template(page_id):
             num_days=template_form.total_days.data)
         db.session.add(template_data)
         db.session.commit()
-        current_template = Template.query.order_by(Template.id.desc()).first()
+        current_template = get_current_template()
         get_weights_data(1, 1, page_id, current_template)
         return redirect(url_for('index', page_id=page_id))
     return render_template('update_template.html', template_form=template_form)

@@ -6,13 +6,16 @@ from googleapiclient.discovery import build
 from ouraapp.database import db, Weights, Template
 
 dir_path = os.path.dirname(os.path.realpath(__file__))
-print(dir_path)
 
 SCOPES = ['https://www.googleapis.com/auth/spreadsheets']
 SERVICE_ACCOUNT_FILE = f'{dir_path}/keys.json'
 creds = service_account.Credentials.from_service_account_file(
     SERVICE_ACCOUNT_FILE, scopes=SCOPES)
 SPREADSHEET_ID = '1AdnxSengjtM0zwTgG7NtX1nBUdK0w4-368n8852WNPs'
+
+
+def get_current_template():
+    return Template.query.order_by(Template.id.desc()).first()
 
 
 def create_weeks_column():
@@ -28,7 +31,7 @@ def create_weeks_column():
 
 
 def get_sheet_prefix():
-    current_template = Template.query.order_by(Template.id.desc()).first()
+    current_template = get_current_template()
     try:
         return f'{current_template.template_name}!'
     except AttributeError:
@@ -40,6 +43,7 @@ def parse_reps_weight(reps_weight):
     For instance, 8x45 becomes reps=8 and weight=45.
     '''
     reps_list, weights_list = [], []
+    print(reps_weight)
     subbed_list = ['' for x in range(len(reps_weight))]
     for i, input in enumerate(reps_weight):
         if input == '':
@@ -113,13 +117,10 @@ def subs(workout_data):
 
 def add_weights_to_db(subs_made, id, workout_id, workout_week):
     db_dict = {}
+    current_template = get_current_template()
     for i, val in enumerate(subs_made):
         db_dict[i] = val
-    # weight = Weights.query.filter_by(id = id).first()
-    # weight.exercises = db_dict[0]
-    # weight.set_ranges = db_dict[1]
-    # weight.reps = db_dict[2]
-    # weight.weight = db_dict[3]
+
     weights_info = Weights(id=id, exercises=db_dict[0], set_ranges = db_dict[1],\
       reps = db_dict[2], weight = db_dict[3], workout_week = workout_week, workout_id=workout_id,
       template_id=current_template.id)
