@@ -22,6 +22,7 @@ import interactionPlugin from '@fullcalendar/interaction';
   const swim_color = 'light-blue';
   const journal_color = '#08088A';
   const weights_color = 'blue';
+  const hike_color = 'green';
 
 
     let calendarEl = document.getElementById
@@ -48,6 +49,8 @@ import interactionPlugin from '@fullcalendar/interaction';
             icon: "spa",
         {% elif event.title == 'Swim' %}
             icon: "person-swimming",
+        {% elif event.title == 'Hike' %}
+            icon: "person-hiking",
         {% endif %}
       title : ' {{ event['title']}}' + ' {{ event['score'] }}',
       {% endif %}
@@ -66,6 +69,9 @@ import interactionPlugin from '@fullcalendar/interaction';
       {% elif event.title[:2] == 'Sw' %}
       backgroundColor: swim_color,
       borderColor: swim_color,
+      {% if event.title == 'Hike' %}
+      backgroundColor: hike_color,
+        borderColor: hike_color,
       {% endif %}
       },
 
