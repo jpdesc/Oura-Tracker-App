@@ -1,6 +1,6 @@
 #! /bin/bash
 
-export PATH="/Users/jackdescombes/.venvs/flaskbook/bin:/Users/jackdescombes/opt/anaconda3/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/opt/X11/bin:/Users/jackdescombes/bash_course/scripts"
+export PATH="/jwa_env/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin:/srv/jwa/ouraapp"
 
 max_files=5
 today=$(date +"%m-%d-%y")
