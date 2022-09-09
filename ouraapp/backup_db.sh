@@ -9,7 +9,7 @@ filename="/var/lib/ouraapp/backups/uploads/oura_db_$today.bak"
 
 cd /srv/jwa
 
-pg_dump --role=postgres oura_db > "$filename"
+pg_dump -h localhost -U postgres -Fc oura_db > "$filename"
 
 cd /var/lib/ouraapp/backups/uploads/
 
