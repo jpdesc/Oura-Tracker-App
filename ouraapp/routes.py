@@ -84,7 +84,7 @@ def update_log_events(submitted_log):
 def update_workout_events(submitted_log, type):
     events.append({
         'title': type,
-        'score': submitted_log.score,
+        'score': submitted_log.grade,
         'date': submitted_log.date,
         'id': submitted_log.id
     })

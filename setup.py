@@ -4,16 +4,15 @@ except ImportError:
     from distutils.core import setup
 
 config = {
-    'description': 'My Project',
+    'description': 'Oura Sleep and Workout Tracker',
     'author': 'Jack DesCombes',
-    'url': 'URL to get it at.',
-    'download_url': 'Where to download it.',
+    'url': 'server.jpdesc.com',
     'author_email': 'jpdesc@alumni.stanford.edu',
     'version': '0.1',
     'install_requires': ['pytest'],
     'packages': ['ouraapp', 'tests'],
     'scripts': [],
-    'name': 'oura'
+    'name': 'jwa'
 }
 
 setup(**config)

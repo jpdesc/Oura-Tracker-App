@@ -4,3 +4,4 @@ __pycache__
 *.json
 *.sqlite
 *.update
+local_backup.sh
