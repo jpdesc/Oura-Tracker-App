@@ -56,7 +56,7 @@ import interactionPlugin from '@fullcalendar/interaction';
       {% endif %}
       id: '{{ event['id'] }}',
       start : '{{ event['date'] }}',
-      url: '{{ url_for('index', page_id = event['id']) }}',
+      url: '{{ url_for('log', page_id = event['id']) }}',
 
 
 

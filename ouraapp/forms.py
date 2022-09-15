@@ -1,7 +1,7 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, SubmitField, RadioField, FileField, SelectField, DateField, FloatField, IntegerField
+from wtforms import StringField, SubmitField, RadioField, FileField, SelectField, DateField, FloatField, IntegerField, PasswordField, ValidationError
 from wtforms.widgets import TextArea
-from wtforms.validators import DataRequired, InputRequired, Optional
+from wtforms.validators import DataRequired, InputRequired, Optional, EqualTo
 from ouraapp.database import Tag
 from wtforms_sqlalchemy.fields import QuerySelectMultipleField
 
@@ -111,3 +111,22 @@ class FilterForm(FlaskForm):
     end_date = DateField(format='%Y-%m-%d')
 
     submit = SubmitField("Submit Filters")
+
+
+class RegistrationForm(FlaskForm):
+    username = StringField('Name', validators=[DataRequired()])
+    password1 = PasswordField('Password',
+                              validators=[
+                                  DataRequired(),
+                                  EqualTo('password2',
+                                          message='Passwords Must Match!')
+                              ])
+    password2 = PasswordField('Confirm Password')
+    email = StringField('Name', validators=[DataRequired()])
+    submit = SubmitField('Submit')
+
+
+class LoginForm(FlaskForm):
+    username = StringField('Username', validators=[DataRequired()])
+    password = PasswordField('Password')
+    submit = SubmitField('Submit')

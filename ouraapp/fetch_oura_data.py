@@ -7,6 +7,7 @@ from dotenv import load_dotenv
 from ouraapp import database
 from ouraapp import db
 
+
 today = date.today()
 date_str_cal = {}
 
@@ -76,17 +77,19 @@ def convert_seconds(total_seconds):
     return str_time
 
 
+def add_event_to_db(new_event_dict):
+    json_event = json.dumps(new_event_dict)
+    event = database.Events(event=json_event)
+    db.session.add(event)
+    db.session.commit()
+
+
 def add_sleep_to_db(json_dict):
     ''' Commit data to sleep database model.'''
     selected_data = json.loads(json_dict, object_hook=date_hook)
     for entry in (selected_data['sleep']):
         day = format_date(entry['summary_date'])
-        # print(selected_data)
         if db.session.query(database.Sleep).filter_by(date=day).count() < 1:
-            # obj = Sleep.query.filter_by(date=day).first()
-            # if obj:
-            #     obj.seconds_sleep = entry['total']
-            #     obj.sleep_score = entry['score']
             prev_night_data = database.Sleep(
                 date=day,
                 id=id_dict[day],
@@ -99,6 +102,13 @@ def add_sleep_to_db(json_dict):
                 deep_score=entry['score_deep'],
                 total_sleep=convert_seconds(entry['total']),
                 seconds_sleep=entry['total'])
+            add_event_to_db({
+                'title': 'Sleep',
+                'score': entry['score'],
+                'date': day.strftime('%Y-%m-%d'),
+                'id': id_dict[day],
+                'subclass': 'Oura'
+            })
             db.session.add(prev_night_data)
     db.session.commit()
 
@@ -110,18 +120,21 @@ def add_readiness_to_db(json_dict):
         day = format_date(entry['summary_date'])
         if db.session.query(
                 database.Readiness).filter_by(date=day).count() < 1:
-            try:
-                resting_hr_score = entry['score_resting_hr']
-            except KeyError:
-                resting_hr_score = 75
             prev_night_data = database.Readiness(
                 date=day,
                 id=id_dict[day],
                 hrv_balance=entry['score_hrv_balance'],
                 recovery_index=entry['score_recovery_index'],
-                resting_hr=resting_hr_score,
+                resting_hr=entry['score_resting_hr'],
                 temperature=entry['score_temperature'],
                 readiness_score=entry['score'])
+            add_event_to_db({
+                'title': 'Readiness',
+                'score': entry['score'],
+                'date': day.strftime('%Y-%m-%d'),
+                'id': id_dict[day],
+                'subclass': 'Oura'
+            })
             db.session.add(prev_night_data)
     db.session.commit()
 

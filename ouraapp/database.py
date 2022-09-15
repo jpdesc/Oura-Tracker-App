@@ -1,6 +1,34 @@
 from flask_sqlalchemy import SQLAlchemy
+from werkzeug.security import generate_password_hash, check_password_hash
+from flask_login import UserMixin
 
 db = SQLAlchemy()
+
+
+class User(db.Model, UserMixin):
+    __tablename__ = 'user'
+    id = db.Column(db.Integer, primary_key=True, unique=True)
+    username = db.Column(db.String(20), nullable=False, unique=True)
+    password_hash = db.Column(db.String(128))
+    tags = db.relationship('Tag', backref='user', lazy=True)
+    logs = db.relationship('Log', backref='user', lazy=True)
+    sleeps = db.relationship('Sleep', backref='user', lazy=True)
+    readies = db.relationship('Readiness', backref='user', lazy=True)
+    workouts = db.relationship('Workout', backref='user', lazy=True)
+    weights = db.relationship('Weights', backref='user', lazy=True)
+    templates = db.relationship('Template', backref='user', lazy=True)
+
+    @property
+    def password(self):
+        raise AttributeError('password is not a readable attribute!')
+
+    @password.setter
+    def password(self, password):
+        self.password_hash = generate_password_hash(password)
+
+    def verify_password(self, password):
+        return check_password_hash(self.password_hash, password)
+
 
 tags = db.Table(
     'tags',
@@ -12,6 +40,7 @@ class Tag(db.Model):
     __tablename__ = 'tag'
     id = db.Column(db.Integer, primary_key=True, unique=True)
     tag = db.Column(db.String, unique=True)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
 
     def __repr__(self):
         return f'{self.tag}'
@@ -30,6 +59,7 @@ class Log(db.Model):
                            secondary=tags,
                            lazy='subquery',
                            backref=db.backref('logs', lazy=True))
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
 
 
 class Sleep(db.Model):
@@ -46,15 +76,7 @@ class Sleep(db.Model):
     total_sleep = db.Column(db.String)
     food_cutoff = db.Column(db.Float)
     seconds_sleep = db.Column(db.Integer)
-
-    # @hybrid_property
-    # def datetime(self):
-    #     return time.mktime(self.datetime_sleep.timetuple())
-
-    # @datetime.expression
-    # def datetime(cls):
-    #     seconds = time.mktime(cls.datetime_sleep.timetuple())
-    #     return seconds
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
 
 
 class Readiness(db.Model):
@@ -66,6 +88,7 @@ class Readiness(db.Model):
     recovery_index = db.Column(db.Integer)
     resting_hr = db.Column(db.Integer)
     temperature = db.Column(db.Integer)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
 
 
 class Workout(db.Model):
@@ -78,6 +101,7 @@ class Workout(db.Model):
     filename = db.Column(db.String(50))
     data = db.Column(db.LargeBinary)
     workout_log = db.Column(db.String)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
 
 
 class Weights(db.Model):
@@ -91,6 +115,7 @@ class Weights(db.Model):
     workout_id = db.Column(db.Integer)
     workout_week = db.Column(db.Integer)
     template_id = db.Column(db.Integer, db.ForeignKey("template.id"))
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
 
 
 class Template(db.Model):
@@ -102,3 +127,11 @@ class Template(db.Model):
     row_nums = db.Column(db.ARRAY(db.Integer))
     num_excs = db.Column(db.ARRAY(db.Integer))
     weights = db.relationship('Weights', backref='template')
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+
+
+class Events(db.Model):
+    __tablename__ = 'events'
+    id = db.Column(db.Integer, unique=True, primary_key=True)
+    event = db.Column(db.JSON)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'))

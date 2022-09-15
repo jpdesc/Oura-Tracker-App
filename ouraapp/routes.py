@@ -1,16 +1,19 @@
 from io import BytesIO
-from flask import render_template, session, redirect, url_for, request, send_file
+from venv import create
+from flask import render_template, session, redirect, url_for, request, send_file, flash
 from datetime import date, timedelta
+import json
 from ouraapp.fetch_oura_data import today, date_str_cal, id_dict
 from ouraapp.weights_data import get_weights_data, get_current_template
-from ouraapp.database import Sleep, Log, Tag, Readiness, Workout, Weights, Template
+from ouraapp.database import Sleep, Log, Tag, Readiness, Workout, Weights, Template, User, Events
 from ouraapp.insights import get_overall_averages, get_filters, get_date_range, get_filtered_avgs
-from ouraapp.fetch_oura_data import setup_oura_data
+from ouraapp.fetch_oura_data import add_event_to_db
+from werkzeug.security import generate_password_hash, check_password_hash
+from flask_login import login_user, login_required, logout_user, current_user
 from ouraapp.forms import *
 from ouraapp import db
+from ouraapp import login_manager
 from run import app
-
-events = []
 
 
 def get_date(page_id, id_dict):
@@ -31,63 +34,44 @@ def get_wellness_score(log):
         return None
 
 
-def create_cal_events():
-    sleep_query = Sleep.query.order_by(Sleep.id).all()
-    for sleep in sleep_query:
-
-        readiness = Readiness.query.filter_by(id=sleep.id).first()
-        if readiness:
-            events.append({
-                'title': 'Readiness',
-                'score': readiness.readiness_score,
-                'date': readiness.date,
-                'id': readiness.id,
-                'subclass': 'Oura'
-            })
-
-        events.append({
-            'title': 'Sleep',
-            'score': sleep.sleep_score,
-            'date': sleep.date,
-            'id': sleep.id,
-            'subclass': 'Oura'
-        })
-
-    log_query = Log.query.order_by(Log.id).all()
-    for log in log_query:
-        events.append({
-            'title': 'Wellness',
-            'score': get_wellness_score(log),
-            'date': log.date,
-            'id': log.id
-        })
-
-    workout_query = Workout.query.order_by(Workout.id).all()
-    for workout in workout_query:
-        events.append({
-            'title': workout.type,
-            'score': workout.grade,
-            'date': workout.date,
-            'id': workout.id
-        })
+def str_fmt_date(date_obj):
+    return date_obj.strftime('%Y-%m-%d')
 
 
-def update_log_events(submitted_log):
-    events.append({
+def get_db_events():
+    '''Format events for use in the calendar.'''
+    events = []
+    events_objs = Events.query.order_by(Events.id).all()
+    for event in events_objs:
+        json_event = event.event
+        event_dict = json.loads(json_event)
+        events.append(event_dict)
+    return events
+
+
+def add_event_to_db(new_event_dict):
+    json_event = json.dumps(new_event_dict)
+    event = Events(event=json_event)
+    db.session.add(event)
+    db.session.commit()
+
+
+def create_wellness_event(submitted_log):
+    return {
         'title': 'Wellness',
         'score': get_wellness_score(submitted_log),
-        'date': submitted_log.date,
+        'date': str_fmt_date(submitted_log.date),
         'id': submitted_log.id
-    })
+    }
 
 
-def update_workout_events(submitted_log, type):
-    events.append({
-        'title': type,
+def create_workout_event(submitted_log):
+    return {
+        'title': submitted_log.type,
         'score': submitted_log.grade,
-        'date': submitted_log.date,
+        'date': str_fmt_date(submitted_log.date),
         'id': submitted_log.id
-    })
+    }
 
 
 def get_workout_week_num():
@@ -175,11 +159,62 @@ def create_id_dict():
         date_str_cal[str(day)] = id_dict[day]
 
 
+@login_manager.user_loader
+def load_user(user_id):
+    return User.query.get(int(user_id))
+
+
+@app.route('/register', methods=['GET', 'POST'])
+def register():
+    registration_form = RegistrationForm()
+    if registration_form.validate_on_submit():
+
+        username = registration_form.username.data
+        hashed_password = generate_password_hash(
+            registration_form.password1.data, "sha256")
+        email = registration_form.email.data
+        user_info = User(username=username,
+                         password_hash=hashed_password,
+                         email=email)
+        db.session.add(user_info)
+        db.session.commit()
+
+        return redirect(url_for('login'))
+
+    return render_template('registration.html', form=registration_form)
+
+
+# @app.route('/', methods=['GET', 'POST'])
+# def login():
+#     login_form = LoginForm()
+#     if login_form.validate_on_submit():
+#         username = login_form.username.data
+#         password = login_form.password.data
+#         user = User.query.filter_by(username=username).first()
+#         if user:
+#             passed = check_password_hash(user.password_hash, password)
+#             if passed:
+#                 login_user(user)
+#                 redirect(url_for('log'))
+#             else:
+#                 flash("Wrong Password - Try Again.")
+#         else:
+#             flash("That User Doesn't Exist - Try Again...")
+
+#     return render_template('login.html', form=login_form)
+
+# @app.route('/logout', methods=['GET', 'POST'])
+# @login_required
+# def logout():
+#     logout_user()
+#     flash("You Have Been Logged Out.")
+#     return redirect(url_for('login'))
+
+
+#TODO: figure out a better system for page_id
 @app.route('/', defaults={'page_id': id_dict[today]}, methods=['GET', 'POST'])
 @app.route('/<int:page_id>', methods=['GET', 'POST'])
-def index(page_id):
-    if not events:
-        create_cal_events()
+def log(page_id):
     date = get_date(page_id, id_dict)
     wellness_form = JournalForm()
     workout_form = WorkoutForm()
@@ -190,6 +225,7 @@ def index(page_id):
     new_template = Weights.query.filter(Weights.id == page_id).first()
 
     if wellness_form.validate_on_submit():
+        user_id = current_user.id
         journal = wellness_form.journal.data
         focus = wellness_form.focus.data
         mood = wellness_form.mood.data
@@ -203,17 +239,18 @@ def index(page_id):
                             energy=energy,
                             date=date,
                             id=page_id,
-                            stress=stress)
+                            stress=stress,
+                            user_id=user_id)
         if selected_tags or added_tags:
             add_tags(added_tags, selected_tags, wellness_info)
+        add_event_to_db(create_wellness_event(wellness_info))
         db.session.add(wellness_info)
         db.session.commit()
-        update_log_events(wellness_info)
         if sleep:
             sleep.food_cutoff = wellness_form.food_cutoff.data
             db.session.add(sleep)
             db.session.commit()
-        return redirect(url_for('index', page_id=page_id))
+        return redirect(url_for('log', page_id=page_id))
 
     if workout_form.validate_on_submit():
         file = request.files[str(workout_form.file.name)]
@@ -235,12 +272,12 @@ def index(page_id):
             current_template = get_current_template()
             get_weights_data(get_workout_id(), get_workout_week_num(), page_id,
                              current_template)
+        add_event_to_db(create_workout_event(workout_info))
         db.session.add(workout_info)
         db.session.commit()
-        update_workout_events(workout_info, type)
-        return redirect(url_for('index', page_id=page_id))
+        return redirect(url_for('log', page_id=page_id))
 
-    return render_template('index.html',
+    return render_template('log.html',
                            wellness_form=wellness_form,
                            workout_form=workout_form,
                            sleep=sleep,
@@ -289,11 +326,12 @@ def edit_log(page_id):
             add_tags(added_tags, selected_tags, log)
         db.session.add(log)
         db.session.commit()
+        add_event_to_db(create_workout_event(log))
         if sleep:
             sleep.food_cutoff = wellness_form.food_cutoff.data
             db.session.add(sleep)
             db.session.commit()
-        return redirect(url_for('index', page_id=page_id))
+        return redirect(url_for('log', page_id=page_id))
 
     if workout_form.validate_on_submit():
         workout.soreness = workout_form.soreness.data
@@ -306,7 +344,8 @@ def edit_log(page_id):
             workout.file = workout_form.file.data
         db.session.add(workout)
         db.session.commit()
-        return redirect(url_for('index', page_id=page_id))
+        add_event_to_db(create_workout_event(workout))
+        return redirect(url_for('log', page_id=page_id))
     return render_template('edit_post.html',
                            wellness_form=wellness_form,
                            workout_form=workout_form,
@@ -318,8 +357,8 @@ def edit_log(page_id):
 
 @app.route('/calendar', methods=['GET', 'POST'])
 def calendar():
-    session['url'] = url_for('index', page_id=None)
-    return render_template('calendar.html', events=events)
+    session['url'] = url_for('log', page_id=None)
+    return render_template('calendar.html', events=get_db_events())
 
 
 @app.route('/process', methods=['POST'])
@@ -329,7 +368,7 @@ def process():
   '''
     date_str = request.form.get('date_str')
     clicked_id = date_str_cal[date_str]
-    return redirect(url_for('index', page_id=clicked_id))
+    return redirect(url_for('log', page_id=clicked_id))
 
 
 @app.route('/download/<page_id>')
@@ -401,5 +440,5 @@ def template(page_id):
         db.session.commit()
         current_template = get_current_template()
         get_weights_data(1, 1, page_id, current_template)
-        return redirect(url_for('index', page_id=page_id))
+        return redirect(url_for('log', page_id=page_id))
     return render_template('update_template.html', template_form=template_form)
