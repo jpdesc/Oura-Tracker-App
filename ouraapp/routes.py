@@ -2,6 +2,7 @@ from io import BytesIO
 from venv import create
 from flask import render_template, session, redirect, url_for, request, send_file, flash
 from datetime import date, timedelta
+import uuid
 import json
 from ouraapp.fetch_oura_data import today, date_str_cal, id_dict
 from ouraapp.weights_data import get_weights_data, get_current_template
@@ -168,12 +169,13 @@ def load_user(user_id):
 def register():
     registration_form = RegistrationForm()
     if registration_form.validate_on_submit():
-
+        name = registration_form.name.data
         username = registration_form.username.data
         hashed_password = generate_password_hash(
             registration_form.password1.data, "sha256")
         email = registration_form.email.data
         user_info = User(username=username,
+                         name=name,
                          password_hash=hashed_password,
                          email=email)
         db.session.add(user_info)
@@ -184,36 +186,39 @@ def register():
     return render_template('registration.html', form=registration_form)
 
 
-# @app.route('/', methods=['GET', 'POST'])
-# def login():
-#     login_form = LoginForm()
-#     if login_form.validate_on_submit():
-#         username = login_form.username.data
-#         password = login_form.password.data
-#         user = User.query.filter_by(username=username).first()
-#         if user:
-#             passed = check_password_hash(user.password_hash, password)
-#             if passed:
-#                 login_user(user)
-#                 redirect(url_for('log'))
-#             else:
-#                 flash("Wrong Password - Try Again.")
-#         else:
-#             flash("That User Doesn't Exist - Try Again...")
+@app.route('/', methods=['GET', 'POST'])
+def login():
+    login_form = LoginForm()
+    if login_form.validate_on_submit():
+        username = login_form.username.data
+        password = login_form.password.data
+        user = User.query.filter_by(username=username).first()
+        if user:
+            passed = check_password_hash(user.password_hash, password)
+            if passed:
+                login_user(user)
+                return redirect(url_for('log'))
+            else:
+                flash("Wrong password - try again.")
+        else:
+            flash("That user doesn't exist - try again...")
+    return render_template('login.html', form=login_form)
 
-#     return render_template('login.html', form=login_form)
 
-# @app.route('/logout', methods=['GET', 'POST'])
-# @login_required
-# def logout():
-#     logout_user()
-#     flash("You Have Been Logged Out.")
-#     return redirect(url_for('login'))
+@app.route('/logout', methods=['GET', 'POST'])
+@login_required
+def logout():
+    logout_user()
+    flash("You Have Been Logged Out.")
+    return redirect(url_for('login'))
 
 
 #TODO: figure out a better system for page_id
-@app.route('/', defaults={'page_id': id_dict[today]}, methods=['GET', 'POST'])
-@app.route('/<int:page_id>', methods=['GET', 'POST'])
+@app.route('/log',
+           defaults={'page_id': id_dict[today]},
+           methods=['GET', 'POST'])
+@app.route('/log/<int:page_id>', methods=['GET', 'POST'])
+@login_required
 def log(page_id):
     date = get_date(page_id, id_dict)
     wellness_form = JournalForm()
@@ -289,6 +294,7 @@ def log(page_id):
 
 
 @app.route('/edit/<int:page_id>', methods=['GET', 'POST'])
+@login_required
 def edit_log(page_id):
     date = get_date(page_id, id_dict)
     sleep = Sleep.query.get(page_id)
@@ -356,12 +362,14 @@ def edit_log(page_id):
 
 
 @app.route('/calendar', methods=['GET', 'POST'])
+@login_required
 def calendar():
     session['url'] = url_for('log', page_id=None)
     return render_template('calendar.html', events=get_db_events())
 
 
 @app.route('/process', methods=['POST'])
+@login_required
 def process():
     ''' Used to process ajax call for calendar event clicks.
   Routes to the correct index page based on the page_id/dates.
@@ -372,6 +380,7 @@ def process():
 
 
 @app.route('/download/<page_id>')
+@login_required
 def download(page_id):
     workout = Workout.query.filter_by(id=page_id).first()
     return send_file(BytesIO(workout.data),
@@ -380,6 +389,7 @@ def download(page_id):
 
 
 @app.route('/weights/<page_id>')
+@login_required
 def weights(page_id):
     this_week = Weights.query.filter_by(id=page_id).first()
     try:
@@ -398,6 +408,7 @@ def weights(page_id):
 
 
 @app.route('/insights', methods=['GET', 'POST'])
+@login_required
 def insights():
     filter_form = FilterForm()
     averages = get_overall_averages()
@@ -418,6 +429,7 @@ def insights():
 
 
 @app.route('/template/<page_id>', methods=['GET', 'POST'])
+@login_required
 def template(page_id):
     template_form = TemplateForm()
 

@@ -114,7 +114,7 @@ class FilterForm(FlaskForm):
 
 
 class RegistrationForm(FlaskForm):
-    username = StringField('Name', validators=[DataRequired()])
+    username = StringField('Username', validators=[DataRequired()])
     password1 = PasswordField('Password',
                               validators=[
                                   DataRequired(),
@@ -122,7 +122,8 @@ class RegistrationForm(FlaskForm):
                                           message='Passwords Must Match!')
                               ])
     password2 = PasswordField('Confirm Password')
-    email = StringField('Name', validators=[DataRequired()])
+    email = StringField('Email', validators=[DataRequired()])
+    name = StringField('Name', validators=[DataRequired()])
     submit = SubmitField('Submit')
 
 

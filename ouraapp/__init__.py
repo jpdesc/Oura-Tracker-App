@@ -6,7 +6,7 @@ from config import Config
 from flask_login import LoginManager
 from ouraapp.fetch_oura_data import setup_oura_data
 
-migrate = Migrate()
+migrate = Migrate(compare_type=True)
 bootstrap = Bootstrap()
 login_manager = LoginManager()
 

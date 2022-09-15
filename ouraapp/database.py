@@ -9,6 +9,8 @@ class User(db.Model, UserMixin):
     __tablename__ = 'user'
     id = db.Column(db.Integer, primary_key=True, unique=True)
     username = db.Column(db.String(20), nullable=False, unique=True)
+    name = db.Column(db.String(30), nullable=False)
+    email = db.Column(db.String(50), nullable=False, unique=True)
     password_hash = db.Column(db.String(128))
     tags = db.relationship('Tag', backref='user', lazy=True)
     logs = db.relationship('Log', backref='user', lazy=True)
