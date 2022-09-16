@@ -137,3 +137,8 @@ class Events(db.Model):
     id = db.Column(db.Integer, unique=True, primary_key=True)
     event = db.Column(db.JSON)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+
+
+class IDs(db.Model):
+    id = db.Column(db.Integer, unique=True, primary_key=True)
+    id_dict = db.Column(db.JSON)

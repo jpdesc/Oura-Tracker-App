@@ -7,7 +7,6 @@ from dotenv import load_dotenv
 from ouraapp import database
 from ouraapp import db
 
-
 today = date.today()
 date_str_cal = {}
 
@@ -32,15 +31,21 @@ def pull_oura_data():
     return [sleep_json, readiness_json]
 
 
+#TODO: get rid of global call.
 def create_id_dict():
+
     id_dict = {}
     all_days = [
         date(2022, 1, 1) + timedelta(days=x)
-        for x in range((today - date(2022, 1, 1)).days + 5)
+        for x in range((date.today() - date(2022, 1, 1)).days + 5000)
     ]
     for i, day in enumerate(all_days):
         id_dict[day] = i
-        date_str_cal[str(day)] = id_dict[day]
+        date_str_cal[day] = id_dict[day]
+    # json_id_dict = json.dumps(id_dict, default=str)
+    # id_dict_db_obj = database.IDs(id_dict=json_id_dict)
+    # db.session.add(id_dict_db_obj)
+    # db.session.commit()
     return id_dict
 
 

@@ -61,22 +61,26 @@ def get_filters(form, date_range):
         selected_tags.append(str(selected))
     conditions = []
     second_conditions = []
-    for tag in selected_tags:
-        conditions.append(Log.tags.any(Tag.tag == tag))
-    conditions.append(Log.date >= date_range[0])
-    conditions.append(Log.date <= date_range[1])
-    for statement in format_filters(form):
-        second_conditions.append(statement)
-    condition = and_(*conditions)
-    second_condition = and_(*second_conditions)
-    filter_result = Log.query.join(
-        Log.tags).filter(condition).filter(second_condition).all()
+    if selected_tags:
+        for tag in selected_tags:
+            conditions.append(Log.tags.any(Tag.tag == tag))
+        conditions.append(Log.date >= date_range[0])
+        conditions.append(Log.date <= date_range[1])
+        for statement in format_filters(form):
+            second_conditions.append(statement)
+        condition = and_(*conditions)
+        second_condition = and_(*second_conditions)
+        filter_result = Log.query.join(
+            Log.tags).filter(condition).filter(second_condition).all()
+    else:
+        filter_result = Sleep.query.filter(
+            Sleep.date.between(date_range[0], date_range[1])).all()
     return filter_result
 
 
 def get_filtered_avgs(filtered_objs):
     filter_avgs = {}
-    id_nums = [log.id + 1 for log in filtered_objs]
+    id_nums = [day.id + 1 for day in filtered_objs]
     for key, value in avg_fields.items():
         db_attr = db_fields[value[0]]
         attr = value[0]
@@ -88,10 +92,9 @@ def get_filtered_avgs(filtered_objs):
         if key == 'avg_food_cutoff':
             filter_avgs[key] = db.session.query(
                 func.round(func.avg(subquery_c).cast(Numeric), 1)).scalar()
-            print(filter_avgs[key])
         elif key == 'avg_total_sleep':
-            filter_avgs[key] = convert_seconds(
-                db.session.query(func.avg(subquery_c)).scalar())
+            query = db.session.query(func.avg(subquery_c)).scalar()
+            filter_avgs[key] = convert_seconds(query)
         else:
             filter_avgs[key] = db.session.query(
                 func.round(func.avg(subquery_c), 1)).scalar()
@@ -138,7 +141,6 @@ def format_filters(form):
             if val[1] == 'between':
                 query = db_attr > val[2], db_attr < val[3]
             elif val[1] == '>':
-                print('logic working correctly.')
                 query = db_attr > val[2]
             elif val[1] == '<':
                 query = db_attr < val[2]
@@ -151,6 +153,7 @@ def format_filters(form):
 
 
 def convert_seconds(seconds):
+    print(seconds)
     hour = seconds // 3600
     seconds %= 3600
     minutes = seconds // 60
