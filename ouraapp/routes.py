@@ -219,7 +219,7 @@ def login():
                 flash("Wrong password - try again.")
         else:
             flash("That user doesn't exist - try again...")
-    return render_template('index.html', form=login_form)
+    return render_template('index.html', login_form=login_form)
 
 
 @app.route('/logout', methods=['GET', 'POST'])

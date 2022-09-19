@@ -21,22 +21,22 @@
 
 
     <form method="POST" class="form">
-        {{ form.hidden_tag() }}
+        {{ login_form.hidden_tag() }}
         <h2>Login</h2>
         <br /><br />
-        {{ form.username.label(class="form-label") }}
+        {{ login_form.username.label(class="form-label") }}
 
-        {{ form.username(class="form-control") }}
+        {{ login_form.username(class="form-control") }}
 
-        {{ form.password.label(class="form-label") }}
+        {{ login_form.password.label(class="form-label") }}
 
-        {{ form.password(class="form-control") }}
+        {{ login_form.password(class="form-control") }}
         <br />
 
 
         <br />
 
-        {{ form.submit(class="btn btn-secondary") }}
+        {{ login_form.submit(class="btn btn-secondary") }}
 
 
     </form>
