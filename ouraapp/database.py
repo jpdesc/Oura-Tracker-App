@@ -2,7 +2,7 @@ from flask_sqlalchemy import SQLAlchemy
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_login import UserMixin
 
-db = SQLAlchemy()
+db = SQLAlchemy(session_options={"autoflush": False})
 
 
 class User(db.Model, UserMixin):
@@ -139,6 +139,8 @@ class Events(db.Model):
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
 
 
-class IDs(db.Model):
+class Day(db.Model):
+    __tablename__ = 'day'
     id = db.Column(db.Integer, unique=True, primary_key=True)
-    id_dict = db.Column(db.JSON)
+    date = db.Column(db.Date, unique=True)
+    date_str = db.Column(db.String, unique=True)

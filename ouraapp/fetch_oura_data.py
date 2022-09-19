@@ -4,11 +4,12 @@ from datetime import date, timedelta, datetime
 import time
 from oura import OuraClient
 from dotenv import load_dotenv
+from flask_login import current_user
 from ouraapp import database
 from ouraapp import db
+from sqlalchemy import desc, func
 
 today = date.today()
-date_str_cal = {}
 
 
 def pull_oura_data():
@@ -17,39 +18,45 @@ def pull_oura_data():
     oura_token = os.getenv('OURA_PERSONAL_ACCESS_TOKEN')
     oura_client = OuraClient(personal_access_token=oura_token)
     start_date = date(2022, 1, 1)
-    end_date = date.today()
+    # end_date = date.today()
     sleep_summary = oura_client.sleep_summary(start=str(start_date))
     readiness_summary = oura_client.readiness_summary(start=str(start_date))
-    all_days = [
-        start_date + timedelta(days=x)
-        for x in range((end_date - start_date).days + 500)
-    ]
-    for i, day in enumerate(all_days):
-        id_dict[day] = i
+    # all_days = [
+    #     start_date + timedelta(days=x)
+    #     for x in range((end_date - start_date).days + 500)
+    # ]
+    # for i, day in enumerate(all_days):
+    #     id_dict[day] = i
     sleep_json = json.dumps(sleep_summary)
     readiness_json = json.dumps(readiness_summary)
     return [sleep_json, readiness_json]
 
 
 #TODO: get rid of global call.
-def create_id_dict():
-
-    id_dict = {}
-    all_days = [
-        date(2022, 1, 1) + timedelta(days=x)
-        for x in range((date.today() - date(2022, 1, 1)).days + 5000)
+#TODO: change code so that it uses commented out code
+def update_days_db():
+    last_id = db.session.query(func.max(database.Day.id)).scalar()
+    if last_id:
+        next_id = last_id + 1
+        last_day_obj = database.Day.query.filter(
+            database.Day.id == last_id).first()
+        start_date = last_day_obj.date + timedelta(days=1)
+    else:
+        next_id = 0
+        start_date = date(2022, 1, 1)
+    print(start_date)
+    added_days = [
+        start_date + timedelta(days=x)
+        for x in range((date.today() - start_date).days + 1)
     ]
-    for i, day in enumerate(all_days):
-        id_dict[day] = i
-        date_str_cal[day] = id_dict[day]
-    # json_id_dict = json.dumps(id_dict, default=str)
-    # id_dict_db_obj = database.IDs(id_dict=json_id_dict)
-    # db.session.add(id_dict_db_obj)
-    # db.session.commit()
-    return id_dict
-
-
-id_dict = create_id_dict()
+    print(added_days)
+    for i, day in enumerate(added_days, start=next_id):
+        day_obj = database.Day()
+        day_obj.id = i
+        day_obj.date = day
+        day_obj.date_str = day.strftime('%Y-%m-%d')
+        db.session.add(day_obj)
+    db.session.commit()
 
 
 def date_hook(json_dict):
@@ -76,7 +83,6 @@ def format_date(date_obj):
 
 
 def convert_seconds(total_seconds):
-    # print(total_seconds)
     str_time = time.strftime("%H:%M",
                              time.gmtime(total_seconds))  # type: ignore
     return str_time
@@ -84,7 +90,7 @@ def convert_seconds(total_seconds):
 
 def add_event_to_db(new_event_dict):
     json_event = json.dumps(new_event_dict)
-    event = database.Events(event=json_event)
+    event = database.Events(event=json_event, user_id=current_user.id)
     db.session.add(event)
     db.session.commit()
 
@@ -94,10 +100,19 @@ def add_sleep_to_db(json_dict):
     selected_data = json.loads(json_dict, object_hook=date_hook)
     for entry in (selected_data['sleep']):
         day = format_date(entry['summary_date'])
-        if db.session.query(database.Sleep).filter_by(date=day).count() < 1:
+        db_day = database.Day.query.filter_by(date=day).first()
+        sleep_day = database.Sleep.query.filter_by(
+            date=day, user_id=current_user.id).all()
+        print(sleep_day)
+        print(
+            f'sleep_obj_count={db.session.query(database.Sleep).filter_by(date=day, user_id=current_user.id).count()}, day_id={db_day.id}'
+        )
+        if db.session.query(database.Sleep).filter_by(
+                id=db_day.id, user_id=current_user.id).count() < 1:
+            print(f'query says sleep obj does not exist for {db_day.date}. ')
             prev_night_data = database.Sleep(
                 date=day,
-                id=id_dict[day],
+                id=db_day.id,
                 sleep_score=entry['score'],
                 total_rem_sleep=convert_seconds(entry['rem']),
                 total_deep_sleep=convert_seconds(entry['deep']),
@@ -106,12 +121,13 @@ def add_sleep_to_db(json_dict):
                 rem_score=entry['score_rem'],
                 deep_score=entry['score_deep'],
                 total_sleep=convert_seconds(entry['total']),
-                seconds_sleep=entry['total'])
+                seconds_sleep=entry['total'],
+                user_id=current_user.id)
             add_event_to_db({
                 'title': 'Sleep',
                 'score': entry['score'],
                 'date': day.strftime('%Y-%m-%d'),
-                'id': id_dict[day],
+                'id': db_day.id,
                 'subclass': 'Oura'
             })
             db.session.add(prev_night_data)
@@ -123,21 +139,23 @@ def add_readiness_to_db(json_dict):
     selected_data = json.loads(json_dict, object_hook=date_hook)
     for entry in (selected_data['readiness']):
         day = format_date(entry['summary_date'])
-        if db.session.query(
-                database.Readiness).filter_by(date=day).count() < 1:
+        db_day = database.Day.query.filter_by(date=day).first()
+        if db.session.query(database.Readiness).filter_by(
+                date=day, user_id=current_user.id).count() < 1:
             prev_night_data = database.Readiness(
                 date=day,
-                id=id_dict[day],
+                id=db_day.id,
                 hrv_balance=entry['score_hrv_balance'],
                 recovery_index=entry['score_recovery_index'],
                 resting_hr=entry['score_resting_hr'],
                 temperature=entry['score_temperature'],
-                readiness_score=entry['score'])
+                readiness_score=entry['score'],
+                user_id=current_user.id)
             add_event_to_db({
                 'title': 'Readiness',
                 'score': entry['score'],
                 'date': day.strftime('%Y-%m-%d'),
-                'id': id_dict[day],
+                'id': db_day.id,
                 'subclass': 'Oura'
             })
             db.session.add(prev_night_data)

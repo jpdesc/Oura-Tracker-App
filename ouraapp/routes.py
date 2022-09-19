@@ -2,11 +2,10 @@ from io import BytesIO
 from venv import create
 from flask import render_template, session, redirect, url_for, request, send_file, flash
 from datetime import date, timedelta
-import uuid
 import json
-from ouraapp.fetch_oura_data import today, date_str_cal, id_dict
+from ouraapp.fetch_oura_data import setup_oura_data
 from ouraapp.weights_data import get_weights_data, get_current_template
-from ouraapp.database import Sleep, Log, Tag, Readiness, Workout, Weights, Template, User, Events
+from ouraapp.database import Sleep, Log, Tag, Readiness, Workout, Weights, Template, User, Events, Day
 from ouraapp.insights import get_overall_averages, get_filters, get_date_range, get_filtered_avgs
 from ouraapp.fetch_oura_data import add_event_to_db
 from werkzeug.security import generate_password_hash, check_password_hash
@@ -17,10 +16,16 @@ from ouraapp import login_manager
 from run import app
 
 
-def get_date(page_id, id_dict):
-    for key, value in id_dict.items():
-        if value == page_id:
-            return key
+def get_page_id():
+    with app.app_context():
+        today = date.today()
+        db_obj = Day.query.filter_by(date=today).first()
+    return db_obj.id
+
+
+def get_date(page_id):
+    db_obj = Day.query.filter_by(id=page_id).first()
+    return db_obj.date
 
 
 def format_date(date):
@@ -42,7 +47,8 @@ def str_fmt_date(date_obj):
 def get_db_events():
     '''Format events for use in the calendar.'''
     events = []
-    events_objs = Events.query.order_by(Events.id).all()
+    events_objs = Events.query.filter(
+        Events.user_id == current_user.id).order_by(Events.id).all()
     for event in events_objs:
         json_event = event.event
         event_dict = json.loads(json_event)
@@ -52,7 +58,7 @@ def get_db_events():
 
 def add_event_to_db(new_event_dict):
     json_event = json.dumps(new_event_dict)
-    event = Events(event=json_event)
+    event = Events(event=json_event, user_id=current_user.id)
     db.session.add(event)
     db.session.commit()
 
@@ -76,8 +82,12 @@ def create_workout_event(submitted_log):
 
 
 def get_workout_week_num():
-    last_workout = Weights.query.order_by(Weights.id.desc()).first()
-    template = Template.query.order_by(Template.id.desc()).first()
+    last_workout = Weights.query.filter(
+        Weights.user_id == current_user.id).order_by(
+            Weights.id.desc()).first()
+    template = Template.query.filter(
+        Template.user_id == current_user.id).order_by(
+            Template.id.desc()).first()
 
     if last_workout.workout_id == template.num_days:
         week = last_workout.workout_week + 1
@@ -87,8 +97,12 @@ def get_workout_week_num():
 
 
 def get_workout_id():
-    template = Template.query.order_by(Template.id.desc()).first()
-    last_workout = Weights.query.order_by(Weights.id.desc()).first()
+    template = Template.query.filter(
+        Template.user_id == current_user.id).order_by(
+            Template.id.desc()).first()
+    last_workout = Weights.query.filter(
+        Weights.user_id == current_user.id).order_by(
+            Weights.id.desc()).first()
     if last_workout.workout_id == template.num_days:
         workout_id = 1
     else:
@@ -142,22 +156,23 @@ def get_tags(added_tags, selected_tags):
 
 def add_tags(added_tags, selected_tags, db_obj):
     for entry in get_tags(added_tags, selected_tags):
-        existing_entry = Tag.query.filter(Tag.tag == str(entry)).first()
+        existing_entry = Tag.query.filter(
+            Tag.tag == str(entry), Tag.user_id == current_user.id).first()
         if existing_entry:
             tag_obj = existing_entry
         else:
-            tag_obj = Tag(tag=str(entry))
+            tag_obj = Tag(tag=str(entry), user_id=current_user.id)
         db_obj.tags.append(tag_obj)
 
 
-def create_id_dict():
-    all_days = [
-        date(2022, 1, 1) + timedelta(days=x)
-        for x in range((today - date(2022, 1, 1)).days + 5)
-    ]
-    for i, day in enumerate(all_days):
-        id_dict[day] = i
-        date_str_cal[str(day)] = id_dict[day]
+# def create_id_dict():
+#     all_days = [
+#         date(2022, 1, 1) + timedelta(days=x)
+#         for x in range((today - date(2022, 1, 1)).days + 5)
+#     ]
+#     for i, day in enumerate(all_days):
+#         id_dict[day] = i
+#         date_str_cal[str(day)] = id_dict[day]
 
 
 @login_manager.user_loader
@@ -177,7 +192,8 @@ def register():
         user_info = User(username=username,
                          name=name,
                          password_hash=hashed_password,
-                         email=email)
+                         email=email,
+                         user_id=current_user.id)
         db.session.add(user_info)
         db.session.commit()
 
@@ -197,6 +213,7 @@ def login():
             passed = check_password_hash(user.password_hash, password)
             if passed:
                 login_user(user)
+                setup_oura_data()
                 return redirect(url_for('log'))
             else:
                 flash("Wrong password - try again.")
@@ -215,19 +232,24 @@ def logout():
 
 #TODO: figure out a better system for page_id
 @app.route('/log',
-           defaults={'page_id': id_dict[today]},
+           defaults={'page_id': get_page_id()},
            methods=['GET', 'POST'])
 @app.route('/log/<int:page_id>', methods=['GET', 'POST'])
 @login_required
 def log(page_id):
-    date = get_date(page_id, id_dict)
+    date = get_date(page_id)
     wellness_form = JournalForm()
     workout_form = WorkoutForm()
-    sleep = Sleep.query.filter(Sleep.id == page_id).first()
-    log = Log.query.filter(Log.id == page_id).first()
-    readiness = Readiness.query.filter(Readiness.id == page_id).first()
-    workout = Workout.query.filter(Workout.id == page_id).first()
-    new_template = Weights.query.filter(Weights.id == page_id).first()
+    sleep = Sleep.query.filter(Sleep.id == page_id,
+                               Sleep.user_id == current_user.id).first()
+    log = Log.query.filter(Log.id == page_id,
+                           Log.user_id == current_user.id).first()
+    readiness = Readiness.query.filter(
+        Readiness.id == page_id, Readiness.user_id == current_user.id).first()
+    workout = Workout.query.filter(Workout.id == page_id,
+                                   Workout.user_id == current_user.id).first()
+    new_template = Weights.query.filter(
+        Weights.id == page_id, Weights.user_id == current_user.id).first()
 
     if wellness_form.validate_on_submit():
         user_id = current_user.id
@@ -265,7 +287,8 @@ def log(page_id):
         soreness = workout_form.soreness.data
         grade = workout_form.grade.data
         workout_log = workout_form.workout_log.data
-        workout_info = Workout(data=file.read(),
+        workout_info = Workout(user_id=current_user.id,
+                               data=file.read(),
                                date=date,
                                id=page_id,
                                filename=file.filename,
@@ -296,18 +319,21 @@ def log(page_id):
 @app.route('/edit/<int:page_id>', methods=['GET', 'POST'])
 @login_required
 def edit_log(page_id):
-    date = get_date(page_id, id_dict)
-    sleep = Sleep.query.get(page_id)
-    readiness = Readiness.query.get(page_id)
-    log = Log.query.get(page_id)
-    workout = Workout.query.get(page_id)
+    date = get_date(page_id)
+    sleep = Sleep.query.filter(Sleep.user_id == current_user.id).get(page_id)
+    readiness = Readiness.filter(
+        Readiness.user_id == current_user.id).query.get(page_id)
+    log = Log.query.filter(Log.user_id == current_user.id).get(page_id)
+    workout = Workout.query.filter(
+        Workout.user_id == current_user.id).get(page_id)
     if log:
         wellness_form = JournalForm(focus=log.focus,
                                     mood=log.mood,
                                     energy=log.energy,
                                     stress=log.stress,
                                     journal=log.journal,
-                                    select_tags=log.tags)
+                                    select_tags=log.tags,
+                                    user_id=current_user.id)
     else:
         wellness_form = JournalForm()
     if workout:
@@ -316,7 +342,8 @@ def edit_log(page_id):
                                    specify_other=None,
                                    file=workout.data,
                                    grade=workout.grade,
-                                   workout_log=workout.workout_log)
+                                   workout_log=workout.workout_log,
+                                   user_id=current_user.id)
     else:
         workout_form = WorkoutForm()
     if wellness_form.validate_on_submit():
@@ -375,14 +402,15 @@ def process():
   Routes to the correct index page based on the page_id/dates.
   '''
     date_str = request.form.get('date_str')
-    clicked_id = date_str_cal[date_str]
-    return redirect(url_for('log', page_id=clicked_id))
+    clicked_day_obj = Day.query.filter(Day.date_str == date_str).first()
+    return redirect(url_for('log', page_id=clicked_day_obj.id))
 
 
 @app.route('/download/<page_id>')
 @login_required
 def download(page_id):
-    workout = Workout.query.filter_by(id=page_id).first()
+    workout = Workout.query.filter_by(id=page_id,
+                                      user_id=current_user.id).first()
     return send_file(BytesIO(workout.data),
                      attachment_filename=workout.filename,
                      as_attachment=True)
@@ -391,7 +419,8 @@ def download(page_id):
 @app.route('/weights/<page_id>')
 @login_required
 def weights(page_id):
-    this_week = Weights.query.filter_by(id=page_id).first()
+    this_week = Weights.query.filter_by(id=page_id,
+                                        user_id=current_user.id).first()
     try:
         last_week = Weights.query.filter_by(
             workout_id=this_week.workout_id,
@@ -412,7 +441,9 @@ def weights(page_id):
 def insights():
     filter_form = FilterForm()
     averages = get_overall_averages()
-    total_days = len(Sleep.query.order_by(Sleep.id).all())
+    total_days = len(
+        Sleep.query.filter(Sleep.user_id == current_user.id).order_by(
+            Sleep.id).all())
     filter_objs, filter_avgs, filtered_days = None, None, None
     if request.method == "POST":
         date_range = get_date_range(filter_form)
@@ -447,7 +478,8 @@ def template(page_id):
             template_name=template_form.template_name.data,
             row_nums=rows,
             num_excs=excs,
-            num_days=template_form.total_days.data)
+            num_days=template_form.total_days.data,
+            user_id=current_user.id)
         db.session.add(template_data)
         db.session.commit()
         current_template = get_current_template()

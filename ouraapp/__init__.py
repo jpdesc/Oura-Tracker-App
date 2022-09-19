@@ -4,7 +4,7 @@ from flask_bootstrap import Bootstrap
 from ouraapp.database import db
 from config import Config
 from flask_login import LoginManager
-from ouraapp.fetch_oura_data import setup_oura_data
+from ouraapp.fetch_oura_data import update_days_db
 
 migrate = Migrate(compare_type=True)
 bootstrap = Bootstrap()
@@ -20,7 +20,7 @@ def create_app(config_class=Config):
         bootstrap.init_app(app)
         login_manager.init_app(app)
         login_manager.login_view = 'login'
-        setup_oura_data()
+        update_days_db()
     return app
 
 
