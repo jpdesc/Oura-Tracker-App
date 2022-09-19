@@ -1,1 +1,2 @@
 FLASK_APP=run
+FLASK_DEBUG=1
