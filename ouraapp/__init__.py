@@ -5,6 +5,7 @@ from ouraapp.database import db
 from config import Config
 from flask_login import LoginManager
 from ouraapp.fetch_oura_data import update_days_db
+import logging
 
 migrate = Migrate(compare_type=True)
 bootstrap = Bootstrap()
@@ -23,5 +24,11 @@ def create_app(config_class=Config):
         update_days_db()
     return app
 
+
+logging.basicConfig(format='%(asctime)s - %(levelname)s - %(message)s',
+                    filename='../ouraapp.log',
+                    level=logging.DEBUG)
+
+package_logger = logging.getLogger(__name__)
 
 from ouraapp import database

@@ -8,8 +8,9 @@ from flask_login import current_user
 from ouraapp import database
 from ouraapp import db
 from sqlalchemy import desc, func
+import logging
 
-today = date.today()
+logger = logging.getLogger(__name__)
 
 
 def pull_oura_data():
@@ -25,7 +26,6 @@ def pull_oura_data():
     return [sleep_json, readiness_json]
 
 
-
 def update_days_db():
     last_id = db.session.query(func.max(database.Day.id)).scalar()
     if last_id:
@@ -36,12 +36,10 @@ def update_days_db():
     else:
         next_id = 0
         start_date = date(2022, 1, 1)
-    print(start_date)
     added_days = [
         start_date + timedelta(days=x)
         for x in range((date.today() - start_date).days + 1)
     ]
-    print(added_days)
     for i, day in enumerate(added_days, start=next_id):
         day_obj = database.Day()
         day_obj.id = i
@@ -95,13 +93,14 @@ def add_sleep_to_db(json_dict):
         db_day = database.Day.query.filter_by(date=day).first()
         sleep_day = database.Sleep.query.filter_by(
             date=day, user_id=current_user.id).all()
-        print(sleep_day)
-        print(
+        logger.debug(
             f'sleep_obj_count={db.session.query(database.Sleep).filter_by(date=day, user_id=current_user.id).count()}, day_id={db_day.id}'
         )
         if db.session.query(database.Sleep).filter_by(
                 id=db_day.id, user_id=current_user.id).count() < 1:
-            print(f'query says sleep obj does not exist for {db_day.date}. ')
+            logger.debug(
+                f'query says sleep obj does not exist for {db_day.date}. Associated id: {db_day.id}. Sleep_id:{sleep_day.id}, Sleep_date: {sleep_day.date} '
+            )
             prev_night_data = database.Sleep(
                 date=day,
                 id=db_day.id,
