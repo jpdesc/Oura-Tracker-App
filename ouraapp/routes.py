@@ -192,8 +192,7 @@ def register():
         user_info = User(username=username,
                          name=name,
                          password_hash=hashed_password,
-                         email=email,
-                         user_id=current_user.id)
+                         email=email)
         db.session.add(user_info)
         db.session.commit()
 
