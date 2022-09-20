@@ -171,6 +171,7 @@ def load_user(user_id):
     '''Check if user is logged in on every page load.'''
     if user_id is not None:
         return User.query.get(int(user_id))
+    print('user_id is None')
     return None
 
 
@@ -192,6 +193,8 @@ def register():
     # else:
     #     uid = 1
     if registration_form.validate_on_submit():
+        print(current_user)
+        # print(current_user.id)
         existing_user = User.query.filter_by(
             email=registration_form.email.data).first()
         if existing_user is None:
