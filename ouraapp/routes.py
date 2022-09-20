@@ -11,6 +11,7 @@ from ouraapp.fetch_oura_data import add_event_to_db
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_login import login_user, login_required, logout_user, current_user
 from ouraapp.forms import *
+from sqlalchemy import func
 from ouraapp import db
 from ouraapp import login_manager
 from run import app
@@ -183,6 +184,11 @@ def load_user(user_id):
 @app.route('/register', methods=['GET', 'POST'])
 def register():
     registration_form = RegistrationForm()
+    last_uid = db.session.query(func.max(Day.id)).scalar()
+    if last_uid:
+        uid = last_uid + 1
+    else:
+        uid = 1
     if registration_form.validate_on_submit():
         name = registration_form.name.data
         username = registration_form.username.data
@@ -192,7 +198,8 @@ def register():
         user_info = User(username=username,
                          name=name,
                          password_hash=hashed_password,
-                         email=email)
+                         email=email,
+                         id=uid)
         db.session.add(user_info)
         db.session.commit()
 

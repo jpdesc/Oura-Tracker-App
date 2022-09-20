@@ -18,22 +18,14 @@ def pull_oura_data():
     oura_token = os.getenv('OURA_PERSONAL_ACCESS_TOKEN')
     oura_client = OuraClient(personal_access_token=oura_token)
     start_date = date(2022, 1, 1)
-    # end_date = date.today()
     sleep_summary = oura_client.sleep_summary(start=str(start_date))
     readiness_summary = oura_client.readiness_summary(start=str(start_date))
-    # all_days = [
-    #     start_date + timedelta(days=x)
-    #     for x in range((end_date - start_date).days + 500)
-    # ]
-    # for i, day in enumerate(all_days):
-    #     id_dict[day] = i
     sleep_json = json.dumps(sleep_summary)
     readiness_json = json.dumps(readiness_summary)
     return [sleep_json, readiness_json]
 
 
-#TODO: get rid of global call.
-#TODO: change code so that it uses commented out code
+
 def update_days_db():
     last_id = db.session.query(func.max(database.Day.id)).scalar()
     if last_id:
