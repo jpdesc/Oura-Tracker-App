@@ -38,10 +38,12 @@
 
         {{ login_form.submit(class="btn btn-secondary") }}
 
-
+        <div class="login-signup">
+            <span>Don't have an account? <a href="{{ url_for('login') }}">Sign up.</a></span>
+        </div>
     </form>
-    <br>
-    <p>New User? <a href="{{ url_for('register') }}">Click to Register!</a></p>
+
+
 
 
 </div>
