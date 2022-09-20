@@ -25,10 +25,6 @@ def create_app(config_class=Config):
     return app
 
 
-logging.basicConfig(format='%(asctime)s - %(levelname)s - %(message)s',
-                    filename='../ouraapp.log',
-                    level=logging.DEBUG)
 
-package_logger = logging.getLogger(__name__)
 
 from ouraapp import database

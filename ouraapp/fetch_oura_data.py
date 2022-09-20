@@ -10,6 +10,10 @@ from ouraapp import db
 from sqlalchemy import desc, func
 import logging
 
+logging.basicConfig(format='%(asctime)s - %(levelname)s - %(message)s',
+                    filename='../ouraapp.log',
+                    level=logging.DEBUG)
+
 logger = logging.getLogger(__name__)
 
 
