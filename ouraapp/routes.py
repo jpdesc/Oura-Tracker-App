@@ -184,7 +184,7 @@ def load_user(user_id):
 @app.route('/register', methods=['GET', 'POST'])
 def register():
     registration_form = RegistrationForm()
-    last_uid = db.session.query(func.max(Day.id)).scalar()
+    last_uid = db.session.query(func.max(User.id)).scalar()
     if last_uid:
         uid = last_uid + 1
     else:
