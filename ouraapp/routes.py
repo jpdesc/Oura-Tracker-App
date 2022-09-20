@@ -166,16 +166,6 @@ def add_tags(added_tags, selected_tags, db_obj):
         db_obj.tags.append(tag_obj)
 
 
-# def create_id_dict():
-#     all_days = [
-#         date(2022, 1, 1) + timedelta(days=x)
-#         for x in range((today - date(2022, 1, 1)).days + 5)
-#     ]
-#     for i, day in enumerate(all_days):
-#         id_dict[day] = i
-#         date_str_cal[str(day)] = id_dict[day]
-
-
 @login_manager.user_loader
 def load_user(user_id):
     return User.query.get(int(user_id))
@@ -183,26 +173,27 @@ def load_user(user_id):
 
 @app.route('/register', methods=['GET', 'POST'])
 def register():
+    if current_user.is_authenticated:
+        return redirect(url_for('log'))
     registration_form = RegistrationForm()
-    last_uid = db.session.query(func.max(User.id)).scalar()
-    if last_uid:
-        uid = last_uid + 1
-    else:
-        uid = 1
+    # last_uid = db.session.query(func.max(User.id)).scalar()
+    # if last_uid:
+    #     uid = last_uid + 1
+    # else:
+    #     uid = 1
     if registration_form.validate_on_submit():
         name = registration_form.name.data
         username = registration_form.username.data
         hashed_password = generate_password_hash(
             registration_form.password1.data, "sha256")
         email = registration_form.email.data
-        user_info = User(username=username,
-                         name=name,
-                         password_hash=hashed_password,
-                         email=email,
-                         id=uid)
-        db.session.add(user_info)
+        user = User(username=username,
+                    name=name,
+                    password_hash=hashed_password,
+                    email=email)
+        flash('Welcome, {username}. You are now a registered user!')
+        db.session.add(user)
         db.session.commit()
-
         return redirect(url_for('login'))
 
     return render_template('registration.html', form=registration_form)
@@ -210,6 +201,8 @@ def register():
 
 @app.route('/', methods=['GET', 'POST'])
 def login():
+    if current_user.is_authenticated:
+        return redirect(url_for('log'))
     login_form = LoginForm()
     if login_form.validate_on_submit():
         username = login_form.username.data

@@ -1,8 +1,8 @@
 from flask_wtf import FlaskForm
 from wtforms import StringField, SubmitField, RadioField, FileField, SelectField, DateField, FloatField, IntegerField, PasswordField, ValidationError
 from wtforms.widgets import TextArea
-from wtforms.validators import DataRequired, InputRequired, Optional, EqualTo
-from ouraapp.database import Tag
+from wtforms.validators import DataRequired, InputRequired, Optional, EqualTo, Email
+from ouraapp.database import Tag, User
 from wtforms_sqlalchemy.fields import QuerySelectMultipleField
 
 
@@ -122,9 +122,15 @@ class RegistrationForm(FlaskForm):
                                           message='Passwords Must Match!')
                               ])
     password2 = PasswordField('Confirm Password')
-    email = StringField('Email', validators=[DataRequired()])
+    email = StringField('Email', validators=[DataRequired(), Email()])
     name = StringField('Name', validators=[DataRequired()])
     submit = SubmitField('Submit')
+
+
+def validate_username(self, username):
+    user = User.query.filter_by(username=username.data).first()
+    if user is not None:
+        raise ValidationError('Please use a different username.')
 
 
 class LoginForm(FlaskForm):
