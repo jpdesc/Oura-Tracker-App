@@ -182,19 +182,22 @@ def register():
     # else:
     #     uid = 1
     if registration_form.validate_on_submit():
-        name = registration_form.name.data
-        username = registration_form.username.data
-        hashed_password = generate_password_hash(
-            registration_form.password1.data, "sha256")
-        email = registration_form.email.data
-        user = User(username=username,
-                    name=name,
-                    password_hash=hashed_password,
-                    email=email)
-        flash('Welcome, {username}. You are now a registered user!')
-        db.session.add(user)
-        db.session.commit()
-        return redirect(url_for('login'))
+        existing_user = User.query.filter_by(
+            email=registration_form.email.data).first()
+        if existing_user is None:
+            hashed_password = generate_password_hash(
+                registration_form.password1.data, "sha256")
+            user = User(username=registration_form.username.data,
+                        name=registration_form.name.data,
+                        password_hash=hashed_password,
+                        email=registration_form.email.data)
+            flash('Welcome, {username}. You are now a registered user!')
+            db.session.add(user)
+            db.session.commit()
+            login_user(user)
+            setup_oura_data()
+            return redirect(url_for('log'))
+        flash('A user already exists with that email address.')
 
     return render_template('registration.html', form=registration_form)
 
