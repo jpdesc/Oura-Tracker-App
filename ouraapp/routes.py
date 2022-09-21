@@ -242,8 +242,8 @@ def register():
 
 @app.route('/', methods=['GET', 'POST'])
 def login():
+    create_all_cal_events()
     if current_user.is_authenticated:
-        create_all_cal_events()
         return redirect(url_for('log'))
     login_form = LoginForm()
     if login_form.validate_on_submit():
