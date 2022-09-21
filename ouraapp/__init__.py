@@ -25,7 +25,7 @@ def create_app(config_class=Config):
         update_days_db()
         reload(logging)
         logging.basicConfig(format='%(asctime)s - %(levelname)s - %(message)s',
-                            filename='logs/ouraapp.log',
+                            filename='./logs/ouraapp.log',
                             level=logging.DEBUG)
         logger = logging.getLogger("ouraapp")
     return app

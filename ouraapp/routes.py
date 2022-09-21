@@ -255,9 +255,9 @@ def logout():
 @app.route('/log/<int:page_id>', methods=['GET', 'POST'])
 @login_required
 def log(page_id):
-    logger.debug(
-        f'User is authenticated: user obj = {User.query.filter_by(id=current_user.id)}'
-    )
+    # logger.debug(
+    #     f'User is authenticated: user id = {User.query.filter_by(id=current_user.id)}'
+    # )
     date = get_date(page_id)
     wellness_form = JournalForm()
     workout_form = WorkoutForm()
