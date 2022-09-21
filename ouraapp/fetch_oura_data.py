@@ -10,12 +10,6 @@ from ouraapp import db
 from sqlalchemy import desc, func
 import logging
 
-logging.basicConfig(format='%(asctime)s - %(levelname)s - %(message)s',
-                    filename='../ouraapp.log',
-                    level=logging.DEBUG)
-
-logger = logging.getLogger(__name__)
-
 
 def pull_oura_data():
     ''' Pulls oura data from beginning of 2022 to today's date.'''
@@ -91,6 +85,7 @@ def add_event_to_db(new_event_dict):
 
 def add_sleep_to_db(json_dict):
     ''' Commit data to sleep database model.'''
+    logger = logging.getLogger(__name__)
     selected_data = json.loads(json_dict, object_hook=date_hook)
     for entry in (selected_data['sleep']):
         day = format_date(entry['summary_date'])
@@ -100,10 +95,11 @@ def add_sleep_to_db(json_dict):
         logger.debug(
             f'sleep_obj_count={db.session.query(database.Sleep).filter_by(date=day, user_id=current_user.id).count()}, day_id={db_day.id}'
         )
+
         if db.session.query(database.Sleep).filter_by(
                 id=db_day.id, user_id=current_user.id).count() < 1:
             logger.debug(
-                f'query says sleep obj does not exist for {db_day.date}. Associated id: {db_day.id}. Sleep_id:{sleep_day.id}, Sleep_date: {sleep_day.date} '
+                f'query says sleep obj does not exist for {db_day.date}. Associated id: {db_day.id}.'
             )
             prev_night_data = database.Sleep(
                 date=day,
