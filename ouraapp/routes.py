@@ -242,7 +242,6 @@ def register():
 
 @app.route('/', methods=['GET', 'POST'])
 def login():
-    create_all_cal_events()
     if current_user.is_authenticated:
         return redirect(url_for('log'))
     login_form = LoginForm()
@@ -254,6 +253,7 @@ def login():
             passed = check_password_hash(user.password_hash, password)
             if passed:
                 login_user(user)
+                create_all_cal_events()
                 setup_oura_data()
                 return redirect(url_for('log'))
             else:
