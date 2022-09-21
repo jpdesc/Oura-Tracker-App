@@ -88,6 +88,9 @@ def add_event_to_db(new_event_dict):
 def add_sleep_to_db(json_dict):
     ''' Commit data to sleep database model.'''
     selected_data = json.loads(json_dict, object_hook=date_hook)
+    logger.debug(
+        f'User is authenticated: user obj = {database.User.query.filter_by(id=current_user.id)}'
+    )
     for entry in (selected_data['sleep']):
         day = format_date(entry['summary_date'])
         db_day = database.Day.query.filter_by(date=day).first()
