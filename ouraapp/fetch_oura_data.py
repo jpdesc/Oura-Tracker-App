@@ -89,16 +89,11 @@ def add_sleep_to_db(json_dict):
     ''' Commit data to sleep database model.'''
     selected_data = json.loads(json_dict, object_hook=date_hook)
     logger.debug(
-        f'User is authenticated: user obj = {database.User.query.filter_by(id=current_user.id)}'
+        f'User is authenticated: user obj = {database.User.query.filter_by(id=current_user.id).first()}'
     )
     for entry in (selected_data['sleep']):
         day = format_date(entry['summary_date'])
         db_day = database.Day.query.filter_by(date=day).first()
-        sleep_day = database.Sleep.query.filter_by(
-            date=day, user_id=current_user.id).all()
-        # logger.debug(
-        #     f'sleep_obj_count={db.session.query(database.Sleep).filter_by(date=day, user_id=current_user.id).count()}, day_id={db_day.id}'
-        # )
         logger.debug(
             f'{db_day.id}: - 1) Both user_id and sleep data are in database: {database.Sleep.query.filter_by(user_id = current_user.id, id=db_day.id).first()}'
         )

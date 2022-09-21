@@ -5,4 +5,4 @@ __pycache__
 *.sqlite
 *.update
 local_backup.sh
-ouraapp.log
+logs
