@@ -25,6 +25,7 @@ def create_app(config_class=Config):
         logging.basicConfig(format='%(asctime)s - %(levelname)s - %(message)s',
                             filename='ouraapp.log',
                             level=logging.DEBUG)
+        logger = logging.getLogger("ouraapp")
     return app
 
 

@@ -2,7 +2,7 @@ from flask_wtf import FlaskForm
 from wtforms import StringField, SubmitField, RadioField, FileField, SelectField, DateField, FloatField, IntegerField, PasswordField, ValidationError
 from wtforms.widgets import TextArea
 from wtforms.validators import DataRequired, InputRequired, Optional, EqualTo, Email
-from ouraapp.database import Tag, User
+from ouraapp.database import Tag, Users
 from wtforms_sqlalchemy.fields import QuerySelectMultipleField
 
 
@@ -128,7 +128,7 @@ class RegistrationForm(FlaskForm):
 
 
 def validate_username(self, username):
-    user = User.query.filter_by(username=username.data).first()
+    user = Users.query.filter_by(username=username.data).first()
     if user is not None:
         raise ValidationError('Please use a different username.')
 

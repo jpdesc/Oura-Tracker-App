@@ -10,6 +10,8 @@ from ouraapp import db
 from sqlalchemy import desc, func
 import logging
 
+logger = logging.getLogger("ouraapp")
+
 
 def pull_oura_data():
     ''' Pulls oura data from beginning of 2022 to today's date.'''
@@ -85,21 +87,25 @@ def add_event_to_db(new_event_dict):
 
 def add_sleep_to_db(json_dict):
     ''' Commit data to sleep database model.'''
-    logger = logging.getLogger(__name__)
     selected_data = json.loads(json_dict, object_hook=date_hook)
     for entry in (selected_data['sleep']):
         day = format_date(entry['summary_date'])
         db_day = database.Day.query.filter_by(date=day).first()
         sleep_day = database.Sleep.query.filter_by(
             date=day, user_id=current_user.id).all()
+        # logger.debug(
+        #     f'sleep_obj_count={db.session.query(database.Sleep).filter_by(date=day, user_id=current_user.id).count()}, day_id={db_day.id}'
+        # )
         logger.debug(
-            f'sleep_obj_count={db.session.query(database.Sleep).filter_by(date=day, user_id=current_user.id).count()}, day_id={db_day.id}'
+            f'{db_day.id}: - 1) Both user_id and sleep data are in database: {database.Sleep.query.filter_by(user_id = current_user.id, id=db_day.id).first()}'
         )
-
+        logger.debug(
+            f'{db_day.id}: - 2) user_id in database: {database.Sleep.query.filter_by(id=db_day.id).first()}'
+        )
         if db.session.query(database.Sleep).filter_by(
                 id=db_day.id, user_id=current_user.id).count() < 1:
             logger.debug(
-                f'query says sleep obj does not exist for {db_day.date}. Associated id: {db_day.id}.'
+                f'{db_day.id}: 3) Query says sleep obj does not exist for {db_day.date}. Associated id: {db_day.id}.'
             )
             prev_night_data = database.Sleep(
                 date=day,
@@ -114,6 +120,9 @@ def add_sleep_to_db(json_dict):
                 total_sleep=convert_seconds(entry['total']),
                 seconds_sleep=entry['total'],
                 user_id=current_user.id)
+            # logger.debug(
+            #     f'existing sleep obj in database: {database.Sleep.query.filter_by(id=id, user_id=current_user.id).first()}'
+            # )
             add_event_to_db({
                 'title': 'Sleep',
                 'score': entry['score'],

@@ -5,8 +5,8 @@ from flask_login import UserMixin
 db = SQLAlchemy(session_options={"autoflush": False})
 
 
-class User(db.Model, UserMixin):
-    __tablename__ = 'user'
+class Users(db.Model, UserMixin):
+    __tablename__ = 'users'
     id = db.Column(db.Integer, primary_key=True, unique=True)
     username = db.Column(db.String(20), nullable=False, unique=True)
     name = db.Column(db.String(30), nullable=False)

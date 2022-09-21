@@ -1,0 +1,574 @@
+2022-09-21 10:14:44,443 - INFO -  * Detected change in '/Users/jackdescombes/projects/oura_proj/ouraapp/routes.py', reloading
+2022-09-21 10:15:10,020 - INFO -  * Running on http://127.0.0.1:5000 (Press CTRL+C to quit)
+2022-09-21 10:15:10,020 - INFO -  * Restarting with stat
+2022-09-21 10:15:19,833 - INFO - The CSRF token has expired.
+2022-09-21 10:15:19,843 - INFO - 127.0.0.1 - - [21/Sep/2022 10:15:19] "POST / HTTP/1.1" 200 -
+2022-09-21 10:15:19,857 - INFO - 127.0.0.1 - - [21/Sep/2022 10:15:19] "[36mGET /static/main.css HTTP/1.1[0m" 304 -
+2022-09-21 10:15:25,993 - DEBUG - Starting new HTTPS connection (1): api.ouraring.com:443
+2022-09-21 10:15:27,231 - DEBUG - https://api.ouraring.com:443 "GET /v1/sleep?start=2022-01-01&access_token=D5XZ7FLDMXLQIQWTDBMKQBUXTNFYTCVE HTTP/1.1" 200 None
+2022-09-21 10:15:27,528 - DEBUG - Starting new HTTPS connection (1): api.ouraring.com:443
+2022-09-21 10:15:28,281 - DEBUG - https://api.ouraring.com:443 "GET /v1/readiness?start=2022-01-01&access_token=D5XZ7FLDMXLQIQWTDBMKQBUXTNFYTCVE HTTP/1.1" 200 None
+2022-09-21 10:15:28,320 - INFO - 127.0.0.1 - - [21/Sep/2022 10:15:28] "[35m[1mPOST / HTTP/1.1[0m" 500 -
+2022-09-21 10:15:28,328 - INFO - 127.0.0.1 - - [21/Sep/2022 10:15:28] "[36mGET /?__debugger__=yes&cmd=resource&f=style.css HTTP/1.1[0m" 304 -
+2022-09-21 10:15:28,328 - INFO - 127.0.0.1 - - [21/Sep/2022 10:15:28] "[36mGET /?__debugger__=yes&cmd=resource&f=debugger.js HTTP/1.1[0m" 304 -
+2022-09-21 10:15:28,334 - INFO - 127.0.0.1 - - [21/Sep/2022 10:15:28] "[36mGET /?__debugger__=yes&cmd=resource&f=console.png HTTP/1.1[0m" 304 -
+2022-09-21 10:17:04,106 - INFO -  * Detected change in '/Users/jackdescombes/projects/oura_proj/ouraapp/fetch_oura_data.py', reloading
+2022-09-21 10:17:04,285 - INFO -  * Restarting with stat
+2022-09-21 10:24:51,537 - INFO -  * Restarting with stat
+2022-09-21 10:25:16,238 - INFO -  * Restarting with stat
+2022-09-21 10:25:41,992 - INFO -  * Restarting with stat
+2022-09-21 10:26:21,071 - INFO -  * Restarting with stat
+2022-09-21 10:26:52,029 - INFO -  * Detected change in '/Users/jackdescombes/projects/oura_proj/ouraapp/fetch_oura_data.py', reloading
+2022-09-21 10:26:52,286 - INFO -  * Restarting with stat
+2022-09-21 10:26:57,413 - INFO -  * Detected change in '/Users/jackdescombes/projects/oura_proj/ouraapp/fetch_oura_data.py', reloading
+2022-09-21 10:26:57,600 - INFO -  * Restarting with stat
+2022-09-21 10:27:04,974 - INFO -  * Detected change in '/Users/jackdescombes/projects/oura_proj/ouraapp/fetch_oura_data.py', reloading
+2022-09-21 10:27:05,216 - INFO -  * Restarting with stat
+2022-09-21 10:27:28,124 - INFO -  * Detected change in '/Users/jackdescombes/projects/oura_proj/ouraapp/routes.py', reloading
+2022-09-21 10:27:28,333 - INFO -  * Restarting with stat
+2022-09-21 10:27:36,660 - INFO -  * Detected change in '/Users/jackdescombes/projects/oura_proj/ouraapp/routes.py', reloading
+2022-09-21 10:27:36,832 - INFO -  * Restarting with stat
+2022-09-21 10:27:43,886 - INFO -  * Running on http://127.0.0.1:5000 (Press CTRL+C to quit)
+2022-09-21 10:27:43,887 - INFO -  * Restarting with stat
+2022-09-21 10:27:57,131 - DEBUG - Starting new HTTPS connection (1): api.ouraring.com:443
+2022-09-21 10:27:58,164 - DEBUG - https://api.ouraring.com:443 "GET /v1/sleep?start=2022-01-01&access_token=D5XZ7FLDMXLQIQWTDBMKQBUXTNFYTCVE HTTP/1.1" 200 None
+2022-09-21 10:27:58,410 - DEBUG - Starting new HTTPS connection (1): api.ouraring.com:443
+2022-09-21 10:27:59,284 - DEBUG - https://api.ouraring.com:443 "GET /v1/readiness?start=2022-01-01&access_token=D5XZ7FLDMXLQIQWTDBMKQBUXTNFYTCVE HTTP/1.1" 200 None
+2022-09-21 10:27:59,317 - DEBUG - sleep_obj_count=1, day_id=71
+2022-09-21 10:27:59,323 - DEBUG - sleep_obj_count=1, day_id=72
+2022-09-21 10:27:59,325 - DEBUG - sleep_obj_count=1, day_id=73
+2022-09-21 10:27:59,328 - DEBUG - sleep_obj_count=1, day_id=74
+2022-09-21 10:27:59,331 - DEBUG - sleep_obj_count=1, day_id=75
+2022-09-21 10:27:59,334 - DEBUG - sleep_obj_count=1, day_id=76
+2022-09-21 10:27:59,337 - DEBUG - sleep_obj_count=1, day_id=77
+2022-09-21 10:27:59,340 - DEBUG - sleep_obj_count=1, day_id=78
+2022-09-21 10:27:59,343 - DEBUG - sleep_obj_count=1, day_id=79
+2022-09-21 10:27:59,345 - DEBUG - sleep_obj_count=1, day_id=80
+2022-09-21 10:27:59,348 - DEBUG - sleep_obj_count=1, day_id=81
+2022-09-21 10:27:59,351 - DEBUG - sleep_obj_count=1, day_id=82
+2022-09-21 10:27:59,354 - DEBUG - sleep_obj_count=1, day_id=83
+2022-09-21 10:27:59,357 - DEBUG - sleep_obj_count=2, day_id=84
+2022-09-21 10:27:59,359 - DEBUG - sleep_obj_count=1, day_id=86
+2022-09-21 10:27:59,362 - DEBUG - sleep_obj_count=1, day_id=87
+2022-09-21 10:27:59,365 - DEBUG - sleep_obj_count=1, day_id=88
+2022-09-21 10:27:59,367 - DEBUG - sleep_obj_count=1, day_id=89
+2022-09-21 10:27:59,370 - DEBUG - sleep_obj_count=1, day_id=90
+2022-09-21 10:27:59,372 - DEBUG - sleep_obj_count=1, day_id=91
+2022-09-21 10:27:59,375 - DEBUG - sleep_obj_count=1, day_id=92
+2022-09-21 10:27:59,377 - DEBUG - sleep_obj_count=1, day_id=93
+2022-09-21 10:27:59,380 - DEBUG - sleep_obj_count=1, day_id=94
+2022-09-21 10:27:59,382 - DEBUG - sleep_obj_count=2, day_id=95
+2022-09-21 10:27:59,385 - DEBUG - sleep_obj_count=1, day_id=97
+2022-09-21 10:27:59,387 - DEBUG - sleep_obj_count=1, day_id=98
+2022-09-21 10:27:59,390 - DEBUG - sleep_obj_count=1, day_id=99
+2022-09-21 10:27:59,393 - DEBUG - sleep_obj_count=1, day_id=100
+2022-09-21 10:27:59,395 - DEBUG - sleep_obj_count=1, day_id=101
+2022-09-21 10:27:59,398 - DEBUG - sleep_obj_count=1, day_id=102
+2022-09-21 10:27:59,400 - DEBUG - sleep_obj_count=1, day_id=103
+2022-09-21 10:27:59,403 - DEBUG - sleep_obj_count=2, day_id=104
+2022-09-21 10:27:59,405 - DEBUG - sleep_obj_count=1, day_id=107
+2022-09-21 10:27:59,408 - DEBUG - sleep_obj_count=1, day_id=108
+2022-09-21 10:27:59,411 - DEBUG - sleep_obj_count=1, day_id=109
+2022-09-21 10:27:59,414 - DEBUG - sleep_obj_count=1, day_id=110
+2022-09-21 10:27:59,416 - DEBUG - sleep_obj_count=1, day_id=111
+2022-09-21 10:27:59,419 - DEBUG - sleep_obj_count=1, day_id=112
+2022-09-21 10:27:59,421 - DEBUG - sleep_obj_count=1, day_id=113
+2022-09-21 10:27:59,423 - DEBUG - sleep_obj_count=1, day_id=114
+2022-09-21 10:27:59,425 - DEBUG - sleep_obj_count=1, day_id=115
+2022-09-21 10:27:59,428 - DEBUG - sleep_obj_count=2, day_id=116
+2022-09-21 10:27:59,430 - DEBUG - sleep_obj_count=2, day_id=119
+2022-09-21 10:27:59,433 - DEBUG - sleep_obj_count=1, day_id=121
+2022-09-21 10:27:59,435 - DEBUG - sleep_obj_count=1, day_id=122
+2022-09-21 10:27:59,437 - DEBUG - sleep_obj_count=1, day_id=123
+2022-09-21 10:27:59,439 - DEBUG - sleep_obj_count=1, day_id=124
+2022-09-21 10:27:59,442 - DEBUG - sleep_obj_count=1, day_id=125
+2022-09-21 10:27:59,444 - DEBUG - sleep_obj_count=2, day_id=126
+2022-09-21 10:27:59,447 - DEBUG - sleep_obj_count=1, day_id=128
+2022-09-21 10:27:59,449 - DEBUG - sleep_obj_count=1, day_id=129
+2022-09-21 10:27:59,452 - DEBUG - sleep_obj_count=1, day_id=130
+2022-09-21 10:27:59,454 - DEBUG - sleep_obj_count=1, day_id=131
+2022-09-21 10:27:59,457 - DEBUG - sleep_obj_count=1, day_id=132
+2022-09-21 10:27:59,460 - DEBUG - sleep_obj_count=1, day_id=133
+2022-09-21 10:27:59,462 - DEBUG - sleep_obj_count=1, day_id=134
+2022-09-21 10:27:59,464 - DEBUG - sleep_obj_count=1, day_id=135
+2022-09-21 10:27:59,467 - DEBUG - sleep_obj_count=2, day_id=136
+2022-09-21 10:27:59,469 - DEBUG - sleep_obj_count=1, day_id=138
+2022-09-21 10:27:59,472 - DEBUG - sleep_obj_count=2, day_id=139
+2022-09-21 10:27:59,474 - DEBUG - sleep_obj_count=1, day_id=144
+2022-09-21 10:27:59,476 - DEBUG - sleep_obj_count=1, day_id=145
+2022-09-21 10:27:59,479 - DEBUG - sleep_obj_count=1, day_id=146
+2022-09-21 10:27:59,481 - DEBUG - sleep_obj_count=1, day_id=147
+2022-09-21 10:27:59,483 - DEBUG - sleep_obj_count=1, day_id=148
+2022-09-21 10:27:59,486 - DEBUG - sleep_obj_count=1, day_id=150
+2022-09-21 10:27:59,488 - DEBUG - sleep_obj_count=1, day_id=151
+2022-09-21 10:27:59,490 - DEBUG - sleep_obj_count=1, day_id=152
+2022-09-21 10:27:59,493 - DEBUG - sleep_obj_count=1, day_id=153
+2022-09-21 10:27:59,495 - DEBUG - sleep_obj_count=1, day_id=154
+2022-09-21 10:27:59,498 - DEBUG - sleep_obj_count=1, day_id=155
+2022-09-21 10:27:59,500 - DEBUG - sleep_obj_count=1, day_id=156
+2022-09-21 10:27:59,503 - DEBUG - sleep_obj_count=1, day_id=157
+2022-09-21 10:27:59,505 - DEBUG - sleep_obj_count=1, day_id=158
+2022-09-21 10:27:59,507 - DEBUG - sleep_obj_count=1, day_id=159
+2022-09-21 10:27:59,510 - DEBUG - sleep_obj_count=1, day_id=160
+2022-09-21 10:27:59,512 - DEBUG - sleep_obj_count=1, day_id=161
+2022-09-21 10:27:59,515 - DEBUG - sleep_obj_count=1, day_id=162
+2022-09-21 10:27:59,517 - DEBUG - sleep_obj_count=1, day_id=163
+2022-09-21 10:27:59,519 - DEBUG - sleep_obj_count=1, day_id=164
+2022-09-21 10:27:59,522 - DEBUG - sleep_obj_count=1, day_id=165
+2022-09-21 10:27:59,524 - DEBUG - sleep_obj_count=1, day_id=166
+2022-09-21 10:27:59,526 - DEBUG - sleep_obj_count=1, day_id=167
+2022-09-21 10:27:59,529 - DEBUG - sleep_obj_count=2, day_id=168
+2022-09-21 10:27:59,531 - DEBUG - sleep_obj_count=1, day_id=170
+2022-09-21 10:27:59,534 - DEBUG - sleep_obj_count=1, day_id=171
+2022-09-21 10:27:59,536 - DEBUG - sleep_obj_count=1, day_id=172
+2022-09-21 10:27:59,539 - DEBUG - sleep_obj_count=1, day_id=173
+2022-09-21 10:27:59,541 - DEBUG - sleep_obj_count=1, day_id=174
+2022-09-21 10:27:59,543 - DEBUG - sleep_obj_count=1, day_id=175
+2022-09-21 10:27:59,546 - DEBUG - sleep_obj_count=1, day_id=176
+2022-09-21 10:27:59,548 - DEBUG - sleep_obj_count=1, day_id=177
+2022-09-21 10:27:59,550 - DEBUG - sleep_obj_count=1, day_id=178
+2022-09-21 10:27:59,553 - DEBUG - sleep_obj_count=1, day_id=179
+2022-09-21 10:27:59,555 - DEBUG - sleep_obj_count=1, day_id=180
+2022-09-21 10:27:59,558 - DEBUG - sleep_obj_count=1, day_id=181
+2022-09-21 10:27:59,560 - DEBUG - sleep_obj_count=1, day_id=182
+2022-09-21 10:27:59,562 - DEBUG - sleep_obj_count=2, day_id=183
+2022-09-21 10:27:59,565 - DEBUG - sleep_obj_count=2, day_id=186
+2022-09-21 10:27:59,567 - DEBUG - sleep_obj_count=1, day_id=188
+2022-09-21 10:27:59,569 - DEBUG - sleep_obj_count=1, day_id=189
+2022-09-21 10:27:59,572 - DEBUG - sleep_obj_count=1, day_id=190
+2022-09-21 10:27:59,574 - DEBUG - sleep_obj_count=1, day_id=191
+2022-09-21 10:27:59,576 - DEBUG - sleep_obj_count=1, day_id=192
+2022-09-21 10:27:59,579 - DEBUG - sleep_obj_count=1, day_id=193
+2022-09-21 10:27:59,581 - DEBUG - sleep_obj_count=1, day_id=194
+2022-09-21 10:27:59,584 - DEBUG - sleep_obj_count=1, day_id=195
+2022-09-21 10:27:59,586 - DEBUG - sleep_obj_count=1, day_id=196
+2022-09-21 10:27:59,588 - DEBUG - sleep_obj_count=1, day_id=198
+2022-09-21 10:27:59,590 - DEBUG - sleep_obj_count=1, day_id=199
+2022-09-21 10:27:59,593 - DEBUG - sleep_obj_count=1, day_id=200
+2022-09-21 10:27:59,595 - DEBUG - sleep_obj_count=1, day_id=201
+2022-09-21 10:27:59,598 - DEBUG - sleep_obj_count=1, day_id=202
+2022-09-21 10:27:59,600 - DEBUG - sleep_obj_count=1, day_id=203
+2022-09-21 10:27:59,602 - DEBUG - sleep_obj_count=2, day_id=204
+2022-09-21 10:27:59,605 - DEBUG - sleep_obj_count=2, day_id=208
+2022-09-21 10:27:59,607 - DEBUG - sleep_obj_count=1, day_id=211
+2022-09-21 10:27:59,609 - DEBUG - sleep_obj_count=1, day_id=212
+2022-09-21 10:27:59,611 - DEBUG - sleep_obj_count=1, day_id=213
+2022-09-21 10:27:59,614 - DEBUG - sleep_obj_count=1, day_id=214
+2022-09-21 10:27:59,616 - DEBUG - sleep_obj_count=1, day_id=215
+2022-09-21 10:27:59,618 - DEBUG - sleep_obj_count=1, day_id=216
+2022-09-21 10:27:59,621 - DEBUG - sleep_obj_count=1, day_id=217
+2022-09-21 10:27:59,623 - DEBUG - sleep_obj_count=1, day_id=218
+2022-09-21 10:27:59,625 - DEBUG - sleep_obj_count=1, day_id=219
+2022-09-21 10:27:59,628 - DEBUG - sleep_obj_count=1, day_id=220
+2022-09-21 10:27:59,630 - DEBUG - sleep_obj_count=1, day_id=221
+2022-09-21 10:27:59,633 - DEBUG - sleep_obj_count=1, day_id=222
+2022-09-21 10:27:59,635 - DEBUG - sleep_obj_count=1, day_id=223
+2022-09-21 10:27:59,637 - DEBUG - sleep_obj_count=1, day_id=224
+2022-09-21 10:27:59,639 - DEBUG - sleep_obj_count=1, day_id=225
+2022-09-21 10:27:59,642 - DEBUG - sleep_obj_count=1, day_id=226
+2022-09-21 10:27:59,644 - DEBUG - sleep_obj_count=1, day_id=227
+2022-09-21 10:27:59,647 - DEBUG - sleep_obj_count=1, day_id=228
+2022-09-21 10:27:59,649 - DEBUG - sleep_obj_count=1, day_id=229
+2022-09-21 10:27:59,651 - DEBUG - sleep_obj_count=1, day_id=230
+2022-09-21 10:27:59,654 - DEBUG - sleep_obj_count=2, day_id=231
+2022-09-21 10:27:59,656 - DEBUG - sleep_obj_count=1, day_id=233
+2022-09-21 10:27:59,658 - DEBUG - sleep_obj_count=1, day_id=234
+2022-09-21 10:27:59,661 - DEBUG - sleep_obj_count=1, day_id=235
+2022-09-21 10:27:59,663 - DEBUG - sleep_obj_count=1, day_id=236
+2022-09-21 10:27:59,665 - DEBUG - sleep_obj_count=1, day_id=237
+2022-09-21 10:27:59,668 - DEBUG - sleep_obj_count=1, day_id=238
+2022-09-21 10:27:59,670 - DEBUG - sleep_obj_count=2, day_id=239
+2022-09-21 10:27:59,672 - DEBUG - sleep_obj_count=1, day_id=241
+2022-09-21 10:27:59,675 - DEBUG - sleep_obj_count=1, day_id=242
+2022-09-21 10:27:59,677 - DEBUG - sleep_obj_count=2, day_id=243
+2022-09-21 10:27:59,679 - DEBUG - sleep_obj_count=1, day_id=245
+2022-09-21 10:27:59,682 - DEBUG - sleep_obj_count=1, day_id=246
+2022-09-21 10:27:59,684 - DEBUG - sleep_obj_count=1, day_id=248
+2022-09-21 10:27:59,686 - DEBUG - sleep_obj_count=1, day_id=249
+2022-09-21 10:27:59,689 - DEBUG - sleep_obj_count=1, day_id=250
+2022-09-21 10:27:59,691 - DEBUG - sleep_obj_count=1, day_id=251
+2022-09-21 10:27:59,693 - DEBUG - sleep_obj_count=1, day_id=253
+2022-09-21 10:27:59,696 - DEBUG - sleep_obj_count=1, day_id=254
+2022-09-21 10:27:59,698 - DEBUG - sleep_obj_count=1, day_id=255
+2022-09-21 10:27:59,700 - DEBUG - sleep_obj_count=1, day_id=257
+2022-09-21 10:27:59,703 - DEBUG - sleep_obj_count=1, day_id=258
+2022-09-21 10:27:59,705 - DEBUG - sleep_obj_count=1, day_id=259
+2022-09-21 10:27:59,707 - DEBUG - sleep_obj_count=1, day_id=261
+2022-09-21 10:27:59,710 - DEBUG - sleep_obj_count=1, day_id=262
+2022-09-21 10:27:59,905 - INFO - 127.0.0.1 - - [21/Sep/2022 10:27:59] "[32mPOST / HTTP/1.1[0m" 302 -
+2022-09-21 10:28:01,842 - INFO - 127.0.0.1 - - [21/Sep/2022 10:28:01] "GET /log HTTP/1.1" 200 -
+2022-09-21 10:28:01,854 - INFO - 127.0.0.1 - - [21/Sep/2022 10:28:01] "[36mGET /static/main.css HTTP/1.1[0m" 304 -
+2022-09-21 10:39:37,019 - INFO -  * Detected change in '/Users/jackdescombes/projects/oura_proj/ouraapp/fetch_oura_data.py', reloading
+2022-09-21 10:39:37,264 - INFO -  * Restarting with stat
+2022-09-21 10:39:44,605 - INFO -  * Restarting with stat
+2022-09-21 10:40:06,312 - INFO -  * Detected change in '/Users/jackdescombes/projects/oura_proj/ouraapp/fetch_oura_data.py', reloading
+2022-09-21 10:40:06,480 - INFO -  * Restarting with stat
+2022-09-21 10:40:22,124 - INFO -  * Detected change in '/Users/jackdescombes/projects/oura_proj/ouraapp/fetch_oura_data.py', reloading
+2022-09-21 10:40:22,287 - INFO -  * Restarting with stat
+2022-09-21 10:40:49,319 - INFO -  * Detected change in '/Users/jackdescombes/projects/oura_proj/ouraapp/fetch_oura_data.py', reloading
+2022-09-21 10:40:49,489 - INFO -  * Restarting with stat
+2022-09-21 10:44:08,560 - INFO -  * Detected change in '/Users/jackdescombes/projects/oura_proj/ouraapp/fetch_oura_data.py', reloading
+2022-09-21 10:44:08,784 - INFO -  * Restarting with stat
+2022-09-21 10:44:44,994 - INFO -  * Detected change in '/Users/jackdescombes/projects/oura_proj/ouraapp/fetch_oura_data.py', reloading
+2022-09-21 10:44:45,200 - INFO -  * Restarting with stat
+2022-09-21 10:45:27,528 - INFO -  * Detected change in '/Users/jackdescombes/projects/oura_proj/ouraapp/fetch_oura_data.py', reloading
+2022-09-21 10:45:27,747 - INFO -  * Restarting with stat
+2022-09-21 10:48:05,444 - INFO -  * Restarting with stat
+2022-09-21 10:48:22,131 - INFO -  * Detected change in '/Users/jackdescombes/projects/oura_proj/ouraapp/fetch_oura_data.py', reloading
+2022-09-21 10:48:22,329 - INFO -  * Restarting with stat
+2022-09-21 10:48:32,654 - INFO -  * Detected change in '/Users/jackdescombes/projects/oura_proj/ouraapp/fetch_oura_data.py', reloading
+2022-09-21 10:48:32,864 - INFO -  * Restarting with stat
+2022-09-21 10:48:48,578 - INFO -  * Detected change in '/Users/jackdescombes/projects/oura_proj/ouraapp/fetch_oura_data.py', reloading
+2022-09-21 10:48:48,752 - INFO -  * Restarting with stat
+2022-09-21 10:49:16,814 - INFO -  * Detected change in '/Users/jackdescombes/projects/oura_proj/ouraapp/fetch_oura_data.py', reloading
+2022-09-21 10:49:17,031 - INFO -  * Restarting with stat
+2022-09-21 10:50:03,776 - INFO -  * Detected change in '/Users/jackdescombes/projects/oura_proj/ouraapp/fetch_oura_data.py', reloading
+2022-09-21 10:50:03,963 - INFO -  * Restarting with stat
+2022-09-21 10:50:11,258 - INFO -  * Detected change in '/Users/jackdescombes/projects/oura_proj/ouraapp/fetch_oura_data.py', reloading
+2022-09-21 10:50:11,462 - INFO -  * Restarting with stat
+2022-09-21 10:50:29,214 - INFO -  * Detected change in '/Users/jackdescombes/projects/oura_proj/ouraapp/fetch_oura_data.py', reloading
+2022-09-21 10:50:29,384 - INFO -  * Restarting with stat
+2022-09-21 10:50:39,542 - INFO -  * Running on http://127.0.0.1:5000 (Press CTRL+C to quit)
+2022-09-21 10:50:39,543 - INFO -  * Restarting with stat
+2022-09-21 10:50:56,723 - INFO - 127.0.0.1 - - [21/Sep/2022 10:50:56] "[32mGET / HTTP/1.1[0m" 302 -
+2022-09-21 10:50:56,779 - INFO - 127.0.0.1 - - [21/Sep/2022 10:50:56] "GET /log HTTP/1.1" 200 -
+2022-09-21 10:50:56,790 - INFO - 127.0.0.1 - - [21/Sep/2022 10:50:56] "[36mGET /static/main.css HTTP/1.1[0m" 304 -
+2022-09-21 10:51:13,184 - INFO - 127.0.0.1 - - [21/Sep/2022 10:51:13] "[32mGET /logout HTTP/1.1[0m" 302 -
+2022-09-21 10:51:13,195 - INFO - 127.0.0.1 - - [21/Sep/2022 10:51:13] "GET / HTTP/1.1" 200 -
+2022-09-21 10:51:13,201 - INFO - 127.0.0.1 - - [21/Sep/2022 10:51:13] "[36mGET /static/main.css HTTP/1.1[0m" 304 -
+2022-09-21 10:51:24,167 - DEBUG - Starting new HTTPS connection (1): api.ouraring.com:443
+2022-09-21 10:51:25,212 - DEBUG - https://api.ouraring.com:443 "GET /v1/sleep?start=2022-01-01&access_token=D5XZ7FLDMXLQIQWTDBMKQBUXTNFYTCVE HTTP/1.1" 200 None
+2022-09-21 10:51:25,764 - DEBUG - Starting new HTTPS connection (1): api.ouraring.com:443
+2022-09-21 10:51:26,543 - DEBUG - https://api.ouraring.com:443 "GET /v1/readiness?start=2022-01-01&access_token=D5XZ7FLDMXLQIQWTDBMKQBUXTNFYTCVE HTTP/1.1" 200 None
+2022-09-21 10:51:26,656 - DEBUG - 71: - 1) Both user_id and sleep data are in database: <Sleep 71>
+2022-09-21 10:51:26,657 - DEBUG - 71: - 2) user_id in database: <Sleep 71>
+2022-09-21 10:51:26,662 - DEBUG - 72: - 1) Both user_id and sleep data are in database: <Sleep 72>
+2022-09-21 10:51:26,663 - DEBUG - 72: - 2) user_id in database: <Sleep 72>
+2022-09-21 10:51:26,666 - DEBUG - 73: - 1) Both user_id and sleep data are in database: <Sleep 73>
+2022-09-21 10:51:26,667 - DEBUG - 73: - 2) user_id in database: <Sleep 73>
+2022-09-21 10:51:26,670 - DEBUG - 74: - 1) Both user_id and sleep data are in database: <Sleep 74>
+2022-09-21 10:51:26,670 - DEBUG - 74: - 2) user_id in database: <Sleep 74>
+2022-09-21 10:51:26,673 - DEBUG - 75: - 1) Both user_id and sleep data are in database: <Sleep 75>
+2022-09-21 10:51:26,674 - DEBUG - 75: - 2) user_id in database: <Sleep 75>
+2022-09-21 10:51:26,676 - DEBUG - 76: - 1) Both user_id and sleep data are in database: <Sleep 76>
+2022-09-21 10:51:26,677 - DEBUG - 76: - 2) user_id in database: <Sleep 76>
+2022-09-21 10:51:26,680 - DEBUG - 77: - 1) Both user_id and sleep data are in database: <Sleep 77>
+2022-09-21 10:51:26,680 - DEBUG - 77: - 2) user_id in database: <Sleep 77>
+2022-09-21 10:51:26,683 - DEBUG - 78: - 1) Both user_id and sleep data are in database: <Sleep 78>
+2022-09-21 10:51:26,684 - DEBUG - 78: - 2) user_id in database: <Sleep 78>
+2022-09-21 10:51:26,686 - DEBUG - 79: - 1) Both user_id and sleep data are in database: <Sleep 79>
+2022-09-21 10:51:26,687 - DEBUG - 79: - 2) user_id in database: <Sleep 79>
+2022-09-21 10:51:26,689 - DEBUG - 80: - 1) Both user_id and sleep data are in database: <Sleep 80>
+2022-09-21 10:51:26,690 - DEBUG - 80: - 2) user_id in database: <Sleep 80>
+2022-09-21 10:51:26,693 - DEBUG - 81: - 1) Both user_id and sleep data are in database: <Sleep 81>
+2022-09-21 10:51:26,693 - DEBUG - 81: - 2) user_id in database: <Sleep 81>
+2022-09-21 10:51:26,696 - DEBUG - 82: - 1) Both user_id and sleep data are in database: <Sleep 82>
+2022-09-21 10:51:26,697 - DEBUG - 82: - 2) user_id in database: <Sleep 82>
+2022-09-21 10:51:26,699 - DEBUG - 83: - 1) Both user_id and sleep data are in database: <Sleep 83>
+2022-09-21 10:51:26,700 - DEBUG - 83: - 2) user_id in database: <Sleep 83>
+2022-09-21 10:51:26,702 - DEBUG - 84: - 1) Both user_id and sleep data are in database: <Sleep 84>
+2022-09-21 10:51:26,703 - DEBUG - 84: - 2) user_id in database: <Sleep 84>
+2022-09-21 10:51:26,705 - DEBUG - 86: - 1) Both user_id and sleep data are in database: <Sleep 86>
+2022-09-21 10:51:26,706 - DEBUG - 86: - 2) user_id in database: <Sleep 86>
+2022-09-21 10:51:26,708 - DEBUG - 87: - 1) Both user_id and sleep data are in database: <Sleep 87>
+2022-09-21 10:51:26,709 - DEBUG - 87: - 2) user_id in database: <Sleep 87>
+2022-09-21 10:51:26,711 - DEBUG - 88: - 1) Both user_id and sleep data are in database: <Sleep 88>
+2022-09-21 10:51:26,711 - DEBUG - 88: - 2) user_id in database: <Sleep 88>
+2022-09-21 10:51:26,714 - DEBUG - 89: - 1) Both user_id and sleep data are in database: <Sleep 89>
+2022-09-21 10:51:26,714 - DEBUG - 89: - 2) user_id in database: <Sleep 89>
+2022-09-21 10:51:26,716 - DEBUG - 90: - 1) Both user_id and sleep data are in database: <Sleep 90>
+2022-09-21 10:51:26,717 - DEBUG - 90: - 2) user_id in database: <Sleep 90>
+2022-09-21 10:51:26,719 - DEBUG - 91: - 1) Both user_id and sleep data are in database: <Sleep 91>
+2022-09-21 10:51:26,720 - DEBUG - 91: - 2) user_id in database: <Sleep 91>
+2022-09-21 10:51:26,722 - DEBUG - 92: - 1) Both user_id and sleep data are in database: <Sleep 92>
+2022-09-21 10:51:26,722 - DEBUG - 92: - 2) user_id in database: <Sleep 92>
+2022-09-21 10:51:26,725 - DEBUG - 93: - 1) Both user_id and sleep data are in database: <Sleep 93>
+2022-09-21 10:51:26,725 - DEBUG - 93: - 2) user_id in database: <Sleep 93>
+2022-09-21 10:51:26,727 - DEBUG - 94: - 1) Both user_id and sleep data are in database: <Sleep 94>
+2022-09-21 10:51:26,728 - DEBUG - 94: - 2) user_id in database: <Sleep 94>
+2022-09-21 10:51:26,730 - DEBUG - 95: - 1) Both user_id and sleep data are in database: <Sleep 95>
+2022-09-21 10:51:26,731 - DEBUG - 95: - 2) user_id in database: <Sleep 95>
+2022-09-21 10:51:26,733 - DEBUG - 97: - 1) Both user_id and sleep data are in database: <Sleep 97>
+2022-09-21 10:51:26,733 - DEBUG - 97: - 2) user_id in database: <Sleep 97>
+2022-09-21 10:51:26,735 - DEBUG - 98: - 1) Both user_id and sleep data are in database: <Sleep 98>
+2022-09-21 10:51:26,736 - DEBUG - 98: - 2) user_id in database: <Sleep 98>
+2022-09-21 10:51:26,738 - DEBUG - 99: - 1) Both user_id and sleep data are in database: <Sleep 99>
+2022-09-21 10:51:26,739 - DEBUG - 99: - 2) user_id in database: <Sleep 99>
+2022-09-21 10:51:26,741 - DEBUG - 100: - 1) Both user_id and sleep data are in database: <Sleep 100>
+2022-09-21 10:51:26,741 - DEBUG - 100: - 2) user_id in database: <Sleep 100>
+2022-09-21 10:51:26,743 - DEBUG - 101: - 1) Both user_id and sleep data are in database: <Sleep 101>
+2022-09-21 10:51:26,744 - DEBUG - 101: - 2) user_id in database: <Sleep 101>
+2022-09-21 10:51:26,746 - DEBUG - 102: - 1) Both user_id and sleep data are in database: <Sleep 102>
+2022-09-21 10:51:26,747 - DEBUG - 102: - 2) user_id in database: <Sleep 102>
+2022-09-21 10:51:26,749 - DEBUG - 103: - 1) Both user_id and sleep data are in database: <Sleep 103>
+2022-09-21 10:51:26,750 - DEBUG - 103: - 2) user_id in database: <Sleep 103>
+2022-09-21 10:51:26,752 - DEBUG - 104: - 1) Both user_id and sleep data are in database: <Sleep 104>
+2022-09-21 10:51:26,752 - DEBUG - 104: - 2) user_id in database: <Sleep 104>
+2022-09-21 10:51:26,754 - DEBUG - 107: - 1) Both user_id and sleep data are in database: <Sleep 107>
+2022-09-21 10:51:26,755 - DEBUG - 107: - 2) user_id in database: <Sleep 107>
+2022-09-21 10:51:26,757 - DEBUG - 108: - 1) Both user_id and sleep data are in database: <Sleep 108>
+2022-09-21 10:51:26,758 - DEBUG - 108: - 2) user_id in database: <Sleep 108>
+2022-09-21 10:51:26,760 - DEBUG - 109: - 1) Both user_id and sleep data are in database: <Sleep 109>
+2022-09-21 10:51:26,760 - DEBUG - 109: - 2) user_id in database: <Sleep 109>
+2022-09-21 10:51:26,763 - DEBUG - 110: - 1) Both user_id and sleep data are in database: <Sleep 110>
+2022-09-21 10:51:26,763 - DEBUG - 110: - 2) user_id in database: <Sleep 110>
+2022-09-21 10:51:26,765 - DEBUG - 111: - 1) Both user_id and sleep data are in database: <Sleep 111>
+2022-09-21 10:51:26,766 - DEBUG - 111: - 2) user_id in database: <Sleep 111>
+2022-09-21 10:51:26,768 - DEBUG - 112: - 1) Both user_id and sleep data are in database: <Sleep 112>
+2022-09-21 10:51:26,769 - DEBUG - 112: - 2) user_id in database: <Sleep 112>
+2022-09-21 10:51:26,771 - DEBUG - 113: - 1) Both user_id and sleep data are in database: <Sleep 113>
+2022-09-21 10:51:26,772 - DEBUG - 113: - 2) user_id in database: <Sleep 113>
+2022-09-21 10:51:26,774 - DEBUG - 114: - 1) Both user_id and sleep data are in database: <Sleep 114>
+2022-09-21 10:51:26,775 - DEBUG - 114: - 2) user_id in database: <Sleep 114>
+2022-09-21 10:51:26,777 - DEBUG - 115: - 1) Both user_id and sleep data are in database: <Sleep 115>
+2022-09-21 10:51:26,778 - DEBUG - 115: - 2) user_id in database: <Sleep 115>
+2022-09-21 10:51:26,780 - DEBUG - 116: - 1) Both user_id and sleep data are in database: <Sleep 116>
+2022-09-21 10:51:26,780 - DEBUG - 116: - 2) user_id in database: <Sleep 116>
+2022-09-21 10:51:26,783 - DEBUG - 119: - 1) Both user_id and sleep data are in database: <Sleep 119>
+2022-09-21 10:51:26,783 - DEBUG - 119: - 2) user_id in database: <Sleep 119>
+2022-09-21 10:51:26,786 - DEBUG - 121: - 1) Both user_id and sleep data are in database: <Sleep 121>
+2022-09-21 10:51:26,786 - DEBUG - 121: - 2) user_id in database: <Sleep 121>
+2022-09-21 10:51:26,788 - DEBUG - 122: - 1) Both user_id and sleep data are in database: <Sleep 122>
+2022-09-21 10:51:26,789 - DEBUG - 122: - 2) user_id in database: <Sleep 122>
+2022-09-21 10:51:26,791 - DEBUG - 123: - 1) Both user_id and sleep data are in database: <Sleep 123>
+2022-09-21 10:51:26,792 - DEBUG - 123: - 2) user_id in database: <Sleep 123>
+2022-09-21 10:51:26,816 - DEBUG - 124: - 1) Both user_id and sleep data are in database: <Sleep 124>
+2022-09-21 10:51:26,817 - DEBUG - 124: - 2) user_id in database: <Sleep 124>
+2022-09-21 10:51:26,821 - DEBUG - 125: - 1) Both user_id and sleep data are in database: <Sleep 125>
+2022-09-21 10:51:26,821 - DEBUG - 125: - 2) user_id in database: <Sleep 125>
+2022-09-21 10:51:26,824 - DEBUG - 126: - 1) Both user_id and sleep data are in database: <Sleep 126>
+2022-09-21 10:51:26,825 - DEBUG - 126: - 2) user_id in database: <Sleep 126>
+2022-09-21 10:51:26,827 - DEBUG - 128: - 1) Both user_id and sleep data are in database: <Sleep 128>
+2022-09-21 10:51:26,828 - DEBUG - 128: - 2) user_id in database: <Sleep 128>
+2022-09-21 10:51:26,831 - DEBUG - 129: - 1) Both user_id and sleep data are in database: <Sleep 129>
+2022-09-21 10:51:26,832 - DEBUG - 129: - 2) user_id in database: <Sleep 129>
+2022-09-21 10:51:26,834 - DEBUG - 130: - 1) Both user_id and sleep data are in database: <Sleep 130>
+2022-09-21 10:51:26,835 - DEBUG - 130: - 2) user_id in database: <Sleep 130>
+2022-09-21 10:51:26,838 - DEBUG - 131: - 1) Both user_id and sleep data are in database: <Sleep 131>
+2022-09-21 10:51:26,838 - DEBUG - 131: - 2) user_id in database: <Sleep 131>
+2022-09-21 10:51:26,841 - DEBUG - 132: - 1) Both user_id and sleep data are in database: <Sleep 132>
+2022-09-21 10:51:26,841 - DEBUG - 132: - 2) user_id in database: <Sleep 132>
+2022-09-21 10:51:26,844 - DEBUG - 133: - 1) Both user_id and sleep data are in database: <Sleep 133>
+2022-09-21 10:51:26,845 - DEBUG - 133: - 2) user_id in database: <Sleep 133>
+2022-09-21 10:51:26,847 - DEBUG - 134: - 1) Both user_id and sleep data are in database: <Sleep 134>
+2022-09-21 10:51:26,848 - DEBUG - 134: - 2) user_id in database: <Sleep 134>
+2022-09-21 10:51:26,850 - DEBUG - 135: - 1) Both user_id and sleep data are in database: <Sleep 135>
+2022-09-21 10:51:26,851 - DEBUG - 135: - 2) user_id in database: <Sleep 135>
+2022-09-21 10:51:26,853 - DEBUG - 136: - 1) Both user_id and sleep data are in database: <Sleep 136>
+2022-09-21 10:51:26,854 - DEBUG - 136: - 2) user_id in database: <Sleep 136>
+2022-09-21 10:51:26,856 - DEBUG - 138: - 1) Both user_id and sleep data are in database: <Sleep 138>
+2022-09-21 10:51:26,856 - DEBUG - 138: - 2) user_id in database: <Sleep 138>
+2022-09-21 10:51:26,859 - DEBUG - 139: - 1) Both user_id and sleep data are in database: <Sleep 139>
+2022-09-21 10:51:26,859 - DEBUG - 139: - 2) user_id in database: <Sleep 139>
+2022-09-21 10:51:26,862 - DEBUG - 144: - 1) Both user_id and sleep data are in database: <Sleep 144>
+2022-09-21 10:51:26,862 - DEBUG - 144: - 2) user_id in database: <Sleep 144>
+2022-09-21 10:51:26,865 - DEBUG - 145: - 1) Both user_id and sleep data are in database: <Sleep 145>
+2022-09-21 10:51:26,865 - DEBUG - 145: - 2) user_id in database: <Sleep 145>
+2022-09-21 10:51:26,868 - DEBUG - 146: - 1) Both user_id and sleep data are in database: <Sleep 146>
+2022-09-21 10:51:26,868 - DEBUG - 146: - 2) user_id in database: <Sleep 146>
+2022-09-21 10:51:26,870 - DEBUG - 147: - 1) Both user_id and sleep data are in database: <Sleep 147>
+2022-09-21 10:51:26,871 - DEBUG - 147: - 2) user_id in database: <Sleep 147>
+2022-09-21 10:51:26,873 - DEBUG - 148: - 1) Both user_id and sleep data are in database: <Sleep 148>
+2022-09-21 10:51:26,874 - DEBUG - 148: - 2) user_id in database: <Sleep 148>
+2022-09-21 10:51:26,876 - DEBUG - 150: - 1) Both user_id and sleep data are in database: <Sleep 150>
+2022-09-21 10:51:26,876 - DEBUG - 150: - 2) user_id in database: <Sleep 150>
+2022-09-21 10:51:26,878 - DEBUG - 151: - 1) Both user_id and sleep data are in database: <Sleep 151>
+2022-09-21 10:51:26,879 - DEBUG - 151: - 2) user_id in database: <Sleep 151>
+2022-09-21 10:51:26,881 - DEBUG - 152: - 1) Both user_id and sleep data are in database: <Sleep 152>
+2022-09-21 10:51:26,882 - DEBUG - 152: - 2) user_id in database: <Sleep 152>
+2022-09-21 10:51:26,884 - DEBUG - 153: - 1) Both user_id and sleep data are in database: <Sleep 153>
+2022-09-21 10:51:26,885 - DEBUG - 153: - 2) user_id in database: <Sleep 153>
+2022-09-21 10:51:26,887 - DEBUG - 154: - 1) Both user_id and sleep data are in database: <Sleep 154>
+2022-09-21 10:51:26,887 - DEBUG - 154: - 2) user_id in database: <Sleep 154>
+2022-09-21 10:51:26,890 - DEBUG - 155: - 1) Both user_id and sleep data are in database: <Sleep 155>
+2022-09-21 10:51:26,890 - DEBUG - 155: - 2) user_id in database: <Sleep 155>
+2022-09-21 10:51:26,892 - DEBUG - 156: - 1) Both user_id and sleep data are in database: <Sleep 156>
+2022-09-21 10:51:26,893 - DEBUG - 156: - 2) user_id in database: <Sleep 156>
+2022-09-21 10:51:26,895 - DEBUG - 157: - 1) Both user_id and sleep data are in database: <Sleep 157>
+2022-09-21 10:51:26,896 - DEBUG - 157: - 2) user_id in database: <Sleep 157>
+2022-09-21 10:51:26,898 - DEBUG - 158: - 1) Both user_id and sleep data are in database: <Sleep 158>
+2022-09-21 10:51:26,898 - DEBUG - 158: - 2) user_id in database: <Sleep 158>
+2022-09-21 10:51:26,901 - DEBUG - 159: - 1) Both user_id and sleep data are in database: <Sleep 159>
+2022-09-21 10:51:26,901 - DEBUG - 159: - 2) user_id in database: <Sleep 159>
+2022-09-21 10:51:26,903 - DEBUG - 160: - 1) Both user_id and sleep data are in database: <Sleep 160>
+2022-09-21 10:51:26,904 - DEBUG - 160: - 2) user_id in database: <Sleep 160>
+2022-09-21 10:51:26,906 - DEBUG - 161: - 1) Both user_id and sleep data are in database: <Sleep 161>
+2022-09-21 10:51:26,906 - DEBUG - 161: - 2) user_id in database: <Sleep 161>
+2022-09-21 10:51:26,909 - DEBUG - 162: - 1) Both user_id and sleep data are in database: <Sleep 162>
+2022-09-21 10:51:26,909 - DEBUG - 162: - 2) user_id in database: <Sleep 162>
+2022-09-21 10:51:26,912 - DEBUG - 163: - 1) Both user_id and sleep data are in database: <Sleep 163>
+2022-09-21 10:51:26,912 - DEBUG - 163: - 2) user_id in database: <Sleep 163>
+2022-09-21 10:51:26,915 - DEBUG - 164: - 1) Both user_id and sleep data are in database: <Sleep 164>
+2022-09-21 10:51:26,915 - DEBUG - 164: - 2) user_id in database: <Sleep 164>
+2022-09-21 10:51:26,917 - DEBUG - 165: - 1) Both user_id and sleep data are in database: <Sleep 165>
+2022-09-21 10:51:26,918 - DEBUG - 165: - 2) user_id in database: <Sleep 165>
+2022-09-21 10:51:26,920 - DEBUG - 166: - 1) Both user_id and sleep data are in database: <Sleep 166>
+2022-09-21 10:51:26,920 - DEBUG - 166: - 2) user_id in database: <Sleep 166>
+2022-09-21 10:51:26,923 - DEBUG - 167: - 1) Both user_id and sleep data are in database: <Sleep 167>
+2022-09-21 10:51:26,923 - DEBUG - 167: - 2) user_id in database: <Sleep 167>
+2022-09-21 10:51:26,925 - DEBUG - 168: - 1) Both user_id and sleep data are in database: <Sleep 168>
+2022-09-21 10:51:26,926 - DEBUG - 168: - 2) user_id in database: <Sleep 168>
+2022-09-21 10:51:26,928 - DEBUG - 170: - 1) Both user_id and sleep data are in database: <Sleep 170>
+2022-09-21 10:51:26,929 - DEBUG - 170: - 2) user_id in database: <Sleep 170>
+2022-09-21 10:51:26,931 - DEBUG - 171: - 1) Both user_id and sleep data are in database: <Sleep 171>
+2022-09-21 10:51:26,931 - DEBUG - 171: - 2) user_id in database: <Sleep 171>
+2022-09-21 10:51:26,934 - DEBUG - 172: - 1) Both user_id and sleep data are in database: <Sleep 172>
+2022-09-21 10:51:26,934 - DEBUG - 172: - 2) user_id in database: <Sleep 172>
+2022-09-21 10:51:26,936 - DEBUG - 173: - 1) Both user_id and sleep data are in database: <Sleep 173>
+2022-09-21 10:51:26,937 - DEBUG - 173: - 2) user_id in database: <Sleep 173>
+2022-09-21 10:51:26,939 - DEBUG - 174: - 1) Both user_id and sleep data are in database: <Sleep 174>
+2022-09-21 10:51:26,939 - DEBUG - 174: - 2) user_id in database: <Sleep 174>
+2022-09-21 10:51:26,942 - DEBUG - 175: - 1) Both user_id and sleep data are in database: <Sleep 175>
+2022-09-21 10:51:26,942 - DEBUG - 175: - 2) user_id in database: <Sleep 175>
+2022-09-21 10:51:26,944 - DEBUG - 176: - 1) Both user_id and sleep data are in database: <Sleep 176>
+2022-09-21 10:51:26,945 - DEBUG - 176: - 2) user_id in database: <Sleep 176>
+2022-09-21 10:51:26,947 - DEBUG - 177: - 1) Both user_id and sleep data are in database: <Sleep 177>
+2022-09-21 10:51:26,947 - DEBUG - 177: - 2) user_id in database: <Sleep 177>
+2022-09-21 10:51:26,950 - DEBUG - 178: - 1) Both user_id and sleep data are in database: <Sleep 178>
+2022-09-21 10:51:26,950 - DEBUG - 178: - 2) user_id in database: <Sleep 178>
+2022-09-21 10:51:26,953 - DEBUG - 179: - 1) Both user_id and sleep data are in database: <Sleep 179>
+2022-09-21 10:51:26,953 - DEBUG - 179: - 2) user_id in database: <Sleep 179>
+2022-09-21 10:51:26,955 - DEBUG - 180: - 1) Both user_id and sleep data are in database: <Sleep 180>
+2022-09-21 10:51:26,956 - DEBUG - 180: - 2) user_id in database: <Sleep 180>
+2022-09-21 10:51:26,958 - DEBUG - 181: - 1) Both user_id and sleep data are in database: <Sleep 181>
+2022-09-21 10:51:26,959 - DEBUG - 181: - 2) user_id in database: <Sleep 181>
+2022-09-21 10:51:26,961 - DEBUG - 182: - 1) Both user_id and sleep data are in database: <Sleep 182>
+2022-09-21 10:51:26,961 - DEBUG - 182: - 2) user_id in database: <Sleep 182>
+2022-09-21 10:51:26,963 - DEBUG - 183: - 1) Both user_id and sleep data are in database: <Sleep 183>
+2022-09-21 10:51:26,964 - DEBUG - 183: - 2) user_id in database: <Sleep 183>
+2022-09-21 10:51:26,966 - DEBUG - 186: - 1) Both user_id and sleep data are in database: <Sleep 186>
+2022-09-21 10:51:26,967 - DEBUG - 186: - 2) user_id in database: <Sleep 186>
+2022-09-21 10:51:26,969 - DEBUG - 188: - 1) Both user_id and sleep data are in database: <Sleep 188>
+2022-09-21 10:51:26,969 - DEBUG - 188: - 2) user_id in database: <Sleep 188>
+2022-09-21 10:51:26,972 - DEBUG - 189: - 1) Both user_id and sleep data are in database: <Sleep 189>
+2022-09-21 10:51:26,972 - DEBUG - 189: - 2) user_id in database: <Sleep 189>
+2022-09-21 10:51:26,974 - DEBUG - 190: - 1) Both user_id and sleep data are in database: <Sleep 190>
+2022-09-21 10:51:26,975 - DEBUG - 190: - 2) user_id in database: <Sleep 190>
+2022-09-21 10:51:26,977 - DEBUG - 191: - 1) Both user_id and sleep data are in database: <Sleep 191>
+2022-09-21 10:51:26,978 - DEBUG - 191: - 2) user_id in database: <Sleep 191>
+2022-09-21 10:51:26,980 - DEBUG - 192: - 1) Both user_id and sleep data are in database: <Sleep 192>
+2022-09-21 10:51:26,980 - DEBUG - 192: - 2) user_id in database: <Sleep 192>
+2022-09-21 10:51:26,983 - DEBUG - 193: - 1) Both user_id and sleep data are in database: <Sleep 193>
+2022-09-21 10:51:26,983 - DEBUG - 193: - 2) user_id in database: <Sleep 193>
+2022-09-21 10:51:26,985 - DEBUG - 194: - 1) Both user_id and sleep data are in database: <Sleep 194>
+2022-09-21 10:51:26,986 - DEBUG - 194: - 2) user_id in database: <Sleep 194>
+2022-09-21 10:51:26,988 - DEBUG - 195: - 1) Both user_id and sleep data are in database: <Sleep 195>
+2022-09-21 10:51:26,989 - DEBUG - 195: - 2) user_id in database: <Sleep 195>
+2022-09-21 10:51:26,991 - DEBUG - 196: - 1) Both user_id and sleep data are in database: <Sleep 196>
+2022-09-21 10:51:26,991 - DEBUG - 196: - 2) user_id in database: <Sleep 196>
+2022-09-21 10:51:26,994 - DEBUG - 198: - 1) Both user_id and sleep data are in database: <Sleep 198>
+2022-09-21 10:51:26,994 - DEBUG - 198: - 2) user_id in database: <Sleep 198>
+2022-09-21 10:51:26,997 - DEBUG - 199: - 1) Both user_id and sleep data are in database: <Sleep 199>
+2022-09-21 10:51:26,997 - DEBUG - 199: - 2) user_id in database: <Sleep 199>
+2022-09-21 10:51:26,999 - DEBUG - 200: - 1) Both user_id and sleep data are in database: <Sleep 200>
+2022-09-21 10:51:27,000 - DEBUG - 200: - 2) user_id in database: <Sleep 200>
+2022-09-21 10:51:27,002 - DEBUG - 201: - 1) Both user_id and sleep data are in database: <Sleep 201>
+2022-09-21 10:51:27,003 - DEBUG - 201: - 2) user_id in database: <Sleep 201>
+2022-09-21 10:51:27,005 - DEBUG - 202: - 1) Both user_id and sleep data are in database: <Sleep 202>
+2022-09-21 10:51:27,005 - DEBUG - 202: - 2) user_id in database: <Sleep 202>
+2022-09-21 10:51:27,007 - DEBUG - 203: - 1) Both user_id and sleep data are in database: <Sleep 203>
+2022-09-21 10:51:27,008 - DEBUG - 203: - 2) user_id in database: <Sleep 203>
+2022-09-21 10:51:27,010 - DEBUG - 204: - 1) Both user_id and sleep data are in database: <Sleep 204>
+2022-09-21 10:51:27,011 - DEBUG - 204: - 2) user_id in database: <Sleep 204>
+2022-09-21 10:51:27,013 - DEBUG - 208: - 1) Both user_id and sleep data are in database: <Sleep 208>
+2022-09-21 10:51:27,013 - DEBUG - 208: - 2) user_id in database: <Sleep 208>
+2022-09-21 10:51:27,016 - DEBUG - 211: - 1) Both user_id and sleep data are in database: <Sleep 211>
+2022-09-21 10:51:27,016 - DEBUG - 211: - 2) user_id in database: <Sleep 211>
+2022-09-21 10:51:27,019 - DEBUG - 212: - 1) Both user_id and sleep data are in database: <Sleep 212>
+2022-09-21 10:51:27,019 - DEBUG - 212: - 2) user_id in database: <Sleep 212>
+2022-09-21 10:51:27,021 - DEBUG - 213: - 1) Both user_id and sleep data are in database: <Sleep 213>
+2022-09-21 10:51:27,022 - DEBUG - 213: - 2) user_id in database: <Sleep 213>
+2022-09-21 10:51:27,024 - DEBUG - 214: - 1) Both user_id and sleep data are in database: <Sleep 214>
+2022-09-21 10:51:27,025 - DEBUG - 214: - 2) user_id in database: <Sleep 214>
+2022-09-21 10:51:27,027 - DEBUG - 215: - 1) Both user_id and sleep data are in database: <Sleep 215>
+2022-09-21 10:51:27,027 - DEBUG - 215: - 2) user_id in database: <Sleep 215>
+2022-09-21 10:51:27,030 - DEBUG - 216: - 1) Both user_id and sleep data are in database: <Sleep 216>
+2022-09-21 10:51:27,030 - DEBUG - 216: - 2) user_id in database: <Sleep 216>
+2022-09-21 10:51:27,032 - DEBUG - 217: - 1) Both user_id and sleep data are in database: <Sleep 217>
+2022-09-21 10:51:27,033 - DEBUG - 217: - 2) user_id in database: <Sleep 217>
+2022-09-21 10:51:27,035 - DEBUG - 218: - 1) Both user_id and sleep data are in database: <Sleep 218>
+2022-09-21 10:51:27,036 - DEBUG - 218: - 2) user_id in database: <Sleep 218>
+2022-09-21 10:51:27,038 - DEBUG - 219: - 1) Both user_id and sleep data are in database: <Sleep 219>
+2022-09-21 10:51:27,038 - DEBUG - 219: - 2) user_id in database: <Sleep 219>
+2022-09-21 10:51:27,040 - DEBUG - 220: - 1) Both user_id and sleep data are in database: <Sleep 220>
+2022-09-21 10:51:27,041 - DEBUG - 220: - 2) user_id in database: <Sleep 220>
+2022-09-21 10:51:27,043 - DEBUG - 221: - 1) Both user_id and sleep data are in database: <Sleep 221>
+2022-09-21 10:51:27,044 - DEBUG - 221: - 2) user_id in database: <Sleep 221>
+2022-09-21 10:51:27,046 - DEBUG - 222: - 1) Both user_id and sleep data are in database: <Sleep 222>
+2022-09-21 10:51:27,046 - DEBUG - 222: - 2) user_id in database: <Sleep 222>
+2022-09-21 10:51:27,048 - DEBUG - 223: - 1) Both user_id and sleep data are in database: <Sleep 223>
+2022-09-21 10:51:27,049 - DEBUG - 223: - 2) user_id in database: <Sleep 223>
+2022-09-21 10:51:27,051 - DEBUG - 224: - 1) Both user_id and sleep data are in database: <Sleep 224>
+2022-09-21 10:51:27,052 - DEBUG - 224: - 2) user_id in database: <Sleep 224>
+2022-09-21 10:51:27,054 - DEBUG - 225: - 1) Both user_id and sleep data are in database: <Sleep 225>
+2022-09-21 10:51:27,054 - DEBUG - 225: - 2) user_id in database: <Sleep 225>
+2022-09-21 10:51:27,057 - DEBUG - 226: - 1) Both user_id and sleep data are in database: <Sleep 226>
+2022-09-21 10:51:27,057 - DEBUG - 226: - 2) user_id in database: <Sleep 226>
+2022-09-21 10:51:27,059 - DEBUG - 227: - 1) Both user_id and sleep data are in database: <Sleep 227>
+2022-09-21 10:51:27,060 - DEBUG - 227: - 2) user_id in database: <Sleep 227>
+2022-09-21 10:51:27,062 - DEBUG - 228: - 1) Both user_id and sleep data are in database: <Sleep 228>
+2022-09-21 10:51:27,063 - DEBUG - 228: - 2) user_id in database: <Sleep 228>
+2022-09-21 10:51:27,065 - DEBUG - 229: - 1) Both user_id and sleep data are in database: <Sleep 229>
+2022-09-21 10:51:27,065 - DEBUG - 229: - 2) user_id in database: <Sleep 229>
+2022-09-21 10:51:27,068 - DEBUG - 230: - 1) Both user_id and sleep data are in database: <Sleep 230>
+2022-09-21 10:51:27,068 - DEBUG - 230: - 2) user_id in database: <Sleep 230>
+2022-09-21 10:51:27,071 - DEBUG - 231: - 1) Both user_id and sleep data are in database: <Sleep 231>
+2022-09-21 10:51:27,071 - DEBUG - 231: - 2) user_id in database: <Sleep 231>
+2022-09-21 10:51:27,073 - DEBUG - 233: - 1) Both user_id and sleep data are in database: <Sleep 233>
+2022-09-21 10:51:27,074 - DEBUG - 233: - 2) user_id in database: <Sleep 233>
+2022-09-21 10:51:27,076 - DEBUG - 234: - 1) Both user_id and sleep data are in database: <Sleep 234>
+2022-09-21 10:51:27,077 - DEBUG - 234: - 2) user_id in database: <Sleep 234>
+2022-09-21 10:51:27,079 - DEBUG - 235: - 1) Both user_id and sleep data are in database: <Sleep 235>
+2022-09-21 10:51:27,079 - DEBUG - 235: - 2) user_id in database: <Sleep 235>
+2022-09-21 10:51:27,082 - DEBUG - 236: - 1) Both user_id and sleep data are in database: <Sleep 236>
+2022-09-21 10:51:27,082 - DEBUG - 236: - 2) user_id in database: <Sleep 236>
+2022-09-21 10:51:27,084 - DEBUG - 237: - 1) Both user_id and sleep data are in database: <Sleep 237>
+2022-09-21 10:51:27,085 - DEBUG - 237: - 2) user_id in database: <Sleep 237>
+2022-09-21 10:51:27,087 - DEBUG - 238: - 1) Both user_id and sleep data are in database: <Sleep 238>
+2022-09-21 10:51:27,088 - DEBUG - 238: - 2) user_id in database: <Sleep 238>
+2022-09-21 10:51:27,090 - DEBUG - 239: - 1) Both user_id and sleep data are in database: <Sleep 239>
+2022-09-21 10:51:27,090 - DEBUG - 239: - 2) user_id in database: <Sleep 239>
+2022-09-21 10:51:27,092 - DEBUG - 241: - 1) Both user_id and sleep data are in database: <Sleep 241>
+2022-09-21 10:51:27,093 - DEBUG - 241: - 2) user_id in database: <Sleep 241>
+2022-09-21 10:51:27,095 - DEBUG - 242: - 1) Both user_id and sleep data are in database: <Sleep 242>
+2022-09-21 10:51:27,096 - DEBUG - 242: - 2) user_id in database: <Sleep 242>
+2022-09-21 10:51:27,098 - DEBUG - 243: - 1) Both user_id and sleep data are in database: <Sleep 243>
+2022-09-21 10:51:27,098 - DEBUG - 243: - 2) user_id in database: <Sleep 243>
+2022-09-21 10:51:27,100 - DEBUG - 245: - 1) Both user_id and sleep data are in database: <Sleep 245>
+2022-09-21 10:51:27,101 - DEBUG - 245: - 2) user_id in database: <Sleep 245>
+2022-09-21 10:51:27,103 - DEBUG - 246: - 1) Both user_id and sleep data are in database: <Sleep 246>
+2022-09-21 10:51:27,104 - DEBUG - 246: - 2) user_id in database: <Sleep 246>
+2022-09-21 10:51:27,106 - DEBUG - 248: - 1) Both user_id and sleep data are in database: <Sleep 248>
+2022-09-21 10:51:27,106 - DEBUG - 248: - 2) user_id in database: <Sleep 248>
+2022-09-21 10:51:27,109 - DEBUG - 249: - 1) Both user_id and sleep data are in database: <Sleep 249>
+2022-09-21 10:51:27,109 - DEBUG - 249: - 2) user_id in database: <Sleep 249>
+2022-09-21 10:51:27,112 - DEBUG - 250: - 1) Both user_id and sleep data are in database: <Sleep 250>
+2022-09-21 10:51:27,112 - DEBUG - 250: - 2) user_id in database: <Sleep 250>
+2022-09-21 10:51:27,114 - DEBUG - 251: - 1) Both user_id and sleep data are in database: <Sleep 251>
+2022-09-21 10:51:27,115 - DEBUG - 251: - 2) user_id in database: <Sleep 251>
+2022-09-21 10:51:27,117 - DEBUG - 253: - 1) Both user_id and sleep data are in database: <Sleep 253>
+2022-09-21 10:51:27,118 - DEBUG - 253: - 2) user_id in database: <Sleep 253>
+2022-09-21 10:51:27,120 - DEBUG - 254: - 1) Both user_id and sleep data are in database: <Sleep 254>
+2022-09-21 10:51:27,120 - DEBUG - 254: - 2) user_id in database: <Sleep 254>
+2022-09-21 10:51:27,123 - DEBUG - 255: - 1) Both user_id and sleep data are in database: <Sleep 255>
+2022-09-21 10:51:27,123 - DEBUG - 255: - 2) user_id in database: <Sleep 255>
+2022-09-21 10:51:27,125 - DEBUG - 257: - 1) Both user_id and sleep data are in database: <Sleep 257>
+2022-09-21 10:51:27,126 - DEBUG - 257: - 2) user_id in database: <Sleep 257>
+2022-09-21 10:51:27,128 - DEBUG - 258: - 1) Both user_id and sleep data are in database: <Sleep 258>
+2022-09-21 10:51:27,128 - DEBUG - 258: - 2) user_id in database: <Sleep 258>
+2022-09-21 10:51:27,130 - DEBUG - 259: - 1) Both user_id and sleep data are in database: <Sleep 259>
+2022-09-21 10:51:27,131 - DEBUG - 259: - 2) user_id in database: <Sleep 259>
+2022-09-21 10:51:27,133 - DEBUG - 261: - 1) Both user_id and sleep data are in database: <Sleep 261>
+2022-09-21 10:51:27,134 - DEBUG - 261: - 2) user_id in database: <Sleep 261>
+2022-09-21 10:51:27,136 - DEBUG - 262: - 1) Both user_id and sleep data are in database: <Sleep 262>
+2022-09-21 10:51:27,137 - DEBUG - 262: - 2) user_id in database: <Sleep 262>
+2022-09-21 10:51:27,326 - INFO - 127.0.0.1 - - [21/Sep/2022 10:51:27] "[32mPOST / HTTP/1.1[0m" 302 -
+2022-09-21 10:51:27,341 - INFO - 127.0.0.1 - - [21/Sep/2022 10:51:27] "GET /log HTTP/1.1" 200 -
+2022-09-21 10:51:27,348 - INFO - 127.0.0.1 - - [21/Sep/2022 10:51:27] "[36mGET /static/main.css HTTP/1.1[0m" 304 -
+2022-09-21 11:06:04,061 - INFO -  * Detected change in '/Users/jackdescombes/projects/oura_proj/ouraapp/database.py', reloading
+2022-09-21 11:06:04,289 - INFO -  * Restarting with stat
+2022-09-21 11:06:44,715 - INFO -  * Restarting with stat
+2022-09-21 11:08:41,728 - INFO -  * Restarting with stat
+2022-09-21 11:08:50,101 - INFO -  * Restarting with stat
+2022-09-21 11:10:56,646 - INFO -  * Restarting with stat
+2022-09-21 11:11:07,051 - INFO -  * Restarting with stat

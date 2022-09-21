@@ -5,7 +5,7 @@ from datetime import date, timedelta
 import json
 from ouraapp.fetch_oura_data import setup_oura_data
 from ouraapp.weights_data import get_weights_data, get_current_template
-from ouraapp.database import Sleep, Log, Tag, Readiness, Workout, Weights, Template, User, Events, Day
+from ouraapp.database import Sleep, Log, Tag, Readiness, Workout, Weights, Template, Users, Events, Day
 from ouraapp.insights import get_overall_averages, get_filters, get_date_range, get_filtered_avgs
 from ouraapp.fetch_oura_data import add_event_to_db
 from werkzeug.security import generate_password_hash, check_password_hash
@@ -15,6 +15,9 @@ from sqlalchemy import func
 from ouraapp import db
 from ouraapp import login_manager
 from run import app
+import logging
+
+logger = logging.getLogger("ouraapp")
 
 
 def get_page_id():
@@ -170,7 +173,7 @@ def add_tags(added_tags, selected_tags, db_obj):
 def load_user(user_id):
     '''Check if user is logged in on every page load.'''
     if user_id is not None:
-        return User.query.get(int(user_id))
+        return Users.query.get(int(user_id))
     print('user_id is None')
     return None
 
@@ -200,10 +203,10 @@ def register():
         if existing_user is None:
             hashed_password = generate_password_hash(
                 registration_form.password1.data, "sha256")
-            user = User(username=registration_form.username.data,
-                        name=registration_form.name.data,
-                        password_hash=hashed_password,
-                        email=registration_form.email.data)
+            user = Users(username=registration_form.username.data,
+                         name=registration_form.name.data,
+                         password_hash=hashed_password,
+                         email=registration_form.email.data)
             flash('Welcome, {username}. You are now a registered user!')
             db.session.add(user)
             db.session.commit()
@@ -223,7 +226,7 @@ def login():
     if login_form.validate_on_submit():
         username = login_form.username.data
         password = login_form.password.data
-        user = User.query.filter_by(username=username).first()
+        user = Users.query.filter_by(username=username).first()
         if user:
             passed = check_password_hash(user.password_hash, password)
             if passed:
