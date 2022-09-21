@@ -85,6 +85,35 @@ def create_workout_event(submitted_log):
     }
 
 
+def create_all_cal_events():
+    wellness = Log.query.order_by(Log.id).all()
+    for a in wellness:
+        add_event_to_db(create_wellness_event(a))
+
+    workout = Workout.query.order_by(Workout.id).all()
+    for b in workout:
+        add_event_to_db(create_workout_event(b))
+
+    sleep = Sleep.query.order_by(Sleep.id).all()
+    for c in sleep:
+        add_event_to_db({
+            'title': 'Sleep',
+            'score': c.sleep_score,
+            'date': c.date.strftime('%Y-%m-%d'),
+            'id': c.id,
+            'subclass': 'Oura'
+        })
+    readiness = Readiness.query.order_by(Readiness.id).all()
+    for d in readiness:
+        add_event_to_db({
+            'title': 'Readiness',
+            'score': d.readiness_score,
+            'date': d.date.strftime('%Y-%m-%d'),
+            'id': d.id,
+            'subclass': 'Oura'
+        })
+
+
 def get_workout_week_num():
     last_workout = Weights.query.filter(
         Weights.user_id == current_user.id).order_by(
@@ -190,14 +219,7 @@ def register():
     if current_user.is_authenticated:
         return redirect(url_for('log'))
     registration_form = RegistrationForm()
-    # last_uid = db.session.query(func.max(User.id)).scalar()
-    # if last_uid:
-    #     uid = last_uid + 1
-    # else:
-    #     uid = 1
     if registration_form.validate_on_submit():
-        print(current_user)
-        # print(current_user.id)
         existing_user = User.query.filter_by(
             email=registration_form.email.data).first()
         if existing_user is None:
@@ -221,6 +243,7 @@ def register():
 @app.route('/', methods=['GET', 'POST'])
 def login():
     if current_user.is_authenticated:
+        create_all_cal_events()
         return redirect(url_for('log'))
     login_form = LoginForm()
     if login_form.validate_on_submit():
@@ -258,6 +281,7 @@ def log(page_id):
     # logger.debug(
     #     f'User is authenticated: user id = {User.query.filter_by(id=current_user.id)}'
     # )
+
     date = get_date(page_id)
     wellness_form = JournalForm()
     workout_form = WorkoutForm()
