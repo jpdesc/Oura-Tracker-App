@@ -377,8 +377,7 @@ def edit_log(page_id):
                                     energy=log.energy,
                                     stress=log.stress,
                                     journal=log.journal,
-                                    select_tags=log.tags,
-                                    user_id=current_user.id)
+                                    select_tags=log.tags)
     else:
         wellness_form = JournalForm()
     if workout:
@@ -387,8 +386,7 @@ def edit_log(page_id):
                                    specify_other=None,
                                    file=workout.data,
                                    grade=workout.grade,
-                                   workout_log=workout.workout_log,
-                                   user_id=current_user.id)
+                                   workout_log=workout.workout_log)
     else:
         workout_form = WorkoutForm()
     if wellness_form.validate_on_submit():
