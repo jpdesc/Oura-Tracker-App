@@ -22,6 +22,7 @@ def create_app(config_class=Config):
         login_manager.init_app(app)
         login_manager.login_view = 'login'
         update_days_db()
+        #TODO: sys.cwd for current directory.
         logging.basicConfig(format='%(asctime)s - %(levelname)s - %(message)s',
                             filename='/srv/jwa/logs/ouraapp.log',
                             level=logging.DEBUG,

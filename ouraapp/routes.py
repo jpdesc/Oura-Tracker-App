@@ -367,7 +367,7 @@ def edit_log(page_id):
     date = get_date(page_id)
     sleep = Sleep.query.filter(Sleep.user_id == current_user.id).get(page_id)
     readiness = Readiness.filter(
-        Readiness.user_id == current_user.id).query.get(page_id)
+        Readiness.user_id == current_user.id).get(page_id)
     log = Log.query.filter(Log.user_id == current_user.id).get(page_id)
     workout = Workout.query.filter(
         Workout.user_id == current_user.id).get(page_id)

@@ -103,7 +103,7 @@ def add_sleep_to_db(json_dict):
         if db.session.query(database.Sleep).filter_by(
                 id=db_day.id, user_id=current_user.id).count() < 1:
             logger.debug(
-                f'{db_day.id}: 3) Query says sleep obj does not exist for {db_day.date}. Associated id: {db_day.id}.'
+                f'{db_day.id}: 3) Query says sleep obj should be added to db. {db_day.date}. Associated id: {db_day.id}.'
             )
             prev_night_data = database.Sleep(
                 date=day,
