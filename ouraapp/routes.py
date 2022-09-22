@@ -370,7 +370,7 @@ def edit_log(page_id):
     readiness = Readiness.query.filter(Readiness.user_id == current_user.id,
                                        Readiness.id == page_id).first()
     log = Log.query.filter(Log.user_id == current_user.id,
-                           Log.id == page_id).get(page_id).first()
+                           Log.id == page_id).first()
     workout = Workout.query.filter(Workout.user_id == current_user.id,
                                    Workout.id == page_id).first()
     if log:
