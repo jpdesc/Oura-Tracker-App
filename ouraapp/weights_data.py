@@ -4,6 +4,7 @@ import re
 from google.oauth2 import service_account
 from googleapiclient.discovery import build
 from ouraapp.database import db, Weights, Template
+from flask_login import current_user
 
 dir_path = os.path.dirname(os.path.realpath(__file__))
 
@@ -123,7 +124,7 @@ def add_weights_to_db(subs_made, id, workout_id, workout_week):
 
     weights_info = Weights(id=id, exercises=db_dict[0], set_ranges = db_dict[1],\
       reps = db_dict[2], weight = db_dict[3], workout_week = workout_week, workout_id=workout_id,
-      template_id=current_template.id)
+      template_id=current_template.id, user_id=current_user.id)
     db.session.add(weights_info)
     db.session.commit()
 
