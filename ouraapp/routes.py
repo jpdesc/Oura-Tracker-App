@@ -366,13 +366,13 @@ def log(page_id):
 def edit_log(page_id):
     date = get_date(page_id)
     sleep = Sleep.query.filter(Sleep.user_id == current_user.id,
-                               Sleep.id == page_id).query.get(page_id)
+                               Sleep.id == page_id).get(page_id)
     readiness = Readiness.filter(Readiness.user_id == current_user.id,
                                  Readiness.id == page_id).get(page_id)
     log = Log.query.filter(Log.user_id == current_user.id,
-                           Log.id == page_id).query.get(page_id)
+                           Log.id == page_id).get(page_id)
     workout = Workout.query.filter(Workout.user_id == current_user.id,
-                                   Workout.id == page_id).query.get(page_id)
+                                   Workout.id == page_id).get(page_id)
     if log:
         wellness_form = JournalForm(focus=log.focus,
                                     mood=log.mood,
