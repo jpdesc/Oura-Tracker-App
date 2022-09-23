@@ -1,8 +1,6 @@
 - Modularize code w/ flask blueprints
 - Have app refresh
 - Remove food before sleep field
-- User google sheets info and oura_info form
-  - Create settings page w/ preferences and login info
 - Create workout template from app
 - Edit/delete functionality in workout tables
 - Testing suite

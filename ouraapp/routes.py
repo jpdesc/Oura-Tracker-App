@@ -39,7 +39,8 @@ def format_date(date):
 
 def get_wellness_score(log):
     if log.stress:
-        return (log.focus + log.mood + log.energy + (6 - log.stress)) / 4
+        return (int(log.focus) + int(log.mood) + int(log.energy) +
+                (6 - int(log.stress))) / 4
     else:
         return None
 

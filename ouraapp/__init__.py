@@ -6,6 +6,7 @@ from config import Config
 from flask_login import LoginManager
 from ouraapp.fetch_oura_data import update_days_db
 import logging
+import os
 
 migrate = Migrate(compare_type=True)
 bootstrap = Bootstrap()
@@ -24,7 +25,7 @@ def create_app(config_class=Config):
         update_days_db()
         #TODO: sys.cwd for current directory.
         logging.basicConfig(format='%(asctime)s - %(levelname)s - %(message)s',
-                            filename='/srv/jwa/logs/ouraapp.log',
+                            filename=f'{os.getcwd()}/logs/ouraapp.log',
                             level=logging.DEBUG,
                             force=True)
         logger = logging.getLogger("ouraapp")
