@@ -33,8 +33,8 @@
                         <li>Total Sleep: {{sleep.total_sleep}}</li>
                         <li>Total REM Sleep: {{sleep.total_rem_sleep}}</li>
                         <li>Total Deep Sleep: {{sleep.total_deep_sleep}}</li>
-                        {% if sleep.food_cutoff %}
-                        <li>Last Meal: {{sleep.food_cutoff}} hours prior to bedtime</li>
+                        <!-- {% if sleep.food_cutoff %}
+                        <li>Last Meal: {{sleep.food_cutoff}} hours prior to bedtime</li> -->
                         {% endif %}
                     </ul>
                 </div>
@@ -136,8 +136,8 @@
                                 {% endfor %}
                                 <br>
                                 {% endfor %}<br>
-                                {{ wellness_form.food_cutoff.label(class="form-label") }} <br>
-                                {{ wellness_form.food_cutoff()}}<br><br>
+                                <!-- {{ wellness_form.food_cutoff.label(class="form-label") }} <br>
+                                {{ wellness_form.food_cutoff()}}<br><br> -->
                                 {{ wellness_form.journal.label(class="form-label") }} <br>
                                 {{ wellness_form.journal()}}<br><br>
                                 {{ wellness_form.select_tags.label(class="form-label") }} <br>

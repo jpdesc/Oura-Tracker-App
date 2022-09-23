@@ -319,10 +319,10 @@ def log(page_id):
         add_event_to_db(create_wellness_event(wellness_info))
         db.session.add(wellness_info)
         db.session.commit()
-        if sleep:
-            sleep.food_cutoff = wellness_form.food_cutoff.data
-            db.session.add(sleep)
-            db.session.commit()
+        # if sleep:
+        #     sleep.food_cutoff = wellness_form.food_cutoff.data
+        #     db.session.add(sleep)
+        #     db.session.commit()
         return redirect(url_for('log', page_id=page_id))
 
     if workout_form.validate_on_submit():
@@ -406,10 +406,10 @@ def edit_log(page_id):
         db.session.add(log)
         db.session.commit()
         add_event_to_db(create_workout_event(log))
-        if sleep:
-            sleep.food_cutoff = wellness_form.food_cutoff.data
-            db.session.add(sleep)
-            db.session.commit()
+        # if sleep:
+        #     sleep.food_cutoff = wellness_form.food_cutoff.data
+        #     db.session.add(sleep)
+        #     db.session.commit()
         return redirect(url_for('log', page_id=page_id))
 
     if workout_form.validate_on_submit():
