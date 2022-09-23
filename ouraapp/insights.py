@@ -92,7 +92,7 @@ def get_filtered_avgs(filtered_objs):
         # if key == 'avg_food_cutoff':
         #     filter_avgs[key] = db.session.query(
         #         func.round(func.avg(subquery_c).cast(Numeric), 1)).scalar()
-        elif key == 'avg_total_sleep':
+        if key == 'avg_total_sleep':
             query = db.session.query(func.avg(subquery_c)).scalar()
             filter_avgs[key] = convert_seconds(query)
         else:

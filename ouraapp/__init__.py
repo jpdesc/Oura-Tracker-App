@@ -12,6 +12,9 @@ migrate = Migrate(compare_type=True)
 bootstrap = Bootstrap()
 login_manager = LoginManager()
 
+if os.getcwd() == '/':
+    os.chdir('/srv/jwa')
+
 
 def create_app(config_class=Config):
     app = Flask(__name__)
