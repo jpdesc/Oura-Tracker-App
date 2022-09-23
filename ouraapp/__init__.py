@@ -12,9 +12,6 @@ migrate = Migrate(compare_type=True)
 bootstrap = Bootstrap()
 login_manager = LoginManager()
 
-if os.getcwd() == '/':
-    os.chdir('/srv/jwa')
-
 
 def create_app(config_class=Config):
     app = Flask(__name__)
@@ -27,6 +24,9 @@ def create_app(config_class=Config):
         login_manager.login_view = 'login'
         update_days_db()
         #TODO: sys.cwd for current directory.
+
+        if os.getcwd() == '/':
+            os.chdir('/srv/jwa')
         logging.basicConfig(format='%(asctime)s - %(levelname)s - %(message)s',
                             filename=f'{os.getcwd()}/logs/ouraapp.log',
                             level=logging.DEBUG,
