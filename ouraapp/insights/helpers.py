@@ -1,7 +1,7 @@
-from wtforms_sqlalchemy.fields import QuerySelectMultipleField
-from ouraapp.database import Tag, Sleep, Readiness, Log, Workout, db, tags
+from ouraapp.extensions import db
+from ouraapp.dashboard.models import Tag, Sleep, Readiness, Log, Workout
 from datetime import date
-from sqlalchemy import and_, func, cast, Numeric
+from sqlalchemy import and_, func, Numeric
 
 db_fields = {
     'sleep_score': Sleep.sleep_score,
@@ -89,9 +89,6 @@ def get_filtered_avgs(filtered_objs):
         db_objs = db_class.query.filter(id_attr.in_(id_nums)).order_by(id_attr)
         subquery = db_objs.with_entities(db_attr).subquery()
         subquery_c = getattr(subquery.c, attr)
-        # if key == 'avg_food_cutoff':
-        #     filter_avgs[key] = db.session.query(
-        #         func.round(func.avg(subquery_c).cast(Numeric), 1)).scalar()
         if key == 'avg_total_sleep':
             query = db.session.query(func.avg(subquery_c)).scalar()
             filter_avgs[key] = convert_seconds(query)

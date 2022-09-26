@@ -1,5 +1,5 @@
 import pytest
-from ouraapp.database import Readiness
+from ouraapp.models import Readiness
 from ouraapp.fetch_oura_data import setup_oura_data
 
 setup_oura_data()
