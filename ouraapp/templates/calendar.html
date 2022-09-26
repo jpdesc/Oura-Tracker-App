@@ -56,7 +56,7 @@ import interactionPlugin from '@fullcalendar/interaction';
       {% endif %}
       id: '{{ event['id'] }}',
       start : '{{ event['date'] }}',
-      url: '{{ url_for('log', page_id = event['id']) }}',
+      url: '{{ url_for('dashboard.log', page_id = event['id']) }}',
 
 
 
@@ -96,7 +96,7 @@ import interactionPlugin from '@fullcalendar/interaction';
         var xhr = new XMLHttpRequest();
         $.ajax({
           data : {'date_str' : date_str},
-          url : '{{url_for('process')}}',
+          url : '{{url_for('calendar.process')}}',
           method : 'POST',
           cache: false,
           xhr: function(){

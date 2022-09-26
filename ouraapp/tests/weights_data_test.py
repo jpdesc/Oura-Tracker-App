@@ -1,7 +1,7 @@
 import pytest
 from ouraapp.weights_data import *
 from ouraapp.routes import check_improvement
-from ouraapp.database import Weights
+from ouraapp.models import Weights
 
 
 def test_get_weights_data():

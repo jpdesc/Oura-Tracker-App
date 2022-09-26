@@ -150,7 +150,7 @@
                                 <li>Workout Grade: {{workout.grade}}</li>
                                 {% if workout.filename %}
                                 <li>Uploaded Workout: <a
-                                        href="{{url_for('download', page_id=page_id)}}">{{workout.filename}}</a></li>
+                                        href="{{url_for('dashboard.download', page_id=page_id)}}">{{workout.filename}}</a></li>
                                 {% endif %}
                             </ul>
                             <div>Workout Notes:
@@ -168,7 +168,7 @@
                                 </i>
                                 {{ workout_form.specify_other.label(class="form-label")}}<br>
                                 {{ workout_form.specify_other }}<br><br>
-                                <a href={{url_for('template', page_id=page_id)}}>Start New Weights Template</a><br><br>
+                                <a href={{url_for('weights.template', page_id=page_id)}}>Start New Weights Template</a><br><br>
                                 {{ workout_form.soreness.label(class="form-label")}}<br>
                                 {% for subfield in workout_form.soreness %}
                                 <tr>

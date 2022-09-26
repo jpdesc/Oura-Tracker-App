@@ -3,8 +3,9 @@ import os
 import re
 from google.oauth2 import service_account
 from googleapiclient.discovery import build
-from ouraapp.database import db, Weights, Template
 from flask_login import current_user
+from ouraapp.models import db
+from .models import Weights, Template
 
 dir_path = os.path.dirname(os.path.realpath(__file__))
 
@@ -127,6 +128,37 @@ def add_weights_to_db(subs_made, id, workout_id, workout_week):
       template_id=current_template.id, user_id=current_user.id)
     db.session.add(weights_info)
     db.session.commit()
+
+
+def check_improvement(this_week, last_week):
+    reps_improvement, weight_improvement = [], []
+    for i, exercise in enumerate(this_week.exercises):
+        reps_check = False
+        weight_check = False
+        try:
+            check_empty_reps = (this_week.reps[i] and last_week.reps[i]) != ''
+            check_empty_weight = (this_week.reps[i]
+                                  and last_week.reps[i]) != ''
+            exercises_match = exercise == last_week.exercises[i]
+        except IndexError:
+            reps_improvement.append(False)
+            weight_improvement.append(False)
+            continue
+        if exercises_match and check_empty_reps:
+            try:
+                reps_check = int(this_week.reps[i]) > int(last_week.reps[i]) \
+                  and int(this_week.weight[i]) >= int(last_week.weight[i])
+            except ValueError:
+                reps_check = False
+        if exercises_match and check_empty_weight:
+            try:
+                weight_check = float(this_week.weight[i]) > float(
+                    last_week.weight[i])
+            except ValueError:
+                weight_check = False
+        reps_improvement.append(reps_check)
+        weight_improvement.append(weight_check)
+    return reps_improvement, weight_improvement
 
 
 def get_weights_data(workout_id, workout_week, id, current_template):
