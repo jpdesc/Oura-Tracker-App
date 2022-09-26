@@ -1,16 +1,9 @@
 from flask import Flask
-from flask_migrate import Migrate
-from flask_bootstrap import Bootstrap
-from ouraapp.database import db
+from .extensions import migrate, bootstrap, login_manager, db
 from config import Config
-from flask_login import LoginManager
-from ouraapp.fetch_oura_data import update_days_db
+from .helpers import update_days_db
 import logging
 import os
-
-migrate = Migrate(compare_type=True)
-bootstrap = Bootstrap()
-login_manager = LoginManager()
 
 
 def create_app(config_class=Config):
@@ -22,17 +15,21 @@ def create_app(config_class=Config):
         bootstrap.init_app(app)
         login_manager.init_app(app)
         login_manager.login_view = 'login'
+        from ouraapp.auth import bp as auth_bp
+        app.register_blueprint(auth_bp)
+        from ouraapp.calendar import bp as cal_bp
+        app.register_blueprint(cal_bp)
+        from ouraapp.dashboard import bp as dash_bp
+        app.register_blueprint(dash_bp, url_prefix='/dashboard')
+        from ouraapp.insights import bp as insight_bp
+        app.register_blueprint(insight_bp)
+        from ouraapp.weights import bp as weights_bp
+        app.register_blueprint(weights_bp, url_prefix='/workout')
         update_days_db()
-        #TODO: sys.cwd for current directory.
-
         if os.getcwd() == '/':
             os.chdir('/srv/jwa')
         logging.basicConfig(format='%(asctime)s - %(levelname)s - %(message)s',
                             filename=f'{os.getcwd()}/logs/ouraapp.log',
                             level=logging.DEBUG,
                             force=True)
-        logger = logging.getLogger("ouraapp")
     return app
-
-
-from ouraapp import database

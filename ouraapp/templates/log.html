@@ -101,13 +101,13 @@
                             <hr>
                             <i class="fa-regular fa-tags"></i>
                             {% for tag in log.tags %}
-                            <a href="{{ url_for('insights', filters=[tag]) }}">{{tag}}</a>
+                            <a href="{{ url_for('insights.insights', filters=[tag]) }}">{{tag}}</a>
                             {% endfor %}
                         </div>
 
                         {% if not workout %}
                         <br>
-                        <a href="{{ url_for('edit_log', page_id=page_id) }}" class="btn btn-info">Edit
+                        <a href="{{ url_for('dashboard.edit_log', page_id=page_id) }}" class="btn btn-info">Edit
                             Wellness</a>
                         {% endif %}
 
@@ -160,7 +160,7 @@
                                 <li>Workout Grade: {{workout.grade}}</li>
                                 {% if workout.filename %}
                                 <li>Uploaded Workout: <a
-                                        href="{{url_for('download', page_id=page_id)}}">{{workout.filename}}</a></li>
+                                        href="{{url_for('dashoard.download', page_id=page_id)}}">{{workout.filename}}</a></li>
                                 {% endif %}
                             </ul>
                             <div>
@@ -168,7 +168,7 @@
                                 <h6>Log <i class="fa-solid fa-pen-to-square"></i></h6>
                                 <hr> <i>{{workout.workout_log}}</i>
                                 {% if workout.type == "Weights" %}
-                                <a href={{url_for('weights', page_id=page_id)}}>View Workout</a>
+                                <a href={{url_for('weights.weights', page_id=page_id)}}>View Workout</a>
                                 {% endif %}
                             </div>
 
@@ -183,7 +183,7 @@
                                 </i>
                                 {{ workout_form.specify_other.label(class="form-label")}}<br>
                                 {{ workout_form.specify_other }}<br><br>
-                                <a href={{url_for('template', page_id=page_id)}} class="link-success">Start New Weights
+                                <a href={{url_for('weights.template', page_id=page_id)}} class="link-success">Start New Weights
                                     Template</a><br><br>
                                 {{ workout_form.soreness.label(class="form-label" )}}<br>
                                 {% for subfield in workout_form.soreness %}
@@ -215,7 +215,7 @@
 
                         </div>
                         {% if workout and not log %}
-                        <a href="{{ url_for('edit_log', page_id=page_id) }}" class="btn btn-info">Edit <i
+                        <a href="{{ url_for('dashboard.edit_log', page_id=page_id) }}" class="btn btn-info">Edit <i
                                 class="fa-solid fa-person-running"></i></a>
                     </div>
 
@@ -226,7 +226,7 @@
     </div><br>
     {% if log and workout %}
     <div class="wrapper">
-        <a href="{{ url_for('edit_log', page_id=page_id) }}" class="btn btn-info">Edit <i
+        <a href="{{ url_for('dashboard.edit_log', page_id=page_id) }}" class="btn btn-info">Edit <i
                 class="fa-solid fa-spa"></i></a>
     </div>
     {% endif %}
@@ -235,12 +235,13 @@
 </div>
 <div class="button-left">
     <button class="btn btn-outline-secondary" id="back"
-        onclick="window.location.href='{{ url_for('log', page_id=page_id-1) }}'"><i
+        onclick="window.location.href='{{ url_for('dashboard.log', page_id=page_id-1) }}'"><i
             class="fa-solid fa-angles-left"></i> Previous Day</button>
 </div>
+
 <div class="button-right">
     <button class="btn btn-outline-secondary" id="forward"
-        onclick="window.location.href='{{ url_for('log', page_id=page_id+1) }}'">Next Day <i
+        onclick="window.location.href='{{ url_for('dashboard.log', page_id=page_id+1) }}'">Next Day <i
             class="fa-solid fa-angles-right"></i></button>
 </div>
 </div>

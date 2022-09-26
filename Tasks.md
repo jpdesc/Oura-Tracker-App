@@ -1,6 +1,4 @@
 - Modularize code w/ flask blueprints
-- Have app refresh
-- Remove food before sleep field
 - Create workout template from app
 - Edit/delete functionality in workout tables
 - Testing suite
