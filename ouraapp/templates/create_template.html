@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+
+{% block content %}
+<form method="POST">
+    {{ init_form.hidden_tag() }}
+   {% for field in form.exercise_params %}
+    {{ field.excs.label(class="form-label") }} <br>
+    {{ field.excs()}}<br><br>
+
+    {{ field.sets.label(class="form-label") }} <br>
+    {{ field.sets()}}<br><br>
+
+    {{ field.reps1.label(class="form-label") }} <br>
+    {{ field.reps1()}}<br><br>
+
+    {{ field.reps2.label(class="form-label") }} <br>
+    {{ field.reps2()}}<br><br>
+   {% endfor %}
+
+    {{ form.submit(class="btn btn-secondary") }}
+
+</form>
+{% endblock %}

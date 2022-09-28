@@ -23,5 +23,17 @@ class Template(db.Model):
     num_days = db.Column(db.Integer)
     row_nums = db.Column(db.ARRAY(db.Integer))
     num_excs = db.Column(db.ARRAY(db.Integer))
+    starting_prs = db.Column(db.JSON)
+    current_prs = db.Column(db.JSON)
     weights = db.relationship('Weights', backref='template')
+    base_workouts = db.relationship('BaseWorkout', backref='template')
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+
+
+class BaseWorkout(db.Model):
+    __tablename__ = 'base_workout'
+    id = db.Column(db.Integer, primary_key=True)
+    day_num = db.Column(db.Integer)
+    template_name = db.Column(db.Integer, db.ForeignKey('template.id'))
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+    workout_params = db.Column(db.JSON)

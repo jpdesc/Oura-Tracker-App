@@ -146,10 +146,6 @@ def edit_log(page_id):
         db.session.add(log)
         db.session.commit()
         add_event_to_db(create_workout_event(log))
-        # if sleep:
-        #     sleep.food_cutoff = wellness_form.food_cutoff.data
-        #     db.session.add(sleep)
-        #     db.session.commit()
         return redirect(url_for('log', page_id=page_id))
 
     if workout_form.validate_on_submit():
@@ -165,7 +161,7 @@ def edit_log(page_id):
         db.session.commit()
         add_event_to_db(create_workout_event(workout))
         return redirect(url_for('log', page_id=page_id))
-    return render_template('dashboard/edit_post.html',
+    return render_template('edit_post.html',
                            wellness_form=wellness_form,
                            workout_form=workout_form,
                            sleep=sleep,

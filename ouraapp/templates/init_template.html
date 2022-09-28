@@ -1,0 +1,47 @@
+{% extends "base.html" %}
+
+{% block content %}
+<form method="POST">
+    {{ init_form.hidden_tag() }}
+
+    {{ init_form.name_workout_plan.label(class="form-label") }} <br>
+    {{ init_form.name_workout_plan()}}<br><br>
+
+    {{ init_form.set_base.label(class="form-label") }} <br>
+    {{ init_form.set_base()}}<br><br>
+
+    {{ init_form.days.label(class="form-label") }} <br>
+    {{ init_form.days()}}<br><br>
+
+    {{ init_form.set_pr.label(class="form-label") }} <br>
+    {{ init_form.set_pr()}}<br><br>
+
+    {{ init_form.bench_pr.label(class="form-label") }} <br>
+    {{ init_form.bench_pr()}}<br><br>
+
+    {{ init_form.squat_pr.label(class="form-label") }} <br>
+    {{ init_form.squat_pr()}}<br><br>
+
+    {{ init_form.deadlift_pr.label(class="form-label") }} <br>
+    {{ init_form.deadlift_pr()}}<br><br>
+
+    {{ init_form.ohp_pr.label(class="form-label") }} <br>
+    {{ init_form.ohp_pr()}}<br><br>
+
+    {{ init_form.custom_pr.label(class="form-label") }} <br>
+    {{ init_form.custom_pr()}}<br><br>
+
+
+    {%  for field in init_form.custom_prs %}
+    {{ field.custom_pr_name.label(class='form-label') }}
+    {{ field.custom_pr_name()}}<br><br>
+
+    {{ field.custom_pr_weight.label(class='form-label') }}
+    {{ field.custom_pr_weight()}}<br><br>
+    {% endfor %}
+
+    {{ init_form.submit(class="btn btn-secondary") }}
+
+
+</form>
+{% endblock %}
