@@ -17,7 +17,8 @@ SPREADSHEET_ID = '1AdnxSengjtM0zwTgG7NtX1nBUdK0w4-368n8852WNPs'
 
 
 def get_current_template():
-    return Template.query.order_by(Template.id.desc()).first()
+    return Template.query.filter_by(user_id=current_user.id).order_by(
+        Template.id.desc()).first()
 
 
 def create_weeks_column():

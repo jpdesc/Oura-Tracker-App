@@ -1,21 +1,54 @@
 {% extends "base.html" %}
 
 {% block content %}
+<script>
+    function showFields() {
+        let base_template = document.getElementById("set_base").value;
+        let set_pr = document.getElementById("set_pr").value;
+        let custom_pr = document.getElementById("custom_pr").value;
+        if (base_template === true) {
+            document.getElementById("set-base").style.display = "initial"
+            // document.getElementById("set_pr").style.display = "initial"
+        } else {
+            document.getElementById("set-base").style.display = "none"
+        }
+        if (set_pr === true) {
+            document.getElementById("set-prs").style.display = "initial"
+            // document.getElementById("set_pr").style.display = "initial"
+        } else {
+            document.getElementById("set-prs").style.display = "none"
+        }
+        if (custom_pr === true) {
+            document.getElementById("custom-prs").style.display = "initial"
+            // document.getElementById("subcategory_watches").style.display = "initial"
+        } else {
+            document.getElementById("custom-prs").style.display = "none"
+        }
+    }
+</script>
+
 <form method="POST">
     {{ init_form.hidden_tag() }}
 
+
+
+        <div>
     {{ init_form.name_workout_plan.label(class="form-label") }} <br>
     {{ init_form.name_workout_plan()}}<br><br>
 
     {{ init_form.set_base.label(class="form-label") }} <br>
     {{ init_form.set_base()}}<br><br>
+            </div>
 
+    <div id="set-base">
     {{ init_form.days.label(class="form-label") }} <br>
     {{ init_form.days()}}<br><br>
 
     {{ init_form.set_pr.label(class="form-label") }} <br>
     {{ init_form.set_pr()}}<br><br>
 
+    </div>
+    <div id="set-prs">
     {{ init_form.bench_pr.label(class="form-label") }} <br>
     {{ init_form.bench_pr()}}<br><br>
 
@@ -30,8 +63,9 @@
 
     {{ init_form.custom_pr.label(class="form-label") }} <br>
     {{ init_form.custom_pr()}}<br><br>
+    </div>
 
-
+    <div id="custom-prs">
     {%  for field in init_form.custom_prs %}
     {{ field.custom_pr_name.label(class='form-label') }}
     {{ field.custom_pr_name()}}<br><br>
@@ -39,7 +73,7 @@
     {{ field.custom_pr_weight.label(class='form-label') }}
     {{ field.custom_pr_weight()}}<br><br>
     {% endfor %}
-
+    </div>
     {{ init_form.submit(class="btn btn-secondary") }}
 
 

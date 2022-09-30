@@ -26,16 +26,17 @@ def log(page_id):
     date = get_date(page_id)
     wellness_form = JournalForm()
     workout_form = WorkoutForm()
-    sleep = Sleep.query.filter(Sleep.id == page_id,
+    sleep = Sleep.query.filter(Sleep.day_id == page_id,
                                Sleep.user_id == current_user.id).first()
-    log = Log.query.filter(Log.id == page_id,
+    log = Log.query.filter(Log.day_id == page_id,
                            Log.user_id == current_user.id).first()
     readiness = Readiness.query.filter(
-        Readiness.id == page_id, Readiness.user_id == current_user.id).first()
-    workout = Workout.query.filter(Workout.id == page_id,
+        Readiness.day_id == page_id,
+        Readiness.user_id == current_user.id).first()
+    workout = Workout.query.filter(Workout.day_id == page_id,
                                    Workout.user_id == current_user.id).first()
     new_template = Weights.query.filter(
-        Weights.id == page_id, Weights.user_id == current_user.id).first()
+        Weights.day_id == page_id, Weights.user_id == current_user.id).first()
 
     if wellness_form.validate_on_submit():
         user_id = current_user.id
@@ -51,7 +52,7 @@ def log(page_id):
                             mood=mood,
                             energy=energy,
                             date=date,
-                            id=page_id,
+                            day_id=page_id,
                             stress=stress,
                             user_id=user_id)
         if selected_tags or added_tags:
@@ -76,7 +77,7 @@ def log(page_id):
         workout_info = Workout(user_id=current_user.id,
                                data=file.read(),
                                date=date,
-                               id=page_id,
+                               day_id=page_id,
                                filename=file.filename,
                                type=type,
                                soreness=soreness,
@@ -107,13 +108,13 @@ def log(page_id):
 def edit_log(page_id):
     date = get_date(page_id)
     sleep = Sleep.query.filter(Sleep.user_id == current_user.id,
-                               Sleep.id == page_id).first()
+                               Sleep.day_id == page_id).first()
     readiness = Readiness.query.filter(Readiness.user_id == current_user.id,
-                                       Readiness.id == page_id).first()
+                                       Readiness.day_id == page_id).first()
     log = Log.query.filter(Log.user_id == current_user.id,
-                           Log.id == page_id).first()
+                           Log.day_id == page_id).first()
     workout = Workout.query.filter(Workout.user_id == current_user.id,
-                                   Workout.id == page_id).first()
+                                   Workout.day_id == page_id).first()
     if log:
         wellness_form = JournalForm(focus=log.focus,
                                     mood=log.mood,

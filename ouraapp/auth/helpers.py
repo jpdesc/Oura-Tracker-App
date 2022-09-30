@@ -14,6 +14,8 @@ import logging
 
 logger = logging.getLogger("ouraapp")
 
+#TODO: implement individual user
+
 
 def pull_oura_data():
     ''' Pulls oura data from beginning of 2022 to today's date.'''
@@ -77,16 +79,16 @@ def add_sleep_to_db(json_dict):
             f'{db_day.id}: - 1) Both user_id and sleep data are in database: {Sleep.query.filter_by(user_id = current_user.id, id=db_day.id).first()}'
         )
         logger.debug(
-            f'{db_day.id}: - 2) user_id in database: {Sleep.query.filter_by(id=db_day.id).first()}'
+            f'{db_day.id}: - 2) user_id in database: {Sleep.query.filter_by(day_id=db_day.id).first()}'
         )
         if db.session.query(Sleep).filter_by(
-                id=db_day.id, user_id=current_user.id).count() < 1:
+                date=day, user_id=current_user.id).count() < 1:
             logger.debug(
                 f'{db_day.id}: 3) Query says sleep obj should be added to db. {db_day.date}. Associated id: {db_day.id}.'
             )
             prev_night_data = Sleep(
                 date=day,
-                id=db_day.id,
+                day_id=db_day.id,
                 sleep_score=entry['score'],
                 total_rem_sleep=convert_seconds(entry['rem']),
                 total_deep_sleep=convert_seconds(entry['deep']),
@@ -121,7 +123,7 @@ def add_readiness_to_db(json_dict):
                 date=day, user_id=current_user.id).count() < 1:
             prev_night_data = Readiness(
                 date=day,
-                id=db_day.id,
+                day_id=db_day.id,
                 hrv_balance=entry['score_hrv_balance'],
                 recovery_index=entry['score_recovery_index'],
                 resting_hr=entry['score_resting_hr'],

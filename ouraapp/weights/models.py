@@ -4,6 +4,7 @@ from ouraapp.extensions import db
 class Weights(db.Model):
     __tablename__ = 'weights'
     id = db.Column(db.Integer, primary_key=True)
+    day_id = db.Column(db.Integer)
     exercises = db.Column(db.ARRAY(db.String))
     set_ranges = db.Column(db.ARRAY(db.String))
     reps = db.Column(db.ARRAY(db.String))
@@ -34,6 +35,6 @@ class BaseWorkout(db.Model):
     __tablename__ = 'base_workout'
     id = db.Column(db.Integer, primary_key=True)
     day_num = db.Column(db.Integer)
-    template_name = db.Column(db.Integer, db.ForeignKey('template.id'))
+    template_id = db.Column(db.Integer, db.ForeignKey('template.id'))
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
     workout_params = db.Column(db.JSON)

@@ -14,7 +14,7 @@ logger = logging.getLogger("ouraapp")
 @bp.route('/weights/<page_id>')
 @login_required
 def weights(page_id):
-    this_week = Weights.query.filter_by(id=page_id,
+    this_week = Weights.query.filter_by(day_id=page_id,
                                         user_id=current_user.id).first()
     try:
         last_week = Weights.query.filter_by(
@@ -60,10 +60,11 @@ def template(page_id):
     return render_template('update_template.html', template_form=template_form)
 
 
-@bp.route('/create_template/<template_name>', methods=['GET', 'POST'])
+@bp.route('/create_template/<template_name>/<day>/<page_id>',
+          methods=['GET', 'POST'])
 @login_required
 def create_template(template_name, day, page_id):
-    template = Template.query.filter_by(name=template_name,
+    template = Template.query.filter_by(template_name=template_name,
                                         user_id=current_user.id).first()
     workout_params = {}
     workout_form = WorkoutForm()
@@ -79,11 +80,13 @@ def create_template(template_name, day, page_id):
             template_id=template.id)
         db.session.add(workout_template)
         db.session.commit()
-        if day != template.num_days:
+        print(template.num_days)
+        if int(day) != template.num_days:
             return redirect(
                 url_for('weights.create_template',
-                        day=day + 1,
-                        template_name=template_name))
+                        day=int(day) + 1,
+                        template_name=template_name,
+                        page_id=page_id))
         flash('You have created a new workout template: {template.name}')
         return redirect(url_for('dashboard.log', page_id=page_id))
     return render_template('create_template.html', form=workout_form)
@@ -107,18 +110,18 @@ def init_template(page_id):
             for field in init_form.custom_prs:
                 starting_prs[
                     field.custom_pr_name.data] = field.custom_pr_weight.data
-        workout_plan = Template(name=name,
+        workout_plan = Template(template_name=name,
                                 num_days=days,
                                 start_id=page_id,
-                                starting_prs=starting_prs)
+                                starting_prs=starting_prs,
+                                user_id=current_user.id)
         db.session.add(workout_plan)
         db.session.commit()
         if create_base is True:
             return redirect(
                 url_for('weights.create_template',
-                        days=days,
-                        template_name=name,
                         day=1,
+                        template_name=name,
                         page_id=page_id))
         return redirect(url_for('dashboard.log', page_id=page_id))
     return render_template('init_template.html', init_form=init_form)
