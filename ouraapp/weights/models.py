@@ -12,8 +12,34 @@ class Weights(db.Model):
     subbed = db.Column(db.String)
     workout_id = db.Column(db.Integer)
     workout_week = db.Column(db.Integer)
-    template_id = db.Column(db.Integer, db.ForeignKey("template.id"))
+    template_id = db.Column(db.Integer, db.ForeignKey('template.id'))
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+    base_id = db.Column(db.Integer, db.ForeignKey('base_workout.id'))
+    exercises = db.relationship('Exercise', backref='weights')
+
+
+class Exercise(db.Model):
+    __tablename__ = 'exercise'
+    id = db.Column(db.Integer, primary_key=True)
+    day_id = db.Column(db.Integer)
+    exercise_name = db.Column(db.String)
+    sets = db.Column(db.Integer)
+    rep_range = db.Column(db.String)
+    reps = db.Column(db.Integer)
+    reps_improve = db.Column(db.Boolean)
+    weight = db.Column(db.Float)
+    weight_improve = db.Column(db.Boolean)
+    weights_id = db.Column(db.Integer, db.ForeignKey('weights.id'))
+
+    def to_dict(self):
+        return {
+            'id': self.id,
+            'exercise': self.exercise_name,
+            'sets': self.sets,
+            'rep_range': self.sets,
+            'reps': self.reps,
+            'weight': self.weight
+        }
 
 
 class Template(db.Model):
@@ -38,3 +64,4 @@ class BaseWorkout(db.Model):
     template_id = db.Column(db.Integer, db.ForeignKey('template.id'))
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
     workout_params = db.Column(db.JSON)
+    workouts = db.relationship('Weights', backref='base_workout')

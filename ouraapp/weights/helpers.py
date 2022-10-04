@@ -5,7 +5,8 @@ from google.oauth2 import service_account
 from googleapiclient.discovery import build
 from flask_login import current_user
 from ouraapp.models import db
-from .models import Weights, Template
+from ouraapp.dashboard.helpers import get_current_template, get_workout_id, get_workout_week_num
+from .models import Weights, Template, BaseWorkout
 
 dir_path = os.path.dirname(os.path.realpath(__file__))
 
@@ -16,9 +17,8 @@ creds = service_account.Credentials.from_service_account_file(
 SPREADSHEET_ID = '1AdnxSengjtM0zwTgG7NtX1nBUdK0w4-368n8852WNPs'
 
 
-def get_current_template():
-    return Template.query.filter_by(user_id=current_user.id).order_by(
-        Template.id.desc()).first()
+def get_next_base_workout():
+    return BaseWorkout.query.filter_by(day_num=get_workout_id()).first()
 
 
 def create_weeks_column():

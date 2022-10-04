@@ -12,7 +12,6 @@ import logging
 logger = logging.getLogger("ouraapp")
 
 
-
 def get_date(page_id):
     db_obj = Day.query.filter_by(id=page_id).first()
     return db_obj.date
@@ -97,33 +96,38 @@ def create_workout_event(submitted_log):
 #         })
 
 
-def get_workout_week_num():
-    last_workout = Weights.query.filter(
-        Weights.user_id == current_user.id).order_by(
-            Weights.id.desc()).first()
-    template = Template.query.filter(
-        Template.user_id == current_user.id).order_by(
-            Template.id.desc()).first()
-
-    if last_workout.workout_id == template.num_days:
-        week = last_workout.workout_week + 1
-    else:
-        week = last_workout.workout_week
-    return week
+def get_current_template():
+    return Template.query.filter_by(user_id=current_user.id).order_by(
+        Template.id.desc()).first()
 
 
 def get_workout_id():
-    template = Template.query.filter(
-        Template.user_id == current_user.id).order_by(
-            Template.id.desc()).first()
-    last_workout = Weights.query.filter(
-        Weights.user_id == current_user.id).order_by(
-            Weights.id.desc()).first()
-    if last_workout.workout_id == template.num_days:
-        workout_id = 1
+    current_template = get_current_template()
+    num_days = current_template.num_days
+    if current_template.weights:
+        last_workout = Weights.query.filter_by(
+            template_id=current_template.id).order_by(
+                Weights.id.desc()).first()
+        if last_workout.workout_id + 1 <= num_days:
+            return last_workout.workout_id + 1
     else:
-        workout_id = last_workout.workout_id + 1
-    return workout_id
+        return 1
+
+
+def get_workout_week_num():
+    current_template = get_current_template()
+    num_days = current_template.num_days
+    if current_template.weights:
+        last_workout = Weights.query.filter_by(
+            template_id=current_template.id).order_by(
+                Weights.id.desc()).first()
+        if last_workout.workout_id == num_days:
+            week = last_workout.workout_week + 1
+        else:
+            week = last_workout.workout_week
+    else:
+        week = 1
+    return week
 
 
 def add_event_to_db(new_event_dict):

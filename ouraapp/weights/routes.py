@@ -1,6 +1,6 @@
 from flask import render_template, redirect, url_for, request, flash
-from .helpers import get_weights_data, get_current_template, check_improvement
-from .models import Weights, Template, BaseWorkout
+from .helpers import get_weights_data, get_current_template, check_improvement, get_next_base_workout
+from .models import Weights, Template, BaseWorkout, Exercise
 from flask_login import login_required, current_user
 from .forms import TemplateForm, WorkoutForm, InitWorkoutForm
 import json
@@ -10,25 +10,49 @@ from ouraapp.weights import bp
 
 logger = logging.getLogger("ouraapp")
 
+#TODO: Edit weights so that it works with new base templates.
+#TODO: Make page editable.
+#TODO: Set up so old data is integrated with new system.
+# @bp.route('/weights/<page_id>')
+# @login_required
+# def weights(page_id):
+#     this_week = Weights.query.filter_by(day_id=page_id,
+#                                         user_id=current_user.id).first()
+#     try:
+#         last_week = Weights.query.filter_by(
+#             workout_id=this_week.workout_id,
+#             template_id=this_week.template.id,
+#             workout_week=(this_week.workout_week - 1)).first()
+#         reps_improve, weight_improve = check_improvement(this_week, last_week)
+#     except (AttributeError):
+#         reps_improve, weight_improve = None, None
+#     return render_template('workout.html',
+#                            page_id=page_id,
+#                            weights=this_week,
+#                            reps_improve=reps_improve,
+#                            weight_improve=weight_improve)
+
 
 @bp.route('/weights/<page_id>')
 @login_required
 def weights(page_id):
-    this_week = Weights.query.filter_by(day_id=page_id,
-                                        user_id=current_user.id).first()
-    try:
-        last_week = Weights.query.filter_by(
-            workout_id=this_week.workout_id,
-            template_id=this_week.template.id,
-            workout_week=(this_week.workout_week - 1)).first()
-        reps_improve, weight_improve = check_improvement(this_week, last_week)
-    except (AttributeError):
-        reps_improve, weight_improve = None, None
-    return render_template('workout.html',
-                           page_id=page_id,
-                           weights=this_week,
-                           reps_improve=reps_improve,
-                           weight_improve=weight_improve)
+
+    weights = Weights.query.filter_by(user_id=current_user.id,
+                                      day_id=page_id).first()
+    if not weights:
+        init_weights = Weights(day_id=page_id, user_id=current_user.id)
+        db.session.add(init_weights)
+        db.session.commit()
+        base = get_next_base_workout()
+        workout_params = json.loads(base.workout_params)
+        for entry in workout_params.values():
+            exercise = Exercise(exercise_name=entry[0],
+                                sets=entry[1],
+                                rep_range=f'{entry[2]} - {entry[3]}',
+                                weights_id=init_weights.id)
+            db.session.add(exercise)
+        db.session.commit()
+    return render_template('edit_workout.html', page_id=page_id)
 
 
 @bp.route('/template/<page_id>', methods=['GET', 'POST'])
