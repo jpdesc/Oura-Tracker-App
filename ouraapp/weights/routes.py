@@ -10,47 +10,52 @@ from ouraapp.weights import bp
 
 logger = logging.getLogger("ouraapp")
 
-#TODO: Edit weights so that it works with new base templates.
-#TODO: Make page editable.
+
 #TODO: Set up so old data is integrated with new system.
-# @bp.route('/weights/<page_id>')
-# @login_required
-# def weights(page_id):
-#     this_week = Weights.query.filter_by(day_id=page_id,
-#                                         user_id=current_user.id).first()
-#     try:
-#         last_week = Weights.query.filter_by(
-#             workout_id=this_week.workout_id,
-#             template_id=this_week.template.id,
-#             workout_week=(this_week.workout_week - 1)).first()
-#         reps_improve, weight_improve = check_improvement(this_week, last_week)
-#     except (AttributeError):
-#         reps_improve, weight_improve = None, None
-#     return render_template('workout.html',
-#                            page_id=page_id,
-#                            weights=this_week,
-#                            reps_improve=reps_improve,
-#                            weight_improve=weight_improve)
-
-
+#TODO: Remove unneeded stuff.
+#TODO: Improve layout.
 @bp.route('/weights/<page_id>')
 @login_required
 def weights(page_id):
+    this_week = Weights.query.filter_by(day_id=page_id,
+                                        user_id=current_user.id).first()
+    if this_week:
+        this_week_excs = Exercise.query.filter_by(
+            weights_id=this_week.id).all()
+    else:
+        this_week_excs = []
+    try:
+        last_week = Weights.query.filter_by(
+            workout_id=this_week.workout_id,
+            template_id=this_week.template.id,
+            workout_week=(this_week.workout_week - 1)).first()
+        exercise_list = check_improvement(this_week_excs, last_week.id)
+    except (AttributeError):
+        exercise_list = this_week_excs
+    return render_template('workout.html',
+                           page_id=page_id,
+                           exercise_list=exercise_list)
+
+
+@bp.route('/edit_weights/<page_id>')
+@login_required
+def edit_weights(page_id):
 
     weights = Weights.query.filter_by(user_id=current_user.id,
                                       day_id=page_id).first()
-    if not weights:
+    if not weights or not weights.exercises:
         init_weights = Weights(day_id=page_id, user_id=current_user.id)
         db.session.add(init_weights)
         db.session.commit()
         base = get_next_base_workout()
         workout_params = json.loads(base.workout_params)
         for entry in workout_params.values():
-            exercise = Exercise(exercise_name=entry[0],
-                                sets=entry[1],
-                                rep_range=f'{entry[2]} - {entry[3]}',
-                                weights_id=init_weights.id)
-            db.session.add(exercise)
+            if entry[0]:
+                exercise = Exercise(exercise_name=entry[0],
+                                    sets=entry[1],
+                                    rep_range=f'{entry[2]} - {entry[3]}',
+                                    weights_id=init_weights.id)
+                db.session.add(exercise)
         db.session.commit()
     return render_template('edit_workout.html', page_id=page_id)
 

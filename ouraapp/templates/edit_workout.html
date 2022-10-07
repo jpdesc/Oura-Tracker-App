@@ -1,22 +1,34 @@
 {% extends "base.html" %}
-
+{% block head %}
 <link href="https://unpkg.com/gridjs/dist/theme/mermaid.min.css" rel="stylesheet" />
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.0/jquery.min.js"></script>
+
 <style>
     body {
         font-family: Sans-Serif;
     }
-
 </style>
+
+{% endblock %}
 
 {% block content %}
 
 
-<div id="table"></div>
-</div>
+{% set reload_url = url_for('api.add_row', page_id=page_id) %}
+<div id="table" class="table table-striped"></div>
+<span id="addRow"> <button name="AddRow" class="btn btn-secondary" inline="true">Add Row</button></span>
+<span id="removeRow"> <button name="removeRow" class="btn btn-secondary" inline="true">Remove Row</button></span>
+
+<a href="{{ url_for('weights.weights', page_id=page_id) }}" class="btn btn-info">Submit Workout</a>
+
+
+
+
 <script src="https://unpkg.com/gridjs/dist/gridjs.umd.js"></script>
 <script>
     const tableDiv = document.getElementById('table');
-
+    const addRow = document.getElementById('addRow');
+    const removeRow = document.getElementById('removeRow');
     const updateUrl = (prev, query) => {
         return prev + (prev.indexOf('?') >= 0 ? '&' : '?') + new URLSearchParams(query).toString();
     };
@@ -30,49 +42,41 @@
         }
     };
 
-    new gridjs.Grid({
+    const grid = new gridjs.Grid({
         columns: [
             { id: 'id', 'hidden': true },
-            { id: 'exercise', name: 'Exercise', sort: false, 'attributes': editableCellAttributes },
+            { id: 'exercise_name', name: 'Exercise', sort: false, 'attributes': editableCellAttributes },
             { id: 'sets', name: 'Sets', sort: false, 'attributes': editableCellAttributes },
             { id: 'rep_range', name: 'Rep Range', sort: false, 'attributes': editableCellAttributes },
             { id: 'reps', name: 'Reps', sort: false, 'attributes': editableCellAttributes },
             { id: 'weight', name: 'Weight', sort: false, 'attributes': editableCellAttributes },
         ],
+        resizeable: true,
+        server: {
+            url: '/api/data/{{page_id}}',
+            then: results => results.data,
+        },
+    }).render(tableDiv);
+
+
+    function update (){
+    grid.updateConfig({
+            columns: [
+            { id: 'id', 'hidden': true },
+            { id: 'exercise_name', name: 'Exercise', sort: false, 'attributes': editableCellAttributes },
+            { id: 'sets', name: 'Sets', sort: false, 'attributes': editableCellAttributes },
+            { id: 'rep_range', name: 'Rep Range', sort: false, 'attributes': editableCellAttributes },
+            { id: 'reps', name: 'Reps', sort: false, 'attributes': editableCellAttributes },
+            { id: 'weight', name: 'Weight', sort: false, 'attributes': editableCellAttributes },
+        ],
+        resizeable: true,
         server: {
             url: '/api/data/{{page_id}}',
             then: results => results.data,
             // total: results => results.total,
-        },
-        // search: {
-        //     enabled: true,
-        //     server: {
-        //         url: (prev, search) => {
-        //             return updateUrl(prev, { search });
-        //         },
-        //     },
-        // },
-        // sort: {
-        //     enabled: true,
-        //     multiColumn: true,
-        //     server: {
-        //         url: (prev, columns) => {
-        //             const columnIds = ['id', 'name', 'age', 'address', 'phone', 'email'];
-        //             const sort = columns.map(col => (col.direction === 1 ? '+' : '-') + columnIds[col.index]);
-        //             return updateUrl(prev, { sort });
-        //         },
-        //     },
-        // },
-        // pagination: {
-        //     enabled: true,
-        //     server: {
-        //         url: (prev, page, limit) => {
-        //             return updateUrl(prev, { start: page * limit, length: limit });
-        //         },
-        //     },
-        // },
-    }).render(tableDiv);
-
+        }
+        }).forceRender();
+    }
     let savedValue;
 
     tableDiv.addEventListener('focusin', ev => {
@@ -109,6 +113,22 @@
             }
         }
     });
+
+    addRow.addEventListener('click', () => {
+            $.ajax({
+            url: '/api/add_row/{{page_id}}',
+            success: update(),
+        })
+    }
+    );
+
+    removeRow.addEventListener('click', () => {
+        $.ajax({
+            url: '/api/remove_row/{{page_id}}',
+            success: update(),
+        })
+    }
+    );
 </script>
 </body>
 {% endblock %}

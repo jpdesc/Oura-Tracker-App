@@ -27,14 +27,14 @@ class Exercise(db.Model):
     rep_range = db.Column(db.String)
     reps = db.Column(db.Integer)
     reps_improve = db.Column(db.Boolean)
-    weight = db.Column(db.Float)
+    weight = db.Column(db.Integer)
     weight_improve = db.Column(db.Boolean)
     weights_id = db.Column(db.Integer, db.ForeignKey('weights.id'))
 
     def to_dict(self):
         return {
             'id': self.id,
-            'exercise': self.exercise_name,
+            'exercise_name': self.exercise_name,
             'sets': self.sets,
             'rep_range': self.sets,
             'reps': self.reps,

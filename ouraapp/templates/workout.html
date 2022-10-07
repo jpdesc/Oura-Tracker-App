@@ -11,37 +11,42 @@
         </tr>
     </thead>
     <tbody>
-        {% for i in range(weights.exercises| length) %}
+
+        {% for exercise in exercise_list %}
 
         <tr>
             <th scope="row">
-                {{weights.exercises[i]}}</th>
+                {{exercise.exercise_name}}</th>
 
-            <td>{{weights.set_ranges[i]}}</td>
+            <td>{{exercise.set_ranges}}</td>
 
-            {% if reps_improve %}
-            {% if reps_improve[i] == True %}
+            {% if exercise.reps %}
+            {% if exercise.reps_improve == True %}
             <td class="table-success">
-                {{weights.reps[i]}}</td>
+                {{exercise.reps}}</td>
             {% else %}
-            <td>{{weights.reps[i]}}</td>
+            <td>{{exercise.reps}}</td>
             {% endif %}
             {% else %}
-            <td>{{weights.reps[i]}}</td>
+            <td>{{exercise.reps}}</td>
             {% endif %}
 
-            {% if weight_improve %}
-            {% if weight_improve[i] == True %}
+            {% if exercise.weight %}
+            {% if exercise.weight_improve == True %}
             <td class="table-success">
-                {{weights.weight[i]}}</td>
+                {{exercise.weight}}</td>
             {% else %}
-            <td>{{weights.weight[i]}}</td>
+            <td>{{exercise.weight}}</td>
             {% endif %}
             {% else %}
-            <td>{{weights.weight[i]}}</td>
+            <td>{{exercise.weight}}</td>
             {% endif %}
         </tr>
         {% endfor %}
     </tbody>
 </table>
+
+<a href="{{ url_for('weights.edit_weights', page_id=page_id) }}" class="btn btn-info">Edit
+    Workout</a>
+
 {% endblock %}

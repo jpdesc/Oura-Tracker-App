@@ -1,5 +1,5 @@
 from ouraapp.api import bp
-from flask import request, abort
+from flask import request, abort, redirect, url_for, render_template, flash
 from ouraapp.weights.models import Weights, Exercise
 from ouraapp.extensions import db
 from flask_login import current_user
@@ -9,38 +9,7 @@ from flask_login import current_user
 def data(page_id):
     query = Weights.query.filter_by(user_id=current_user.id,
                                     day_id=page_id).first()
-
-    # # search filter
-    # search = request.args.get('search')
-    # if search:
-    #     query = query.filter(
-    #         db.or_(User.name.like(f'%{search}%'),
-    #                User.email.like(f'%{search}%')))
-    # total = query.count()
-
-    # # sorting
-    # sort = request.args.get('sort')
-    # if sort:
-    #     order = []
-    #     for s in sort.split(','):
-    #         direction = s[0]
-    #         name = s[1:]
-    #         if name not in ['name', 'age', 'email']:
-    #             name = 'name'
-    #         col = getattr(User, name)
-    #         if direction == '-':
-    #             col = col.desc()
-    #         order.append(col)
-    #     if order:
-    #         query = query.order_by(*order)
-
-    # # pagination
-    # start = request.args.get('start', type=int, default=-1)
-    # length = request.args.get('length', type=int, default=-1)
-    # if start != -1 and length != -1:
-    #     query = query.offset(start).limit(length)
-
-    # response
+    print('data')
     return {
         'data': [exercise.to_dict() for exercise in query.exercises],
     }
@@ -48,17 +17,40 @@ def data(page_id):
 
 @bp.route('/api/data/<page_id>', methods=['POST'])
 def update(page_id):
+    print('update')
     data = request.get_json()
-    print(f'data = {data}')
     if 'id' not in data:
         abort(400)
     exercise = Exercise.query.get(data['id'])
-    print(f'exercise {exercise.exercise_name}')
-    for field in ['exercise', 'sets', 'rep_range', 'reps', 'weight']:
+    for field in ['exercise_name', 'rep_range', 'sets', 'reps', 'weight']:
         if field in data:
-            print(f'field= {field}')
-            print(data[field])
             setattr(exercise, field, data[field])
+            db.session.add(exercise)
+            db.session.commit()
+    return '', 204
+
+
+@bp.route('/api/add_row/<page_id>')
+def add_row(page_id):
+    query = Weights.query.filter_by(day_id=page_id,
+                                    user_id=current_user.id).first()
+    blank_excs = Exercise(weights_id=query.id)
+    db.session.add(blank_excs)
     db.session.commit()
-    print()
+    print('add_row')
+    return '', 204
+
+
+@bp.route('/api/remove_row/<page_id>')
+def remove_row(page_id):
+    query = Weights.query.filter_by(day_id=page_id,
+                                    user_id=current_user.id).first()
+    blanks = Exercise.query.filter_by(weights_id=query.id,
+                                      exercise_name=None).all()
+    if blanks:
+        db.session.delete(blanks[-1])
+        db.session.commit()
+    else:
+        flash('No more blank rows to delete.')
+    print('remove_row')
     return '', 204
