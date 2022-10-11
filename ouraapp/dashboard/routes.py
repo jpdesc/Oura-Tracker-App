@@ -1,9 +1,9 @@
 from io import BytesIO
 from flask import render_template, redirect, url_for, request, send_file, Blueprint
-from ouraapp.weights.helpers import get_weights_data, get_current_template
+# from ouraapp.weights.helpers import get_weights_data, get_current_template
 from ouraapp.weights.models import Weights
 from .models import Sleep, Log, Readiness, Workout
-from .helpers import add_event_to_db, get_date, add_tags, create_wellness_event, create_workout_event, get_workout_id, get_workout_week_num
+from .helpers import add_event_to_db, get_date, add_tags, create_wellness_event, create_workout_event
 from ouraapp.helpers import get_page_id
 from ouraapp.format import format_date
 from flask_login import login_required, current_user
@@ -60,10 +60,6 @@ def log(page_id):
         add_event_to_db(create_wellness_event(wellness_info))
         db.session.add(wellness_info)
         db.session.commit()
-        # if sleep:
-        #     sleep.food_cutoff = wellness_form.food_cutoff.data
-        #     db.session.add(sleep)
-        #     db.session.commit()
         return redirect(url_for('log', page_id=page_id))
 
     if workout_form.validate_on_submit():
@@ -83,11 +79,6 @@ def log(page_id):
                                soreness=soreness,
                                grade=grade,
                                workout_log=workout_log)
-        if type == "Weights" and not new_template:
-            current_template = get_current_template()
-            get_weights_data(get_workout_id(), get_workout_week_num(), page_id,
-                             current_template)
-        add_event_to_db(create_workout_event(workout_info))
         db.session.add(workout_info)
         db.session.commit()
         return redirect(url_for('log', page_id=page_id))

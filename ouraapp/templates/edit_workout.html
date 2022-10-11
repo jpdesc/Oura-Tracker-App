@@ -15,7 +15,15 @@
 
 
 {% set reload_url = url_for('api.add_row', page_id=page_id) %}
-<div id="table" class="table table-striped"></div>
+{% if from_base=='yes' %}
+<div><h5>Week {{weights.workout_week}}, Day {{weights.day}}</h5></div>
+{% else %}
+<div>
+    <h5>Custom Workout</h5>
+</div>
+{% endif %}
+
+<span id="table" class="table table-striped"></span>
 <span id="addRow"> <button name="AddRow" class="btn btn-secondary" inline="true">Add Row</button></span>
 <span id="removeRow"> <button name="removeRow" class="btn btn-secondary" inline="true">Remove Row</button></span>
 
@@ -51,7 +59,6 @@
             { id: 'reps', name: 'Reps', sort: false, 'attributes': editableCellAttributes },
             { id: 'weight', name: 'Weight', sort: false, 'attributes': editableCellAttributes },
         ],
-        resizeable: true,
         server: {
             url: '/api/data/{{page_id}}',
             then: results => results.data,
@@ -59,24 +66,6 @@
     }).render(tableDiv);
 
 
-    function update (){
-    grid.updateConfig({
-            columns: [
-            { id: 'id', 'hidden': true },
-            { id: 'exercise_name', name: 'Exercise', sort: false, 'attributes': editableCellAttributes },
-            { id: 'sets', name: 'Sets', sort: false, 'attributes': editableCellAttributes },
-            { id: 'rep_range', name: 'Rep Range', sort: false, 'attributes': editableCellAttributes },
-            { id: 'reps', name: 'Reps', sort: false, 'attributes': editableCellAttributes },
-            { id: 'weight', name: 'Weight', sort: false, 'attributes': editableCellAttributes },
-        ],
-        resizeable: true,
-        server: {
-            url: '/api/data/{{page_id}}',
-            then: results => results.data,
-            // total: results => results.total,
-        }
-        }).forceRender();
-    }
     let savedValue;
 
     tableDiv.addEventListener('focusin', ev => {
@@ -116,18 +105,18 @@
 
     addRow.addEventListener('click', () => {
             $.ajax({
+            async: false,
             url: '/api/add_row/{{page_id}}',
-            success: update(),
-        })
+        }).then(grid.forceRender())
     }
-    );
+    )
 
     removeRow.addEventListener('click', () => {
         $.ajax({
+            async: false,
             url: '/api/remove_row/{{page_id}}',
-            success: update(),
-        })
-    }
+        }).then(grid.forceRender())
+}
     );
 </script>
 </body>

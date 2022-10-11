@@ -1,8 +1,9 @@
 from flask import render_template, redirect, url_for, request, flash
-from .helpers import get_weights_data, get_current_template, check_improvement, get_next_base_workout
+from .helpers import check_improvement, get_next_base_workout, clear_exercises
 from .models import Weights, Template, BaseWorkout, Exercise
 from flask_login import login_required, current_user
 from .forms import TemplateForm, WorkoutForm, InitWorkoutForm
+from ouraapp.dashboard.helpers import get_current_template, get_workout_id, get_workout_week_num
 import json
 from ouraapp.extensions import db
 import logging
@@ -11,8 +12,8 @@ from ouraapp.weights import bp
 logger = logging.getLogger("ouraapp")
 
 
+#TODO: Figure out links etc.
 #TODO: Set up so old data is integrated with new system.
-#TODO: Remove unneeded stuff.
 #TODO: Improve layout.
 @bp.route('/weights/<page_id>')
 @login_required
@@ -20,73 +21,75 @@ def weights(page_id):
     this_week = Weights.query.filter_by(day_id=page_id,
                                         user_id=current_user.id).first()
     if this_week:
-        this_week_excs = Exercise.query.filter_by(
-            weights_id=this_week.id).all()
+        this_week_excs = Exercise.query.filter(
+            Exercise.weights_id == this_week.id,
+            Exercise.exercise_name != None).all()
+
+    empty_rows = Exercise.query.filter(Exercise.weights_id == this_week.id,
+                                       Exercise.exercise_name == None).all()
+    if empty_rows:
+        for row in empty_rows:
+            db.session.delete(row)
+        db.session.commit()
+
     else:
         this_week_excs = []
     try:
         last_week = Weights.query.filter_by(
             workout_id=this_week.workout_id,
             template_id=this_week.template.id,
-            workout_week=(this_week.workout_week - 1)).first()
+            workout_week=(int(this_week.workout_week) - 1)).first()
         exercise_list = check_improvement(this_week_excs, last_week.id)
-    except (AttributeError):
+    except (AttributeError, TypeError):
         exercise_list = this_week_excs
     return render_template('workout.html',
                            page_id=page_id,
                            exercise_list=exercise_list)
 
 
-@bp.route('/edit_weights/<page_id>')
+#TODO: When hitting submit workout, create a log entry for the workout.
+@bp.route('/edit_weights/from_base:<from_base>/<page_id>')
 @login_required
-def edit_weights(page_id):
-
+def edit_weights(page_id, from_base):
     weights = Weights.query.filter_by(user_id=current_user.id,
                                       day_id=page_id).first()
-    if not weights or not weights.exercises:
-        init_weights = Weights(day_id=page_id, user_id=current_user.id)
-        db.session.add(init_weights)
+    weights.workout_week = 1
+    weights.day = 1
+    db.session.add(weights)
+    db.session.commit()
+    print(weights.workout_week)
+    if not weights:
+        if from_base:
+            weights = Weights(day_id=page_id,
+                              user_id=current_user.id,
+                              template_id=get_current_template().id,
+                              workout_id=get_workout_id(),
+                              workout_week=get_workout_week_num())
+        else:
+            weights = Weights(day_id=page_id, user_id=current_user.id)
+        db.session.add(weights)
         db.session.commit()
+
+    if from_base == 'yes' and not weights.exercises:
         base = get_next_base_workout()
+        print(base)
         workout_params = json.loads(base.workout_params)
         for entry in workout_params.values():
             if entry[0]:
                 exercise = Exercise(exercise_name=entry[0],
                                     sets=entry[1],
                                     rep_range=f'{entry[2]} - {entry[3]}',
-                                    weights_id=init_weights.id)
+                                    weights_id=weights.id,
+                                    reps='',
+                                    weight='')
                 db.session.add(exercise)
         db.session.commit()
-    return render_template('edit_workout.html', page_id=page_id)
-
-
-@bp.route('/template/<page_id>', methods=['GET', 'POST'])
-@login_required
-def template(page_id):
-    template_form = TemplateForm()
-
-    if request.method == "POST":
-        rows = [
-            template_form.day_one.data, template_form.day_two.data,
-            template_form.day_three.data, template_form.day_four.data
-        ]
-        excs = [
-            template_form.one_excs.data, template_form.two_excs.data,
-            template_form.three_excs.data, template_form.four_excs.data
-        ]
-        template_data = Template(
-            start_id=page_id,
-            template_name=template_form.template_name.data,
-            row_nums=rows,
-            num_excs=excs,
-            num_days=template_form.total_days.data,
-            user_id=current_user.id)
-        db.session.add(template_data)
-        db.session.commit()
-        current_template = get_current_template()
-        get_weights_data(1, 1, page_id, current_template)
-        return redirect(url_for('dashboard.log', page_id=page_id))
-    return render_template('update_template.html', template_form=template_form)
+    if from_base == 'no':
+        clear_exercises(page_id)
+    return render_template('edit_workout.html',
+                           page_id=page_id,
+                           from_base=from_base,
+                           weights=weights)
 
 
 @bp.route('/create_template/<template_name>/<day>/<page_id>',

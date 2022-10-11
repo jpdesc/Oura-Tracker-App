@@ -103,13 +103,17 @@ def get_current_template():
 
 def get_workout_id():
     current_template = get_current_template()
+    print(f'current_template= {current_template}')
     num_days = current_template.num_days
     if current_template.weights:
         last_workout = Weights.query.filter_by(
             template_id=current_template.id).order_by(
                 Weights.id.desc()).first()
-        if last_workout.workout_id + 1 <= num_days:
-            return last_workout.workout_id + 1
+        if last_workout.workout_id:
+            if int(last_workout.workout_id) + 1 <= num_days:
+                return int(last_workout.workout_id) + 1
+        else:
+            return 1
     else:
         return 1
 

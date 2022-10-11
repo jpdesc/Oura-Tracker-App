@@ -20,6 +20,7 @@
 
             <td>{{exercise.set_ranges}}</td>
 
+
             {% if exercise.reps %}
             {% if exercise.reps_improve == True %}
             <td class="table-success">
@@ -46,7 +47,7 @@
     </tbody>
 </table>
 
-<a href="{{ url_for('weights.edit_weights', page_id=page_id) }}" class="btn btn-info">Edit
+<a href="{{ url_for('weights.edit_weights', page_id=page_id, from_base='yes') }}" class="btn btn-info">Edit
     Workout</a>
 
 {% endblock %}
