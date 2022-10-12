@@ -68,7 +68,11 @@ def edit_weights(page_id, from_base):
     # for exercise in weights.exercise_objs:
     #     print(exercise.exercise_name)
     if from_base == 'yes' and not weights.exercise_objs:
-        base = get_next_base_workout()
+        try:
+            base = get_next_base_workout()
+        except AttributeError:
+            flash('You must create a base template to load from.')
+            return redirect(url_for('weights.init_template'))
         workout_params = json.loads(base.workout_params)
         for entry in workout_params.values():
             if entry[0]:
