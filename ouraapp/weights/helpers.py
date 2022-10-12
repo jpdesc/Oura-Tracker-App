@@ -7,7 +7,9 @@ from flask_login import current_user
 from ouraapp.models import db
 from ouraapp.dashboard.helpers import get_workout_id, get_current_template
 from .models import Weights, Template, BaseWorkout, Exercise
+import logging
 
+logger = logging.getLogger("ouraapp")
 dir_path = os.path.dirname(os.path.realpath(__file__))
 
 
@@ -48,7 +50,10 @@ def convert_older_weights():
     all_weights = Weights.query.order_by(id).all()
     for weight in all_weights:
         for i, exercise in enumerate(weight.exercises):
-            add_exercise = Exercise(day_id=weight.day_id, weights_id=weight.id, )
+            add_exercise = Exercise(
+                day_id=weight.day_id,
+                weights_id=weight.id,
+            )
 
 
 #             class Weights(db.Model):
@@ -67,7 +72,6 @@ def convert_older_weights():
 #     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
 #     base_id = db.Column(db.Integer, db.ForeignKey('base_workout.id'))
 #     exercises = db.relationship('Exercise', backref='weights')
-
 
 # class Exercise(db.Model):
 #     __tablename__ = 'exercise'

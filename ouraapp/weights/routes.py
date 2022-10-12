@@ -12,7 +12,8 @@ from ouraapp.weights import bp
 logger = logging.getLogger("ouraapp")
 
 
-#TODO: Figure out links etc.
+#TODO: Select template from past templates.
+#TODO: Improve init_workout and template layouts.
 #TODO: Set up so old data is integrated with new system.
 #TODO: Improve layout.
 @bp.route('/weights/<page_id>')
@@ -70,7 +71,7 @@ def edit_weights(page_id, from_base):
     if from_base == 'yes' and not weights.exercise_objs:
 
         base = get_next_base_workout()
-
+        logger.debug(f'workout_params = {base.workout_params}')
         try:
             workout_params = json.loads(base.workout_params)
         except AttributeError:
@@ -111,7 +112,8 @@ def create_template(template_name, day, page_id):
         workout_template = BaseWorkout(
             workout_params=json.dumps(workout_params),
             day_num=day,
-            template_id=template.id)
+            template_id=template.id,
+            user_id=current_user.id)
         db.session.add(workout_template)
         db.session.commit()
         print(template.num_days)
