@@ -1,6 +1,7 @@
 from ouraapp.extensions import db
 from ouraapp.dashboard.models import Tag, Sleep, Readiness, Log, Workout
 from datetime import date
+from flask_login import current_user
 from sqlalchemy import and_, func, Numeric
 
 db_fields = {
@@ -66,6 +67,7 @@ def get_filters(form, date_range):
             conditions.append(Log.tags.any(Tag.tag == tag))
         conditions.append(Log.date >= date_range[0])
         conditions.append(Log.date <= date_range[1])
+        conditions.append(Log.user_id == current_user.id)
         for statement in format_filters(form):
             second_conditions.append(statement)
         condition = and_(*conditions)
@@ -74,7 +76,8 @@ def get_filters(form, date_range):
             Log.tags).filter(condition).filter(second_condition).all()
     else:
         filter_result = Sleep.query.filter(
-            Sleep.date.between(date_range[0], date_range[1])).all()
+            Sleep.date.between(date_range[0], date_range[1]),
+            Sleep.user_id == current_user.id).all()
     return filter_result
 
 
@@ -85,7 +88,7 @@ def get_filtered_avgs(filtered_objs):
         db_attr = db_fields[value[0]]
         attr = value[0]
         db_class = value[1]
-        id_attr = db_class.id
+        id_attr = db_class.day_id
         db_objs = db_class.query.filter(id_attr.in_(id_nums)).order_by(id_attr)
         subquery = db_objs.with_entities(db_attr).subquery()
         subquery_c = getattr(subquery.c, attr)
@@ -118,17 +121,17 @@ def format_filters(form):
         ]
     }
     form_db_dict = {
-        'Sleep Score': (Sleep.sleep_score, Sleep.id),
-        'Efficiency Score': (Sleep.sleep_efficiency, Sleep.id),
-        'Readiness': (Readiness.readiness_score, Readiness.id),
-        'Recovery Index': (Readiness.recovery_index, Readiness.id),
-        'Temperature Score': (Readiness.temperature, Readiness.id),
-        'Focus': (Log.focus, Log.id),
-        'Energy': (Log.energy, Log.id),
-        'Mood': (Log.mood, Log.id),
-        'Stress': (Log.stress, Log.id),
-        'Grade': (Workout.grade, Workout.id),
-        'Soreness': (Workout.soreness, Workout.id)
+        'Sleep Score': (Sleep.sleep_score, Sleep.day_id),
+        'Efficiency Score': (Sleep.sleep_efficiency, Sleep.day_id),
+        'Readiness': (Readiness.readiness_score, Readiness.day_id),
+        'Recovery Index': (Readiness.recovery_index, Readiness.day_id),
+        'Temperature Score': (Readiness.temperature, Readiness.day_id),
+        'Focus': (Log.focus, Log.day_id),
+        'Energy': (Log.energy, Log.day_id),
+        'Mood': (Log.mood, Log.day_id),
+        'Stress': (Log.stress, Log.day_id),
+        'Grade': (Workout.grade, Workout.day_id),
+        'Soreness': (Workout.soreness, Workout.day_id)
     }
     filters = []
     for key, val in filter_fields.items():
@@ -143,7 +146,7 @@ def format_filters(form):
                 query = db_attr < val[2]
             else:
                 query = None
-            id_check = id_num == Log.id
+            id_check = id_num == Log.day_id
             filters.append(query)
             filters.append(id_check)
     return filters

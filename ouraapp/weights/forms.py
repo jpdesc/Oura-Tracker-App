@@ -1,5 +1,6 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, SubmitField, IntegerField
+from wtforms import StringField, SubmitField, IntegerField, FieldList, FormField, BooleanField
+from wtforms.validators import Optional, InputRequired, NumberRange
 
 
 class TemplateForm(FlaskForm):
@@ -17,4 +18,50 @@ class TemplateForm(FlaskForm):
     five_excs = IntegerField("Day 5 Total Exercises")
     day_six = IntegerField("Day 6 Row: ")
     six_excs = IntegerField("Day 6 Total Exercises")
+    submit = SubmitField("Submit")
+
+
+class TemplateForm2(FlaskForm):
+    excs = StringField('Exercise Name: ', validators=[Optional()])
+    sets = IntegerField('Sets: ', validators=[Optional()])
+    reps1 = IntegerField('Rep range: ', validators=[Optional()])
+    reps2 = IntegerField(validators=[Optional()])
+
+
+class WorkoutForm(FlaskForm):
+    exercise_params = FieldList(FormField(TemplateForm2),
+                                min_entries=10,
+                                max_entries=15,
+                                validators=[Optional()])
+    submit = SubmitField("Submit")
+
+
+class CustomPR(FlaskForm):
+    custom_pr_name = StringField('Exercise Name: ')
+    custom_pr_weight = IntegerField('1 Rep Max: ')
+
+
+class InitWorkoutForm(FlaskForm):
+    name_workout_plan = StringField('Name of workout plan: ',
+                                    validators=[InputRequired()])
+    set_base = BooleanField('Create a base template for your workouts?',
+                            render_kw={'onchange': "showFields()"})
+    days = IntegerField('Enter the number of workouts per weekly cycle: ',
+                        validators=[Optional(),
+                                    NumberRange(min=1, max=7)])
+    set_pr = BooleanField('Enter one rep maxes at start of program?',
+                          validators=[Optional()],
+                          render_kw={'onchange': "showFields()"})
+    bench_pr = IntegerField('Bench 1 Rep Max: ', validators=[Optional()])
+    squat_pr = IntegerField('Back Squat 1 Rep Max: ', validators=[Optional()])
+    deadlift_pr = IntegerField('Deadlift 1 Rep Max: ', validators=[Optional()])
+    ohp_pr = IntegerField('Overhead Press 1 Rep Max: ',
+                          validators=[Optional()])
+    custom_pr = BooleanField('Record additional PRs? ',
+                             validators=[Optional()],
+                             render_kw={'onchange': "showFields()"})
+    custom_prs = FieldList(FormField(CustomPR),
+                           min_entries=1,
+                           max_entries=5,
+                           validators=[Optional()])
     submit = SubmitField("Submit")

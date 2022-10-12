@@ -1,9 +1,9 @@
 from io import BytesIO
 from flask import render_template, redirect, url_for, request, send_file, Blueprint
-from ouraapp.weights.helpers import get_weights_data, get_current_template
+# from ouraapp.weights.helpers import get_weights_data, get_current_template
 from ouraapp.weights.models import Weights
 from .models import Sleep, Log, Readiness, Workout
-from .helpers import add_event_to_db, get_date, add_tags, create_wellness_event, create_workout_event, get_workout_id, get_workout_week_num
+from .helpers import add_event_to_db, get_date, add_tags, create_wellness_event, create_workout_event
 from ouraapp.helpers import get_page_id
 from ouraapp.format import format_date
 from flask_login import login_required, current_user
@@ -26,16 +26,17 @@ def log(page_id):
     date = get_date(page_id)
     wellness_form = JournalForm()
     workout_form = WorkoutForm()
-    sleep = Sleep.query.filter(Sleep.id == page_id,
+    sleep = Sleep.query.filter(Sleep.day_id == page_id,
                                Sleep.user_id == current_user.id).first()
-    log = Log.query.filter(Log.id == page_id,
+    log = Log.query.filter(Log.day_id == page_id,
                            Log.user_id == current_user.id).first()
     readiness = Readiness.query.filter(
-        Readiness.id == page_id, Readiness.user_id == current_user.id).first()
-    workout = Workout.query.filter(Workout.id == page_id,
+        Readiness.day_id == page_id,
+        Readiness.user_id == current_user.id).first()
+    workout = Workout.query.filter(Workout.day_id == page_id,
                                    Workout.user_id == current_user.id).first()
     new_template = Weights.query.filter(
-        Weights.id == page_id, Weights.user_id == current_user.id).first()
+        Weights.day_id == page_id, Weights.user_id == current_user.id).first()
 
     if wellness_form.validate_on_submit():
         user_id = current_user.id
@@ -51,7 +52,7 @@ def log(page_id):
                             mood=mood,
                             energy=energy,
                             date=date,
-                            id=page_id,
+                            day_id=page_id,
                             stress=stress,
                             user_id=user_id)
         if selected_tags or added_tags:
@@ -59,10 +60,6 @@ def log(page_id):
         add_event_to_db(create_wellness_event(wellness_info))
         db.session.add(wellness_info)
         db.session.commit()
-        # if sleep:
-        #     sleep.food_cutoff = wellness_form.food_cutoff.data
-        #     db.session.add(sleep)
-        #     db.session.commit()
         return redirect(url_for('log', page_id=page_id))
 
     if workout_form.validate_on_submit():
@@ -76,17 +73,12 @@ def log(page_id):
         workout_info = Workout(user_id=current_user.id,
                                data=file.read(),
                                date=date,
-                               id=page_id,
+                               day_id=page_id,
                                filename=file.filename,
                                type=type,
                                soreness=soreness,
                                grade=grade,
                                workout_log=workout_log)
-        if type == "Weights" and not new_template:
-            current_template = get_current_template()
-            get_weights_data(get_workout_id(), get_workout_week_num(), page_id,
-                             current_template)
-        add_event_to_db(create_workout_event(workout_info))
         db.session.add(workout_info)
         db.session.commit()
         return redirect(url_for('log', page_id=page_id))
@@ -107,13 +99,13 @@ def log(page_id):
 def edit_log(page_id):
     date = get_date(page_id)
     sleep = Sleep.query.filter(Sleep.user_id == current_user.id,
-                               Sleep.id == page_id).first()
+                               Sleep.day_id == page_id).first()
     readiness = Readiness.query.filter(Readiness.user_id == current_user.id,
-                                       Readiness.id == page_id).first()
+                                       Readiness.day_id == page_id).first()
     log = Log.query.filter(Log.user_id == current_user.id,
-                           Log.id == page_id).first()
+                           Log.day_id == page_id).first()
     workout = Workout.query.filter(Workout.user_id == current_user.id,
-                                   Workout.id == page_id).first()
+                                   Workout.day_id == page_id).first()
     if log:
         wellness_form = JournalForm(focus=log.focus,
                                     mood=log.mood,
@@ -146,10 +138,6 @@ def edit_log(page_id):
         db.session.add(log)
         db.session.commit()
         add_event_to_db(create_workout_event(log))
-        # if sleep:
-        #     sleep.food_cutoff = wellness_form.food_cutoff.data
-        #     db.session.add(sleep)
-        #     db.session.commit()
         return redirect(url_for('log', page_id=page_id))
 
     if workout_form.validate_on_submit():
@@ -165,7 +153,7 @@ def edit_log(page_id):
         db.session.commit()
         add_event_to_db(create_workout_event(workout))
         return redirect(url_for('log', page_id=page_id))
-    return render_template('dashboard/edit_post.html',
+    return render_template('edit_post.html',
                            wellness_form=wellness_form,
                            workout_form=workout_form,
                            sleep=sleep,

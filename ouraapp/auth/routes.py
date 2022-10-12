@@ -24,7 +24,7 @@ def load_user(user_id):
 def unauthorized():
     '''Redirect unauthorized users to Login page.'''
     flash('You must be logged in to view that page.')
-    return redirect(url_for('authentication.login'))
+    return redirect(url_for('auth.login'))
 
 
 @bp.route('/auth/register', methods=['GET', 'POST'])
