@@ -5,7 +5,7 @@ class Weights(db.Model):
     __tablename__ = 'weights'
     id = db.Column(db.Integer, primary_key=True)
     day_id = db.Column(db.Integer)
-    exercises_old = db.Column(db.ARRAY(db.String))
+    exercises = db.Column(db.ARRAY(db.String))
     set_ranges = db.Column(db.ARRAY(db.String))
     reps = db.Column(db.ARRAY(db.String))
     weight = db.Column(db.ARRAY(db.String))
@@ -15,7 +15,7 @@ class Weights(db.Model):
     template_id = db.Column(db.Integer, db.ForeignKey('template.id'))
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
     base_id = db.Column(db.Integer, db.ForeignKey('base_workout.id'))
-    exercises = db.relationship('Exercise', backref='weights')
+    exercise_objs = db.relationship('Exercise', backref='weights')
 
 
 class Exercise(db.Model):
