@@ -8,7 +8,7 @@ tags = db.Table(
 
 class Tag(db.Model):
     __tablename__ = 'tag'
-    id = db.Column(db.Integer, primary_key=True)
+    id = db.Column(db.Integer, primary_key=True, unique=True)
     day_id = db.Column(db.Integer)
     tag = db.Column(db.String, unique=True)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
@@ -19,7 +19,7 @@ class Tag(db.Model):
 
 class Log(db.Model):
     __tablename__ = 'log'
-    id = db.Column(db.Integer, primary_key=True)
+    id = db.Column(db.Integer, primary_key=True, unique=True)
     day_id = db.Column(db.Integer)
     date = db.Column(db.Date)
     focus = db.Column(db.Integer)
@@ -36,7 +36,7 @@ class Log(db.Model):
 
 class Sleep(db.Model):
     __tablename__ = 'sleep'
-    id = db.Column(db.Integer, primary_key=True)
+    id = db.Column(db.Integer, primary_key=True, unique=True)
     day_id = db.Column(db.Integer)
     date = db.Column(db.Date)
     sleep_score = db.Column(db.Integer)
@@ -54,7 +54,7 @@ class Sleep(db.Model):
 
 class Readiness(db.Model):
     __tablename__ = 'readiness'
-    id = db.Column(db.Integer, primary_key=True)
+    id = db.Column(db.Integer, primary_key=True, unique=True)
     day_id = db.Column(db.Integer)
     date = db.Column(db.Date)
     readiness_score = db.Column(db.Integer)
@@ -67,7 +67,7 @@ class Readiness(db.Model):
 
 class Workout(db.Model):
     __tablename__ = 'workout'
-    id = db.Column(db.Integer, primary_key=True)
+    id = db.Column(db.Integer, primary_key=True, unique=True)
     day_id = db.Column(db.Integer)
     date = db.Column(db.Date)
     type = db.Column(db.String)
