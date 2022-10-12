@@ -53,11 +53,6 @@ def weights(page_id):
 def edit_weights(page_id, from_base):
     weights = Weights.query.filter_by(user_id=current_user.id,
                                       day_id=page_id).first()
-    weights.workout_week = 1
-    weights.day = 1
-    db.session.add(weights)
-    db.session.commit()
-    print(weights.workout_week)
     if not weights:
         if from_base:
             weights = Weights(day_id=page_id,
@@ -70,9 +65,10 @@ def edit_weights(page_id, from_base):
         db.session.add(weights)
         db.session.commit()
 
+    for exercise in weights.exercises:
+        print(exercise.exercise_name)
     if from_base == 'yes' and not weights.exercises:
         base = get_next_base_workout()
-        print(base)
         workout_params = json.loads(base.workout_params)
         for entry in workout_params.values():
             if entry[0]:

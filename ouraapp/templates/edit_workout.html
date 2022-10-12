@@ -13,8 +13,8 @@
 
 {% block content %}
 
+<div class="container">
 
-{% set reload_url = url_for('api.add_row', page_id=page_id) %}
 {% if from_base=='yes' %}
 <div><h5>Week {{weights.workout_week}}, Day {{weights.day}}</h5></div>
 {% else %}
@@ -23,14 +23,23 @@
 </div>
 {% endif %}
 
-<span id="table" class="table table-striped"></span>
-<span id="addRow"> <button name="AddRow" class="btn btn-secondary" inline="true">Add Row</button></span>
-<span id="removeRow"> <button name="removeRow" class="btn btn-secondary" inline="true">Remove Row</button></span>
 
+<span id="table" class="table table-striped"></span><br>
+
+<div class="container buttons">
+<span class="button-left">
+<span id="addRow"> <button name="AddRow" class="btn btn-secondary" >Add Row</button></span></span>
+<span class="button-left">
+<span id="removeRow"> <button name="removeRow" class="btn btn-secondary">Remove Row</button></span>
+</span>
+
+
+<span class="button-right">
 <a href="{{ url_for('weights.weights', page_id=page_id) }}" class="btn btn-info">Submit Workout</a>
+</span>
 
-
-
+</div>
+</div>
 
 <script src="https://unpkg.com/gridjs/dist/gridjs.umd.js"></script>
 <script>
@@ -59,10 +68,13 @@
             { id: 'reps', name: 'Reps', sort: false, 'attributes': editableCellAttributes },
             { id: 'weight', name: 'Weight', sort: false, 'attributes': editableCellAttributes },
         ],
+        resizable: true,
         server: {
             url: '/api/data/{{page_id}}',
             then: results => results.data,
         },
+        width: "auto",
+        height: "auto"
     }).render(tableDiv);
 
 

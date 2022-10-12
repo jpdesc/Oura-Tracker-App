@@ -94,15 +94,20 @@ h2 {
     width: 100%;
 }
 
+/* .table {
+    align-items: center;
+} */
 
 
 .button-left {
     float: left;
     padding: 10px;
+    display: flex;
  }
  .button-right{
-     float: right;
-     padding: 10px;
+    padding: 10px;
+    float: right;
+    display: flex;
  }
 .wrapper{
     width: 100%;
