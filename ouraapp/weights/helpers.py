@@ -14,6 +14,8 @@ dir_path = os.path.dirname(os.path.realpath(__file__))
 
 
 def get_next_base_workout():
+    logger.debug(f'current_template.id = {get_current_template().id}')
+    logger.debug(f'day_num = {get_workout_id()}')
     return BaseWorkout.query.filter_by(
         day_num=get_workout_id(),
         template_id=get_current_template().id).first()

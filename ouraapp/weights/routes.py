@@ -71,7 +71,7 @@ def edit_weights(page_id, from_base):
     if from_base == 'yes' and not weights.exercise_objs:
 
         base = get_next_base_workout()
-        logger.debug(f'workout_params = {base.workout_params}')
+        logger.debug(f'base = {base}')
         try:
             workout_params = json.loads(base.workout_params)
         except AttributeError:
