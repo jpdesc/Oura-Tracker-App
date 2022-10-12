@@ -65,9 +65,9 @@ def edit_weights(page_id, from_base):
         db.session.add(weights)
         db.session.commit()
 
-    for exercise in weights.exercise_objs:
-        print(exercise.exercise_name)
-    if from_base == 'yes' and not weights.exercises:
+    # for exercise in weights.exercise_objs:
+    #     print(exercise.exercise_name)
+    if from_base == 'yes' and not weights.exercise_objs:
         base = get_next_base_workout()
         workout_params = json.loads(base.workout_params)
         for entry in workout_params.values():
