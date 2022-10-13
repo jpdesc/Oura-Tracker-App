@@ -52,6 +52,7 @@ def weights(page_id):
 @bp.route('/edit_weights/from_base:<from_base>/<page_id>')
 @login_required
 def edit_weights(page_id, from_base):
+    logger.debug(f'page_id = {page_id}')
     weights = Weights.query.filter_by(user_id=current_user.id,
                                       day_id=page_id).first()
     logger.debug(f'weights_obj = {weights}')
