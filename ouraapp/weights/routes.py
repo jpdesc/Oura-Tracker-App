@@ -54,6 +54,7 @@ def weights(page_id):
 def edit_weights(page_id, from_base):
     weights = Weights.query.filter_by(user_id=current_user.id,
                                       day_id=page_id).first()
+    logger.debug(f'weights_obj = {weights}')
     if not weights:
         if from_base:
             weights = Weights(day_id=page_id,
