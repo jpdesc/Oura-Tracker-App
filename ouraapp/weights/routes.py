@@ -21,13 +21,17 @@ logger = logging.getLogger("ouraapp")
 def weights(page_id):
     this_week = Weights.query.filter_by(day_id=page_id,
                                         user_id=current_user.id).first()
+    logger.debug(f'this_week= {this_week}')
     if this_week:
         this_week_excs = Exercise.query.filter(
             Exercise.weights_id == this_week.id,
             Exercise.exercise_name != None).all()
+         logger.debug(f'this_week_excs = {this_week_excs}')
 
     empty_rows = Exercise.query.filter(Exercise.weights_id == this_week.id,
                                        Exercise.exercise_name == None).all()
+
+    logger.debug(f'empty_rows = {empty_rows}')
     if empty_rows:
         for row in empty_rows:
             db.session.delete(row)
@@ -52,10 +56,10 @@ def weights(page_id):
 @bp.route('/edit_weights/from_base:<from_base>/<page_id>')
 @login_required
 def edit_weights(page_id, from_base):
-    logger.debug(f'page_id = {page_id}')
+    # logger.debug(f'page_id = {page_id}')
     weights = Weights.query.filter_by(user_id=current_user.id,
                                       day_id=page_id).first()
-    logger.debug(f'weights_obj = {weights}')
+    # logger.debug(f'weights_obj = {weights}')
     if not weights:
         if from_base:
             weights = Weights(day_id=page_id,
