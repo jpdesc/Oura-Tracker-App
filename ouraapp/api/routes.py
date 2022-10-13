@@ -13,7 +13,7 @@ def data(page_id):
                                     day_id=page_id).first()
 
     return {
-        'data': [exercise.to_dict() for exercise in query.exercises],
+        'data': [exercise.to_dict() for exercise in query.exercise_objs],
     }
 
 
