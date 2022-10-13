@@ -64,11 +64,11 @@ def edit_weights(page_id, from_base):
         else:
             weights = Weights(day_id=page_id, user_id=current_user.id)
 
-        logger.debug(f'page_id = {page_id}')
         db.session.add(weights)
         db.session.commit()
     logger.debug(f'day_id = {weights.day_id}')
     logger.debug(f'weights_id = {weights.id}')
+    logger.debug(f'page_id = {page_id}')
 
     # for exercise in weights.exercise_objs:
     #     print(exercise.exercise_name)
