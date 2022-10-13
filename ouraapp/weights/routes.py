@@ -26,7 +26,7 @@ def weights(page_id):
         this_week_excs = Exercise.query.filter(
             Exercise.weights_id == this_week.id,
             Exercise.exercise_name != None).all()
-         logger.debug(f'this_week_excs = {this_week_excs}')
+        logger.debug(f'this_week_excs = {this_week_excs}')
 
     empty_rows = Exercise.query.filter(Exercise.weights_id == this_week.id,
                                        Exercise.exercise_name == None).all()
