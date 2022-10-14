@@ -28,6 +28,9 @@ def weights(page_id):
             Exercise.exercise_name != None).all()
         logger.debug(f'this_week_excs = {this_week_excs}')
 
+    else:
+        this_week_excs = []
+
     empty_rows = Exercise.query.filter(Exercise.weights_id == this_week.id,
                                        Exercise.exercise_name == None).all()
 
@@ -38,8 +41,6 @@ def weights(page_id):
             db.session.delete(row)
         db.session.commit()
 
-    else:
-        this_week_excs = []
     try:
         last_week = Weights.query.filter_by(
             workout_id=this_week.workout_id,
