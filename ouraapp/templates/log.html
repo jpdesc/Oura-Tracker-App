@@ -173,7 +173,7 @@
 
 
                                 {% if workout.type == "Weights" %}
-                                <a inline="true" href={{url_for('weights.weights', page_id=page_id)}}>View Workout</a>
+                                <a class="left-link" inline="true" href={{url_for('weights.weights', page_id=page_id)}}>View Workout</a>
                                 <a class="right-link" inline="true" href={{url_for('weights.edit_weights', page_id=page_id, from_base='yes' )}}>Edit Workout</a>
                                 {% endif %}
 

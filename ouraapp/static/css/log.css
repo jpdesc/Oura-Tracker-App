@@ -111,6 +111,11 @@ h2 {
     justify-content: flex-end;
  }
 
+ .right-link {
+     display: flex;
+     justify-content: start;
+ }
+
  .right-link{
     display: flex;
     justify-content: flex-end;
