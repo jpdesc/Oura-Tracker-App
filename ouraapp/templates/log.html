@@ -169,7 +169,7 @@
                                 <hr> <i>{{workout.workout_log}}</i>
                                 {% if workout.type == "Weights" %}
                                 <a href={{url_for('weights.weights', page_id=page_id)}}>View Workout</a>
-                                <a href={{url_for('weights.edit_weights', page_id=page_id)}}>Edit Workout</a>
+                                <a href={{url_for('weights.edit_weights', page_id=page_id, from_base='yes')}}>Edit Workout</a>
                                 {% endif %}
                             </div>
 
