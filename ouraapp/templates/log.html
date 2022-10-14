@@ -156,9 +156,12 @@
                             {% if workout %}
                             <ul>
                                 <li>Workout Type: {{workout.type}}</li>
-                                <li>Soreness Level: {{workout.soreness if workout.soreness != None}}</li>
-                                <li>Workout Grade: {{workout.grade if workout.grade != None}}</li>
-
+                                {% if workout.soreness %}
+                                <li>Soreness Level: {{workout.soreness}}</li>
+                                {% endif %}
+                                {% if workout.grade %}
+                                <li>Workout Grade: {{workout.grade}}</li>
+                                {% endif %}
 
                                 {% if workout.filename %}
                                 <li>Uploaded Workout: <a
