@@ -7,6 +7,7 @@ from flask_login import current_user
 from ouraapp.models import db
 from ouraapp.dashboard.helpers import get_workout_id, get_current_template
 from .models import Weights, Template, BaseWorkout, Exercise
+from ouraapp.dashboard.models import Workout
 import logging
 
 logger = logging.getLogger("ouraapp")
@@ -62,6 +63,17 @@ def convert_older_weights():
                 day_id=weight.day_id,
                 weights_id=weight.id,
             )
+
+
+def ensure_workout_log_exists(page_id):
+    workout = Workout.query.filter_by(day_id=page_id,
+                                      user_id=current_user.id).first()
+    if not workout:
+        new_workout = Workout(user_id=current_user.id,
+                              day_id=page_id,
+                              workout_type="Weights")
+        db.session.add(new_workout)
+        db.session.commit()
 
 
 #             class Weights(db.Model):

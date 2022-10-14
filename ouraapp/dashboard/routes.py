@@ -35,8 +35,6 @@ def log(page_id):
         Readiness.user_id == current_user.id).first()
     workout = Workout.query.filter(Workout.day_id == page_id,
                                    Workout.user_id == current_user.id).first()
-    new_template = Weights.query.filter(
-        Weights.day_id == page_id, Weights.user_id == current_user.id).first()
 
     if wellness_form.validate_on_submit():
         user_id = current_user.id

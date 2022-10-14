@@ -1,6 +1,7 @@
 from flask import render_template, redirect, url_for, request, flash
-from .helpers import check_improvement, get_next_base_workout, clear_exercises
+from .helpers import check_improvement, get_next_base_workout, clear_exercises, ensure_workout_log_exists
 from .models import Weights, Template, BaseWorkout, Exercise
+from ouraapp.dashboard.models import Workout
 from flask_login import login_required, current_user
 from .forms import TemplateForm, WorkoutForm, InitWorkoutForm
 from ouraapp.dashboard.helpers import get_current_template, get_workout_id, get_workout_week_num
@@ -21,12 +22,13 @@ logger = logging.getLogger("ouraapp")
 def weights(page_id):
     this_week = Weights.query.filter_by(day_id=page_id,
                                         user_id=current_user.id).first()
-    logger.debug(f'this_week= {this_week}')
+    # logger.debug(f'this_week= {this_week}')
     if this_week:
         this_week_excs = Exercise.query.filter(
             Exercise.weights_id == this_week.id,
             Exercise.exercise_name != None).all()
-        logger.debug(f'this_week_excs = {this_week_excs}')
+
+        # logger.debug(f'this_week_excs = {this_week_excs}')
 
     else:
         this_week_excs = []
@@ -34,7 +36,7 @@ def weights(page_id):
     empty_rows = Exercise.query.filter(Exercise.weights_id == this_week.id,
                                        Exercise.exercise_name == None).all()
 
-    logger.debug(f'empty_rows = {empty_rows}')
+    # logger.debug(f'empty_rows = {empty_rows}')
 
     if empty_rows:
         for row in empty_rows:
@@ -49,8 +51,8 @@ def weights(page_id):
         exercise_list = check_improvement(this_week_excs, last_week.id)
     except (AttributeError, TypeError):
         exercise_list = this_week_excs
-    for exercise in exercise_list:
-        logger.debug(f'exercise_name = {exercise.exercise_name}')
+    # for exercise in exercise_list:
+    # logger.debug(f'exercise_name = {exercise.exercise_name}')
 
     return render_template('workout.html',
                            page_id=page_id,
@@ -77,16 +79,15 @@ def edit_weights(page_id, from_base):
 
         db.session.add(weights)
         db.session.commit()
-    logger.debug(f'day_id = {weights.day_id}')
-    logger.debug(f'weights_id = {weights.id}')
-    logger.debug(f'page_id = {page_id}')
+    # logger.debug(f'day_id = {weights.day_id}')
+    # logger.debug(f'weights_id = {weights.id}')
+    # logger.debug(f'page_id = {page_id}')
 
     # for exercise in weights.exercise_objs:
     #     print(exercise.exercise_name)
     if from_base == 'yes' and not weights.exercise_objs:
-
         base = get_next_base_workout()
-        logger.debug(f'base = {base}')
+        # logger.debug(f'base = {base}')
         try:
             workout_params = json.loads(base.workout_params)
         except AttributeError:
@@ -105,6 +106,9 @@ def edit_weights(page_id, from_base):
         db.session.commit()
     if from_base == 'no':
         clear_exercises(page_id)
+
+    ensure_workout_log_exists(page_id)
+
     return render_template('edit_workout.html',
                            page_id=page_id,
                            from_base=from_base,
