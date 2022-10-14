@@ -108,6 +108,7 @@ h2 {
     padding: 10px;
     float: right;
     display: flex;
+    justify-content: flex-end;
  }
 .wrapper{
     width: 100%;

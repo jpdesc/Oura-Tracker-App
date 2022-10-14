@@ -166,7 +166,9 @@
                                 {% if workout.filename %}
                                 <li>Uploaded Workout: <a
                                         href="{{url_for('dashoard.download', page_id=page_id)}}">{{workout.filename}}</a></li>
-                                {% endif %}<br><br>
+                                {% endif %}
+                                <br>
+
 
                                 {% if workout.type == "Weights" %}
                                 <a href={{url_for('weights.weights', page_id=page_id)}}>View Workout</a>
