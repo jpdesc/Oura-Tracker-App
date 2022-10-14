@@ -71,7 +71,7 @@ def ensure_workout_log_exists(page_id):
     if not workout:
         new_workout = Workout(user_id=current_user.id,
                               day_id=page_id,
-                              workout_type="Weights")
+                              type="Weights")
         db.session.add(new_workout)
         db.session.commit()
 
