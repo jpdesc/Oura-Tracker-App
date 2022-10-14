@@ -156,21 +156,26 @@
                             {% if workout %}
                             <ul>
                                 <li>Workout Type: {{workout.type}}</li>
-                                <li>Soreness Level: {{workout.soreness}}</li>
-                                <li>Workout Grade: {{workout.grade}}</li>
+                                <li>Soreness Level: {{workout.soreness if workout.soreness != None}}</li>
+                                <li>Workout Grade: {{workout.grade if workout.grade != None}}</li>
+
+
                                 {% if workout.filename %}
                                 <li>Uploaded Workout: <a
                                         href="{{url_for('dashoard.download', page_id=page_id)}}">{{workout.filename}}</a></li>
+                                {% endif %}<br><br>
+
+                                {% if workout.type == "Weights" %}
+                                <a href={{url_for('weights.weights', page_id=page_id)}}>View Workout</a>
+                                <a href={{url_for('weights.edit_weights', page_id=page_id, from_base='yes' )}}>Edit Workout</a>
                                 {% endif %}
+
                             </ul>
                             <div>
                                 <hr>
                                 <h6>Log <i class="fa-solid fa-pen-to-square"></i></h6>
-                                <hr> <i>{{workout.workout_log}}</i>
-                                {% if workout.type == "Weights" %}
-                                <a href={{url_for('weights.weights', page_id=page_id)}}>View Workout</a>
-                                <a href={{url_for('weights.edit_weights', page_id=page_id, from_base='yes')}}>Edit Workout</a>
-                                {% endif %}
+                                <hr> <i>{{workout.workout_log}}</i><br>
+
                             </div>
 
 
