@@ -32,6 +32,7 @@ def weights(page_id):
                                        Exercise.exercise_name == None).all()
 
     logger.debug(f'empty_rows = {empty_rows}')
+
     if empty_rows:
         for row in empty_rows:
             db.session.delete(row)
@@ -47,6 +48,9 @@ def weights(page_id):
         exercise_list = check_improvement(this_week_excs, last_week.id)
     except (AttributeError, TypeError):
         exercise_list = this_week_excs
+    for exercise in exercise_list:
+        logger.debug(f'exercise_name = {exercise.exercise_name}')
+
     return render_template('workout.html',
                            page_id=page_id,
                            exercise_list=exercise_list)
