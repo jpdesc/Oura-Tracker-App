@@ -39,11 +39,13 @@ def register():
         if existing_user is None:
             hashed_password = generate_password_hash(
                 registration_form.password1.data, "sha256")
-            user = User(username=registration_form.username.data,
-                        name=registration_form.name.data,
-                        password_hash=hashed_password,
-                        email=registration_form.email.data,
-                        join_date=date.today())
+            user = User(
+                username=registration_form.username.data,
+                name=registration_form.name.data,
+                password_hash=hashed_password,
+                email=registration_form.email.data,
+                join_date=date.today(),
+                oura_access_token=registration_form.oura_access_token.data)
             flash('Welcome, {username}. You are now a registered user!')
             db.session.add(user)
             db.session.commit()
