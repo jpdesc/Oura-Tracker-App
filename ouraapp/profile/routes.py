@@ -7,8 +7,7 @@ from ouraapp.auth.forms import RegistrationForm
 from ouraapp.profile import bp
 
 
-@bp.route(f'/profile/<{current_user.username}/<int:edit>',
-          methods=['GET', 'POST'])
+@bp.route(f'/profile/<int:edit>', methods=['GET', 'POST'])
 @login_required
 def profile(edit):
     user = User.query.filter_by(id=current_user.id).first()
