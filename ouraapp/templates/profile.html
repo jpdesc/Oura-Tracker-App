@@ -24,7 +24,7 @@
 
         <form method="POST" class="form">
             {{ form.hidden_tag() }}
-            <h2>Register</h2>
+            <h2>Edit Profile</h2>
             <br /><br />
             {{ form.username.label(class="form-label") }}
 
@@ -60,11 +60,12 @@
         </form>
 
         {% else %}
-        <h5>Username: {{username}}</h1>
-        <hr>
+        <h2>Edit Profile</h2>
+
+        <br /><br />
+        <h6>Username: {{username}}</h1>
         <h6>Name: {{name}}</h6><br>
         <h6>Email: {{email}}</h6><br>
-        <h6>Password: {{password}}</h6><br>
         <h6>Oura Access Token: {{oura_access_token}}</h6><br>
         <h6>Join Date: {{join_date}}</h6><br>
         <a href="{{url_for('profile.profile', edit=1)}}" class="btn btn-info">Edit Profile</a>
