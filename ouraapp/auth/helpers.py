@@ -20,7 +20,10 @@ logger = logging.getLogger("ouraapp")
 def pull_oura_data():
     ''' Pulls oura data from beginning of 2022 to today's date.'''
     load_dotenv()
-    oura_token = os.getenv('OURA_PERSONAL_ACCESS_TOKEN')
+    logger.debug(
+        f'current_user.oura_access_token = {current_user.oura_access_token}')
+    oura_token = current_user.oura_access_token
+    # oura_token = os.getenv('OURA_PERSONAL_ACCESS_TOKEN')
     oura_client = OuraClient(personal_access_token=oura_token)
     start_date = date(2022, 1, 1)
     sleep_summary = oura_client.sleep_summary(start=str(start_date))
