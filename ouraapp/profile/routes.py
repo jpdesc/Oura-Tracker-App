@@ -9,7 +9,7 @@ from werkzeug.security import generate_password_hash, check_password_hash
 
 
 @bp.route(f'/profile/<int:edit>', methods=['GET', 'POST'])
-@login_required
+# @login_required
 def profile(edit):
     user = User.query.filter_by(id=current_user.id).first()
     username = user.username
