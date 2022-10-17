@@ -174,9 +174,9 @@
 
                                 {% if workout.type == "Weights" %}
                                 <div class="workout-links">
-                                <span class="left-link">
-                                <a href={{url_for('weights.weights', page_id=page_id)}}>View Workout</a></span>
-                                <span class="right-link"><a href={{url_for('weights.edit_weights', page_id=page_id, from_base='yes' )}}>Edit Workout</a></span>
+
+                                <a href={{url_for('weights.weights', page_id=page_id)}}>View Workout</a><br>
+                                <a href={{url_for('weights.edit_weights', page_id=page_id, from_base='yes' )}}>Edit Workout</a>
                                 </div>
                                 {% endif %}
 
