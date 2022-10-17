@@ -17,8 +17,6 @@ def profile(edit):
     password = user.password_hash
     oura_access_token = user.oura_access_token
     join_date = user.join_date
-    hashed_password = generate_password_hash(registration_form.password1.data,
-                                             "sha256")
     form = RegistrationForm(username=username,
                             password1=password,
                             password2=password,
