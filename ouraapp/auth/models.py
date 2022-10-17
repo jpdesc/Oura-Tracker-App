@@ -12,7 +12,7 @@ class User(db.Model, UserMixin):
     name = db.Column(db.String(30), nullable=False)
     email = db.Column(db.String(50), nullable=False, unique=True)
     password_hash = db.Column(db.String(128))
-    oura_access_token = db.Column(db.String(30))
+    oura_access_token = db.Column(db.String(50))
     tags = db.relationship('Tag', backref='user')
     logs = db.relationship('Log', backref='user')
     sleeps = db.relationship('Sleep', backref='user')
