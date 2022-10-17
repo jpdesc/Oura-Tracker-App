@@ -1,5 +1,6 @@
 from flask import render_template, redirect, url_for, flash, Blueprint
 from .helpers import setup_oura_data
+from datetime import date
 from ouraapp.auth.models import User
 from werkzeug.security import generate_password_hash, check_password_hash
 from .forms import LoginForm, RegistrationForm
@@ -41,7 +42,8 @@ def register():
             user = User(username=registration_form.username.data,
                         name=registration_form.name.data,
                         password_hash=hashed_password,
-                        email=registration_form.email.data)
+                        email=registration_form.email.data,
+                        join_date=date.today())
             flash('Welcome, {username}. You are now a registered user!')
             db.session.add(user)
             db.session.commit()

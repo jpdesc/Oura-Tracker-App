@@ -1,0 +1,69 @@
+{% extends 'base.html' %}
+
+{% block head %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/auth.css') }}">
+{% endblock %}
+
+{% block content %}
+
+<!-- {% for message in get_flashed_messages() %}
+
+<div class="alert alert-warning alert-dismissible fade show" role="alert">
+    {{ message }}
+    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+</div>
+
+
+{% endfor %} -->
+
+<body>
+    <div class="container">
+
+
+        {% if edit == 1 %}
+
+        <form method="POST" class="form">
+            {{ form.hidden_tag() }}
+            <h2>Register</h2>
+            <br /><br />
+            {{ form.username.label(class="form-label") }}
+
+            {{ form.username(class="form-control") }}
+
+            {{ form.name.label(class="form-label")}}
+
+            {{ form.name(class="form-control")}}
+
+            {{ form.email.label(class="form-label") }}
+
+            {{ form.email(class="form-control") }}
+
+            {{ form.password1.label(class="form-label")}}
+
+            {{ form.password1(class="form-control")}}
+
+            {{ form.password2.label(class="form-label")}}
+
+            {{ form.password2(class="form-control")}}
+            <br />
+
+
+            <br />
+
+            {{ form.submit(class="btn btn-secondary") }}
+
+
+        </form>
+
+        {% else %}
+        <h5>Username: {{username}}</h1>
+        <hr>
+        <h6>Name: {{name}}</h6><br>
+        <h6>Email: {{email}}</h6><br>
+        <h6>Password: {{password}}</h6><br>
+        <h6>Oura Access Token: {{oura_access_token}}</h6><br>
+        <h6>Join Date: {{join_date}}</h6><br>
+        {% endif %}
+    </div>
+</body>
+{% endblock %}

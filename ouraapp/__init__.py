@@ -27,6 +27,8 @@ def create_app(config_class=Config):
         app.register_blueprint(weights_bp, url_prefix='/workout')
         from ouraapp.api import bp as api_bp
         app.register_blueprint(api_bp)
+        from ouraapp.profile import bp as profile_bp
+        app.register_blueprint(profile_bp)
         update_days_db()
         if os.getcwd() == '/':
             os.chdir('/srv/jwa')
