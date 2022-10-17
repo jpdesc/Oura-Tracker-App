@@ -67,6 +67,7 @@
         <h6>Password: {{password}}</h6><br>
         <h6>Oura Access Token: {{oura_access_token}}</h6><br>
         <h6>Join Date: {{join_date}}</h6><br>
+        <a href="{{url_for('profile.profile', edit=1)}}" class="btn btn-info">Edit Profile</a>
         {% endif %}
     </div>
 </body>
