@@ -3,7 +3,7 @@ from flask_wtf import FlaskForm
 from flask import request, redirect, url_for, render_template
 from ouraapp.auth.models import User
 from ouraapp.extensions import db
-from ouraapp.auth.forms import RegistrationForm
+from .forms import EditProfileForm
 from ouraapp.profile import bp
 from werkzeug.security import generate_password_hash, check_password_hash
 
@@ -18,17 +18,17 @@ def profile(edit):
     oura_access_token = user.oura_access_token
     join_date = user.join_date
     email = user.email
-    form = RegistrationForm(username=username,
-                            password1=password,
-                            password2=password,
-                            oura_access_token=oura_access_token)
+    form = EditProfileForm(username=username,
+                           email=email,
+                           name=name,
+                           oura_access_token=oura_access_token)
 
-    if request.method == 'Post':
+    if form.validate_on_submit():
         user.username = form.username.data
         user.name = form.name.data
         user.email = form.email.data
-        user.password_hash = generate_password_hash(form.password1.data,
-                                                    "sha256")
+        if form.password1.data:
+            user.password = form.password1.data
         user.oura_access_token = form.oura_access_token.data
         db.session.add(user)
         db.session.commit()
