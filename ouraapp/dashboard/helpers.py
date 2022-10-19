@@ -151,6 +151,6 @@ def add_title_and_day():
         if event.event:
             dict = json.loads(event.event)
             event.title = dict['title']
-            event.day_id = dict['id']
+            event.day_id = int(dict['id'])
             db.session.add(event)
             db.session.commit()
