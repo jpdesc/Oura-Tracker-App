@@ -134,8 +134,23 @@ def get_workout_week_num():
     return week
 
 
-def add_event_to_db(new_event_dict):
+def add_event_to_db(new_event_dict, page_id):
+    title = new_event_dict['title']
     json_event = json.dumps(new_event_dict)
-    event = Events(event=json_event, user_id=current_user.id)
+    event = Events(event=json_event,
+                   day_id=page_id,
+                   title=title,
+                   user_id=current_user.id)
     db.session.add(event)
     db.session.commit()
+
+
+def add_title_and_day():
+    all_events = Events.query.order_by(Events.id).all()
+    for event in all_events:
+        if event.event:
+            dict = json.loads(event.event)
+            event.title = dict['title']
+            event.day_id = dict['id']
+            db.session.add(event)
+            db.session.commit()
