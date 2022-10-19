@@ -17,6 +17,7 @@ def profile(edit):
     password = user.password_hash
     oura_access_token = user.oura_access_token
     join_date = user.join_date
+    email = user.email
     form = RegistrationForm(username=username,
                             password1=password,
                             password2=password,
@@ -41,4 +42,5 @@ def profile(edit):
                            oura_access_token=oura_access_token,
                            join_date=join_date,
                            edit=edit,
-                           password=password)
+                           password=password,
+                           email=email)
