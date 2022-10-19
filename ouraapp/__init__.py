@@ -1,20 +1,22 @@
 from flask import Flask
-from .extensions import migrate, bootstrap, login_manager, db
-from config import Config
+from .extensions import migrate, bootstrap, login_manager, db, mail
 from .helpers import update_days_db
-import logging
 import os
+import logging
 
 
-def create_app(config_class=Config):
+def create_app():
     app = Flask(__name__)
-    app.config.from_object(config_class)
+    app.config.from_pyfile('../config.py')
+    print(app.config)
     with app.app_context():
         db.init_app(app)
         migrate.init_app(app, db)
         bootstrap.init_app(app)
+        mail.init_app(app)
         login_manager.init_app(app)
         login_manager.login_view = 'login'
+        update_days_db()
         from ouraapp.auth import bp as auth_bp
         app.register_blueprint(auth_bp)
         from ouraapp.calendar import bp as cal_bp
@@ -29,7 +31,7 @@ def create_app(config_class=Config):
         app.register_blueprint(api_bp)
         from ouraapp.profile import bp as profile_bp
         app.register_blueprint(profile_bp)
-        update_days_db()
+
         if os.getcwd() == '/':
             os.chdir('/srv/jwa')
         logging.basicConfig(format='%(asctime)s - %(levelname)s - %(message)s',

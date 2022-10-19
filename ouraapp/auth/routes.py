@@ -1,13 +1,14 @@
 from flask import render_template, redirect, url_for, flash, Blueprint
-from .helpers import setup_oura_data
+from .helpers import setup_oura_data, send_password_reset_email
 from datetime import date
 from ouraapp.auth.models import User
 from werkzeug.security import generate_password_hash, check_password_hash
-from .forms import LoginForm, RegistrationForm
+from .forms import LoginForm, RegistrationForm, ResetPasswordRequestForm, ResetPasswordForm
 from flask_login import login_user, login_required, logout_user, current_user
 from ouraapp.extensions import db, login_manager
 import logging
 from ouraapp.auth import bp
+from flask_mail import Message
 
 logger = logging.getLogger("ouraapp")
 
@@ -87,3 +88,35 @@ def logout():
     logout_user()
     flash("You Have Been Logged Out.")
     return redirect(url_for('auth.login'))
+
+
+@bp.route('/reset_password_request', methods=['GET', 'POST'])
+def reset_password_request():
+    if current_user.is_authenticated:
+        return redirect(url_for('dashboard.log'))
+    form = ResetPasswordRequestForm()
+    if form.validate_on_submit():
+        user = User.query.filter_by(email=form.email.data).first()
+        if user:
+            send_password_reset_email(user)
+        flash('Check your email for instructions to reset your password')
+        return redirect(url_for('auth.login'))
+    return render_template('reset_password_request.html',
+                           title='Reset Password',
+                           form=form)
+
+
+@bp.route('/reset_password/<token>', methods=['GET', 'POST'])
+def reset_password(token):
+    if current_user.is_authenticated:
+        return redirect(url_for('dashboard.log'))
+    user = User.verify_reset_password_token(token)
+    if not user:
+        return redirect(url_for('auth.login'))
+    form = ResetPasswordForm()
+    if form.validate_on_submit():
+        user.password = form.password.data
+        db.session.commit()
+        flash('Your password has been reset.')
+        return redirect(url_for('auth.login'))
+    return render_template('reset_password.html', form=form)
