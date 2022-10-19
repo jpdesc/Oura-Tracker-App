@@ -54,12 +54,13 @@
 
             <br />
 
-            {{ form.submit(class="btn btn-secondary") }}
+            {{ form.submit(class="btn btn-secondary") }} <a href="{{url_for('profile.profile', edit=0)}}" class="btn btn-info">View Profile</a>
 
 
         </form>
 
         {% else %}
+        <br><br>
         <h2>User Profile</h2>
 
         <br /><br />
