@@ -1,6 +1,7 @@
 from io import BytesIO
 from flask import render_template, redirect, url_for, request, send_file, Blueprint
 # from ouraapp.weights.helpers import get_weights_data, get_current_template
+from ouraapp.api.helpers import event_exists
 from ouraapp.weights.models import Weights
 from .models import Sleep, Log, Readiness, Workout
 from .helpers import add_event_to_db, get_date, add_tags, create_wellness_event, create_workout_event
@@ -55,7 +56,8 @@ def log(page_id):
                             user_id=user_id)
         if selected_tags or added_tags:
             add_tags(added_tags, selected_tags, wellness_info)
-        add_event_to_db(create_wellness_event(wellness_info))
+        event = event_exists('Wellness', page_id)
+        add_event_to_db(create_wellness_event(wellness_info), page_id, event)
         db.session.add(wellness_info)
         db.session.commit()
         return redirect(url_for('log', page_id=page_id))
@@ -77,6 +79,8 @@ def log(page_id):
                                soreness=soreness,
                                grade=grade,
                                workout_log=workout_log)
+        event = event_exists(type, page_id)
+        add_event_to_db(create_workout_event(workout_info), page_id, event)
         db.session.add(workout_info)
         db.session.commit()
         return redirect(url_for('log', page_id=page_id))
@@ -135,7 +139,8 @@ def edit_log(page_id):
             add_tags(added_tags, selected_tags, log)
         db.session.add(log)
         db.session.commit()
-        add_event_to_db(create_workout_event(log))
+        event = event_exists('Wellness', page_id)
+        add_event_to_db(create_wellness_event(log), page_id, event)
         return redirect(url_for('log', page_id=page_id))
 
     if workout_form.validate_on_submit():
@@ -149,7 +154,8 @@ def edit_log(page_id):
             workout.file = workout_form.file.data
         db.session.add(workout)
         db.session.commit()
-        add_event_to_db(create_workout_event(workout))
+        event = event_exists(workout.type, page_id)
+        add_event_to_db(create_workout_event(workout), page_id, event)
         return redirect(url_for('log', page_id=page_id))
     return render_template('edit_post.html',
                            wellness_form=wellness_form,
