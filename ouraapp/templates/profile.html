@@ -64,11 +64,11 @@
         <h2>User Profile</h2>
 
         <br /><br />
-        <h6>Username: {{username}}</h1>
-        <h6>Name: {{name}}</h6>
-        <h6>Email: {{email}}</h6>
-        <h6>Oura Access Token: {{oura_access_token}}</h6>
-        <h6>Join Date: {{join_date}}</h6>
+        <h6>Username:</h6> <p>{{username}}</p>
+        <h6>Name:</h6> <p>{{name}}</p>
+        <h6>Email:</h6> <p>{{email}}</p>
+        <h6>Oura Access Token:</h6> <p>{{oura_access_token}}</p>
+        <h6>Join Date:</h6> <p>{{join_date}}</p>
         <a href="{{url_for('profile.profile', edit=1)}}" class="btn btn-info">Edit Profile</a><br>
         {% endif %}
     </div>
