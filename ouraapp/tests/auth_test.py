@@ -1,6 +1,7 @@
 import pytest
-from ouraapp.models import Readiness
-from ouraapp.fetch_oura_data import setup_oura_data
+from ouraapp.dashboard.models import Readiness
+from ouraapp.auth.helpers import setup_oura_data
+# from run import app
 
 setup_oura_data()
 

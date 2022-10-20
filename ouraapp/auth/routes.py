@@ -37,6 +37,7 @@ def register():
     if registration_form.validate_on_submit():
         existing_user = User.query.filter_by(
             email=registration_form.email.data).first()
+        logger.debug(f'existing_user = {existing_user}')
         if existing_user is None:
             hashed_password = generate_password_hash(
                 registration_form.password1.data, "sha256")
@@ -54,6 +55,7 @@ def register():
             if user.oura_access_token:
                 setup_oura_data()
             return redirect(url_for('dashboard.log'))
+        logger.debug('A user with that email address exists.')
         flash('A user already exists with that email address.')
 
     return render_template('registration.html', form=registration_form)

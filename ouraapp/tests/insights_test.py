@@ -1,13 +1,12 @@
 import pytest
 
-import ouraapp.models
-import ouraapp.insights
+from ouraapp.dashboard.models import Sleep
+from ouraapp.insights.helpers import format_filters
 
 
 def test_format_filters():
     data_dict = {'sleep': ['Sleep Score', '>', 70]}
-    assert ouraapp.insights.format_filters(
-        data_dict) == ouraapp.models.Sleep.sleep_score > 70
+    assert format_filters(data_dict) == Sleep.sleep_score > 70
 
 
 #  filter_fields = {'sleep': ['']
