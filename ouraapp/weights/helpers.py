@@ -5,7 +5,6 @@ import os
 # from googleapiclient.discovery import build
 from flask_login import current_user
 from ouraapp.models import db
-from ouraapp.dashboard.helpers import get_workout_id, get_current_template
 from .models import Weights, Template, BaseWorkout, Exercise
 from ouraapp.dashboard.models import Workout
 import logging
