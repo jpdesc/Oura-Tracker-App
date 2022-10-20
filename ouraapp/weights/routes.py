@@ -1,10 +1,9 @@
 from flask import render_template, redirect, url_for, request, flash
-from .helpers import check_improvement, get_next_base_workout, clear_exercises, ensure_workout_log_exists
+from .helpers import check_improvement, get_next_base_workout, clear_exercises, ensure_workout_log_exists, get_current_template, get_workout_id, get_workout_week_num
 from .models import Weights, Template, BaseWorkout, Exercise
 from ouraapp.dashboard.models import Workout
 from flask_login import login_required, current_user
 from .forms import TemplateForm, WorkoutForm, InitWorkoutForm
-from ouraapp.dashboard.helpers import get_current_template, get_workout_id, get_workout_week_num
 import json
 from ouraapp.extensions import db
 import logging

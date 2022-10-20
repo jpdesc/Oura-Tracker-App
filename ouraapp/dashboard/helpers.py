@@ -112,42 +112,10 @@ def create_weights_event(page_id):
 #         })
 
 
-def get_current_template():
-    return Template.query.filter_by(user_id=current_user.id).order_by(
-        Template.id.desc()).first()
 
 
-def get_workout_id():
-    current_template = get_current_template()
-    print(f'current_template= {current_template}')
-    num_days = current_template.num_days
-    if current_template.weights:
-        last_workout = Weights.query.filter_by(
-            template_id=current_template.id).order_by(
-                Weights.id.desc()).first()
-        if last_workout.workout_id:
-            if int(last_workout.workout_id) + 1 <= num_days:
-                return int(last_workout.workout_id) + 1
-        else:
-            return 1
-    else:
-        return 1
 
 
-def get_workout_week_num():
-    current_template = get_current_template()
-    num_days = current_template.num_days
-    if current_template.weights:
-        last_workout = Weights.query.filter_by(
-            template_id=current_template.id).order_by(
-                Weights.id.desc()).first()
-        if last_workout.workout_id == num_days:
-            week = last_workout.workout_week + 1
-        else:
-            week = last_workout.workout_week
-    else:
-        week = 1
-    return week
 
 
 def add_event_to_db(new_event_dict, page_id, existing_event):

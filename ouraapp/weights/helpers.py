@@ -76,32 +76,39 @@ def ensure_workout_log_exists(page_id):
         db.session.commit()
 
 
-#             class Weights(db.Model):
-#     __tablename__ = 'weights'
-#     id = db.Column(db.Integer, primary_key=True)
-#     day_id = db.Column(db.Integer)
-#     exercises = db.Column(db.ARRAY(db.String))
-#     exercises_old = db.Column(db.ARRAY(db.String))
-#     set_ranges = db.Column(db.ARRAY(db.String))
-#     reps = db.Column(db.ARRAY(db.String))
-#     weight = db.Column(db.ARRAY(db.String))
-#     subbed = db.Column(db.String)
-#     workout_id = db.Column(db.Integer)
-#     workout_week = db.Column(db.Integer)
-#     template_id = db.Column(db.Integer, db.ForeignKey('template.id'))
-#     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
-#     base_id = db.Column(db.Integer, db.ForeignKey('base_workout.id'))
-#     exercises = db.relationship('Exercise', backref='weights')
+def get_workout_id():
+    current_template = get_current_template()
+    print(f'current_template= {current_template}')
+    num_days = current_template.num_days
+    if current_template.weights:
+        last_workout = Weights.query.filter_by(
+            template_id=current_template.id).order_by(
+                Weights.id.desc()).first()
+        if last_workout.workout_id:
+            if int(last_workout.workout_id) + 1 <= num_days:
+                return int(last_workout.workout_id) + 1
+        else:
+            return 1
+    else:
+        return 1
 
-# class Exercise(db.Model):
-#     __tablename__ = 'exercise'
-#     id = db.Column(db.Integer, primary_key=True)
-#     day_id = db.Column(db.Integer)
-#     exercise_name = db.Column(db.String)
-#     sets = db.Column(db.String)
-#     rep_range = db.Column(db.String)
-#     reps = db.Column(db.String)
-#     reps_improve = db.Column(db.Boolean)
-#     weight = db.Column(db.String)
-#     weight_improve = db.Column(db.Boolean)
-#     weights_id = db.Column(db.Integer, db.ForeignKey('weights.id'))
+
+def get_workout_week_num():
+    current_template = get_current_template()
+    num_days = current_template.num_days
+    if current_template.weights:
+        last_workout = Weights.query.filter_by(
+            template_id=current_template.id).order_by(
+                Weights.id.desc()).first()
+        if last_workout.workout_id == num_days:
+            week = last_workout.workout_week + 1
+        else:
+            week = last_workout.workout_week
+    else:
+        week = 1
+    return week
+
+
+def get_current_template():
+    return Template.query.filter_by(user_id=current_user.id).order_by(
+        Template.id.desc()).first()
