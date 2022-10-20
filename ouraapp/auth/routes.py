@@ -51,7 +51,8 @@ def register():
             db.session.add(user)
             db.session.commit()
             login_user(user)
-            setup_oura_data()
+            if user.oura_access_token:
+                setup_oura_data()
             return redirect(url_for('dashboard.log'))
         flash('A user already exists with that email address.')
 
