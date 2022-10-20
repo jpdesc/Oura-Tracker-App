@@ -172,7 +172,12 @@
                                 </i>
                                 {{ workout_form.specify_other.label(class="form-label")}}<br>
                                 {{ workout_form.specify_other }}<br><br>
-                                <a href={{url_for('weights.template', page_id=page_id)}}>Start New Weights Template</a><br><br>
+                                <a href={{url_for('weights.init_template', page_id=page_id)}} class="link-success">Start New Weights
+                                    Template</a><br><br>
+                                <a href={{url_for('weights.edit_weights', page_id=page_id, from_base='yes' )}} class="link-success">Start Weights
+                                    Workout (from template)</a><br><br>
+                                <a href={{url_for('weights.edit_weights', page_id=page_id, from_base='no' )}} class="link-success">Start Weights Workout
+                                    (empty)</a><br><br>
                                 {{ workout_form.soreness.label(class="form-label")}}<br>
                                 {% for subfield in workout_form.soreness %}
                                 <tr>
