@@ -58,7 +58,7 @@ def log(page_id):
         add_event_to_db(create_wellness_event(wellness_info), page_id, event)
         db.session.add(wellness_info)
         db.session.commit()
-        return redirect(url_for('log', page_id=page_id))
+        return redirect(url_for('dashboard.log', page_id=page_id))
 
     if workout_form.validate_on_submit():
         file = request.files[str(workout_form.file.name)]
@@ -81,7 +81,7 @@ def log(page_id):
         add_event_to_db(create_workout_event(workout_info), page_id, event)
         db.session.add(workout_info)
         db.session.commit()
-        return redirect(url_for('log', page_id=page_id))
+        return redirect(url_for('dashboard.log', page_id=page_id))
 
     return render_template('log.html',
                            wellness_form=wellness_form,
@@ -139,7 +139,7 @@ def edit_log(page_id):
         db.session.commit()
         event = event_exists('Wellness', page_id)
         add_event_to_db(create_wellness_event(log), page_id, event)
-        return redirect(url_for('log', page_id=page_id))
+        return redirect(url_for('dashboard.log', page_id=page_id))
 
     if workout_form.validate_on_submit():
         workout.soreness = workout_form.soreness.data
@@ -154,7 +154,7 @@ def edit_log(page_id):
         db.session.commit()
         event = event_exists(workout.type, page_id)
         add_event_to_db(create_workout_event(workout), page_id, event)
-        return redirect(url_for('log', page_id=page_id))
+        return redirect(url_for('dashboard.log', page_id=page_id))
     return render_template('edit_post.html',
                            wellness_form=wellness_form,
                            workout_form=workout_form,
