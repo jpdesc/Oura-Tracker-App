@@ -12,7 +12,9 @@ def data(page_id):
     print('data')
     query = Weights.query.filter_by(user_id=current_user.id,
                                     day_id=page_id).first()
-
+    if not event_exists('Weights', page_id):
+        event = create_weights_event(page_id)
+        add_event_to_db(event, page_id, None)
     return {
         'data': [exercise.to_dict() for exercise in query.exercise_objs],
     }
@@ -30,9 +32,7 @@ def update(page_id):
             setattr(exercise, field, data[field])
             db.session.add(exercise)
             db.session.commit()
-        if not event_exists('Weights', page_id):
-            event = create_weights_event(page_id)
-            add_event_to_db(event, page_id, None)
+
     return '', 204
 
 
