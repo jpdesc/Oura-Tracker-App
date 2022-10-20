@@ -52,7 +52,7 @@ def add_tags(added_tags, selected_tags, db_obj):
 def event_exists(title, day_id):
     return Events.query.filter_by(day_id=day_id,
                                   title=title,
-                                  user_id=current_user.id)
+                                  user_id=current_user.id).first()
 
 
 def create_wellness_event(submitted_log):
