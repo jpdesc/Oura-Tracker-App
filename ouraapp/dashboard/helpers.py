@@ -49,6 +49,12 @@ def add_tags(added_tags, selected_tags, db_obj):
         db_obj.tags.append(tag_obj)
 
 
+def event_exists(title, day_id):
+    return Events.query.filter_by(day_id=day_id,
+                                  title=title,
+                                  user_id=current_user.id)
+
+
 def create_wellness_event(submitted_log):
     return {
         'title': 'Wellness',
@@ -64,6 +70,16 @@ def create_workout_event(submitted_log):
         'score': submitted_log.grade,
         'date': str_fmt_date(submitted_log.date),
         'id': submitted_log.id
+    }
+
+
+def create_weights_event(page_id):
+    day = Day.query.filter_by(day_id=page_id)
+    return {
+        'title': 'Weights',
+        'score': None,
+        'date': str_fmt_date(day.date),
+        'id': page_id
     }
 
 

@@ -1,8 +1,6 @@
 from io import BytesIO
 from flask import render_template, redirect, url_for, request, send_file, Blueprint
 # from ouraapp.weights.helpers import get_weights_data, get_current_template
-from ouraapp.api.helpers import event_exists
-from ouraapp.weights.models import Weights
 from .models import Sleep, Log, Readiness, Workout
 from .helpers import add_event_to_db, get_date, add_tags, create_wellness_event, create_workout_event
 from ouraapp.helpers import get_page_id

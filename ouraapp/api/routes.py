@@ -1,8 +1,7 @@
 import re
 from ouraapp.api import bp
-from flask import request, abort, redirect, url_for, render_template, flash
-from .helpers import event_exists, create_weights_event
-from ouraapp.dashboard.helpers import add_event_to_db
+from flask import request, abort
+from ouraapp.dashboard.helpers import add_event_to_db, event_exists, create_weights_event
 from ouraapp.weights.models import Weights, Exercise
 from ouraapp.extensions import db
 from flask_login import current_user
@@ -33,7 +32,7 @@ def update(page_id):
             db.session.commit()
         if not event_exists('Weights', page_id):
             event = create_weights_event(page_id)
-            add_event_to_db(event, page_id)
+            add_event_to_db(event, page_id, None)
     return '', 204
 
 
