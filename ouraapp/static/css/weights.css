@@ -1,4 +1,7 @@
-
+.flex-container {
+    display: flex;
+    flex-wrap: nowrap;
+}
 .heading {
     text-align: center;
 }
@@ -22,7 +25,6 @@
 .table-block {
     display: inline-block;
     padding: 10px;
-    overflow-inline;
 }
 
 .button-left {

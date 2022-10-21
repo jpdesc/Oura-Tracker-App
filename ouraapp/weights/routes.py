@@ -59,7 +59,8 @@ def weights(page_id):
 
 
 #TODO: When hitting submit workout, create a log entry for the workout.
-@bp.route('/edit_weights/from_base:<from_base>/<page_id>')
+@bp.route('/edit_weights/from_base:<from_base>/<page_id>',
+          methods=['GET', 'POST'])
 @login_required
 def edit_weights(page_id, from_base):
     # logger.debug(f'page_id = {page_id}')
