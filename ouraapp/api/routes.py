@@ -1,13 +1,15 @@
 import re
 from ouraapp.api import bp
-from flask import request, abort
+from flask import request, abort, redirect, url_for
 from ouraapp.dashboard.helpers import add_event_to_db, event_exists, create_weights_event
 from ouraapp.weights.models import Weights, Exercise
+from ouraapp.dashboard.models import Workout
 from ouraapp.extensions import db
 from flask_login import current_user
 import logging
 
 logger = logging.getLogger("ouraapp")
+
 
 @bp.route('/api/data/<page_id>')
 def data(page_id):
@@ -61,3 +63,15 @@ def remove_row(page_id):
         db.session.commit()
 
     return '', 204
+
+
+@bp.route('/api/process/<page_id>', methods=["POST"])
+def process(page_id):
+    workout = Workout.query.filter_by(day_id=page_id).first()
+    workout.soreness = request.form['soreness']
+    workout.grade = request.form['grade']
+    logger.debug(workout.soreness)
+    logger.debug(workout.grade)
+    db.session.add(workout)
+    db.session.commit()
+    return redirect(url_for('weights.weights', page_id=page_id))

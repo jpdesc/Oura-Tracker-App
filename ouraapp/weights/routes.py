@@ -116,12 +116,6 @@ def edit_weights(page_id, from_base):
 
     workout = ensure_workout_log_exists(page_id)
     form = WeightsForm(soreness=workout.soreness, grade=workout.grade)
-    if form.validate_on_submit():
-        workout.soreness = form.soreness.data
-        workout.grade = form.grade.data
-        db.session.add(workout)
-        db.session.commit()
-        return redirect(url_for('weights.weights', page_id=page_id))
 
     return render_template('edit_workout.html',
                            form=form,

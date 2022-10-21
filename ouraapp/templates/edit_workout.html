@@ -20,7 +20,7 @@
 <span class= "flex-container">
 
 
-<form method="POST" enctype="multipart/form-data">
+<form id="form" method="POST" enctype="multipart/form-data">
 
 {% if from_base=='yes' %}
 <span class="heading">
@@ -41,13 +41,12 @@
         <span id="removeRow"> <button name="removeRow" class="btn btn-secondary">Remove Row</button></span>
     </span>
 
-    <span class="button-right">
+    <span id="submit" class="button-right">
         {{ form.submit2(class="btn btn-dark") }}
-    </span>
 </span>
 </span>
-
-<span class="weights-form" inline="true">
+</span>
+<span class="weights-form">
 
     <div class="form-right">
     {{ form.soreness.label(class="form-label" )}}<br>
@@ -72,11 +71,11 @@
 
 
 </span>
-
-</span>
 </form>
 </span>
-</span>
+
+
+
 
 
 <script src="https://unpkg.com/gridjs/dist/gridjs.umd.js"></script>
@@ -84,6 +83,7 @@
     const tableDiv = document.getElementById('table');
     const addRow = document.getElementById('addRow');
     const removeRow = document.getElementById('removeRow');
+    const submit = document.getElementById('submit')
     const updateUrl = (prev, query) => {
         return prev + (prev.indexOf('?') >= 0 ? '&' : '?') + new URLSearchParams(query).toString();
     };
@@ -158,16 +158,38 @@
             async: false,
             url: '/api/add_row/{{page_id}}',
         }).then(grid.forceRender())
-    }
-    )
+    });
 
     removeRow.addEventListener('click', () => {
         $.ajax({
             async: false,
             url: '/api/remove_row/{{page_id}}',
         }).then(grid.forceRender())
-}
-    );
+    });
+
+     submit.addEventListener('click', () => {
+        console.log('submit clicked')
+        var xhr = new XMLHttpRequest();
+        var data = $('form').serialize();
+        console.log(data)
+        event.preventDefault();
+            $.ajax({
+                async: false,
+                data: $('form').serialize(),
+                type: 'POST',
+                url: '/api/process/{{page_id}}',
+                xhr: function () {
+                    return xhr;
+                }
+            }).done (function (response) {
+                console.log(response)
+                document.write(response)
+                window.history.pushState(undefined, '', xhr.responseURL)
+            })
+        });
+
+
+
 </script>
 </body>
 {% endblock %}
