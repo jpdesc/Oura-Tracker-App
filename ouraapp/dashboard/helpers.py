@@ -74,7 +74,7 @@ def create_workout_event(submitted_log):
 
 
 def create_weights_event(page_id):
-    day = Day.query.filter_by(day_id=page_id).first()
+    day = Day.query.filter_by(id=page_id).first()
     return {
         'title': 'Weights',
         'score': None,
@@ -114,11 +114,15 @@ def create_weights_event(page_id):
 
 def add_event_to_db(new_event_dict, page_id, existing_event):
     title = new_event_dict['title']
+    logger.debug(f'title={title}')
     json_event = json.dumps(new_event_dict)
+    logger.debug(f'json_event={json_event}')
     if existing_event:
         existing_event.event = json_event
         db.session.add(existing_event)
+        logger.debug('editing existing event.')
     else:
+        logger.debug('creating new event.')
         event = Events(event=json_event,
                        day_id=page_id,
                        title=title,

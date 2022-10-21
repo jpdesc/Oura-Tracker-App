@@ -73,9 +73,11 @@ def edit_weights(page_id, from_base):
                               template_id=get_current_template().id,
                               workout_id=get_workout_id(),
                               workout_week=get_workout_week_num())
+            logger.debug(
+                f'workout_week = {weights.workout_week}, workout_id={weights.workout_id}, template_id={weights.template_id}'
+            )
         else:
             weights = Weights(day_id=page_id, user_id=current_user.id)
-
         db.session.add(weights)
         db.session.commit()
     # logger.debug(f'day_id = {weights.day_id}')
@@ -84,9 +86,12 @@ def edit_weights(page_id, from_base):
 
     # for exercise in weights.exercise_objs:
     #     print(exercise.exercise_name)
+    logger.debug(
+        f'workout_week = {weights.workout_week}, workout_id={weights.workout_id}, template_id={weights.template_id}'
+    )
     if from_base == 'yes' and not weights.exercise_objs:
-        base = get_next_base_workout()
-        # logger.debug(f'base = {base}')
+        base = get_next_base_workout(weights.workout_id, weights.template_id)
+        logger.debug(f'base = {base}')
         try:
             workout_params = json.loads(base.workout_params)
         except AttributeError:

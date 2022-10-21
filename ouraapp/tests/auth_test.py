@@ -3,6 +3,7 @@ from ouraapp.dashboard.models import Readiness
 from ouraapp.auth.helpers import setup_oura_data
 # from run import app
 
+#TODO: Mock testing.
 setup_oura_data()
 
 

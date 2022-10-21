@@ -5,14 +5,17 @@ from ouraapp.dashboard.helpers import add_event_to_db, event_exists, create_weig
 from ouraapp.weights.models import Weights, Exercise
 from ouraapp.extensions import db
 from flask_login import current_user
+import logging
 
+logger = logging.getLogger("ouraapp")
 
 @bp.route('/api/data/<page_id>')
 def data(page_id):
-    print('data')
+
     query = Weights.query.filter_by(user_id=current_user.id,
                                     day_id=page_id).first()
     if not event_exists('Weights', page_id):
+        logger.debug('event does not exist. Creating workout event.')
         event = create_weights_event(page_id)
         add_event_to_db(event, page_id, None)
     return {
@@ -22,7 +25,7 @@ def data(page_id):
 
 @bp.route('/api/data/<page_id>', methods=['POST'])
 def update(page_id):
-    print('update')
+
     data = request.get_json()
     if 'id' not in data:
         abort(400)
