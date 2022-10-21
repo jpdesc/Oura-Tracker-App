@@ -67,11 +67,12 @@ def ensure_workout_log_exists(page_id):
     workout = Workout.query.filter_by(day_id=page_id,
                                       user_id=current_user.id).first()
     if not workout:
-        new_workout = Workout(user_id=current_user.id,
-                              day_id=page_id,
-                              type="Weights")
-        db.session.add(new_workout)
+        workout = Workout(user_id=current_user.id,
+                          day_id=page_id,
+                          type="Weights")
+        db.session.add(workout)
         db.session.commit()
+    return workout
 
 
 def get_workout_id():

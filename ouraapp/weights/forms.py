@@ -1,6 +1,7 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, SubmitField, IntegerField, FieldList, FormField, BooleanField
+from wtforms import StringField, SubmitField, IntegerField, FieldList, FormField, BooleanField, RadioField, TextAreaField
 from wtforms.validators import Optional, InputRequired, NumberRange
+from wtforms.widgets import TextArea
 
 
 class TemplateForm(FlaskForm):
@@ -65,3 +66,10 @@ class InitWorkoutForm(FlaskForm):
                            max_entries=5,
                            validators=[Optional()])
     submit = SubmitField("Submit")
+
+
+class WeightsForm(FlaskForm):
+    soreness = RadioField('Soreness:', choices=['1', '2', '3', '4', '5'])
+    grade = RadioField('Workout Grade:', choices=['1', '2', '3', '4', '5'])
+    notes = TextAreaField('Workout Notes:')
+    submit2 = SubmitField("Submit Workout")

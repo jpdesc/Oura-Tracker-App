@@ -111,9 +111,9 @@ h2 {
     justify-content: flex-end;
  }
 
-.workout-links{
+/* .workout-links{
     display: flex;
-}
+} */
 
  .right-link {
      justify-content: start;

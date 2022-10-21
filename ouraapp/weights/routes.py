@@ -3,7 +3,7 @@ from .helpers import check_improvement, get_next_base_workout, clear_exercises, 
 from .models import Weights, Template, BaseWorkout, Exercise
 from ouraapp.dashboard.models import Workout
 from flask_login import login_required, current_user
-from .forms import TemplateForm, WorkoutForm, InitWorkoutForm
+from .forms import TemplateForm, WorkoutForm, InitWorkoutForm, WeightsForm
 import json
 from ouraapp.extensions import db
 import logging
@@ -65,6 +65,7 @@ def edit_weights(page_id, from_base):
     # logger.debug(f'page_id = {page_id}')
     weights = Weights.query.filter_by(user_id=current_user.id,
                                       day_id=page_id).first()
+
     # logger.debug(f'weights_obj = {weights}')
     if not weights:
         if from_base:
@@ -80,6 +81,7 @@ def edit_weights(page_id, from_base):
             weights = Weights(day_id=page_id, user_id=current_user.id)
         db.session.add(weights)
         db.session.commit()
+
     # logger.debug(f'day_id = {weights.day_id}')
     # logger.debug(f'weights_id = {weights.id}')
     # logger.debug(f'page_id = {page_id}')
@@ -111,9 +113,16 @@ def edit_weights(page_id, from_base):
     if from_base == 'no':
         clear_exercises(page_id)
 
-    ensure_workout_log_exists(page_id)
+    workout = ensure_workout_log_exists(page_id)
+    form = WeightsForm(soreness=workout.soreness, grade=workout.grade)
+    if form.validate_on_submit():
+        workout.soreness = form.soreness.data
+        workout.grade = form.grade.data
+        db.session.add(workout)
+        db.session.commit()
 
     return render_template('edit_workout.html',
+                           form=form,
                            page_id=page_id,
                            from_base=from_base,
                            weights=weights)
