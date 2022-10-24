@@ -73,7 +73,7 @@ def create_workout_event(submitted_log):
     }
 
 
-def create_weights_event(page_id):
+def create_weights_event(page_id, score):
     day = Day.query.filter_by(id=page_id).first()
     return {
         'title': 'Weights',

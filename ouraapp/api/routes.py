@@ -16,10 +16,7 @@ def data(page_id):
 
     query = Weights.query.filter_by(user_id=current_user.id,
                                     day_id=page_id).first()
-    if not event_exists('Weights', page_id):
-        logger.debug('event does not exist. Creating workout event.')
-        event = create_weights_event(page_id)
-        add_event_to_db(event, page_id, None)
+
     return {
         'data': [exercise.to_dict() for exercise in query.exercise_objs],
     }
@@ -65,13 +62,18 @@ def remove_row(page_id):
     return '', 204
 
 
+#TODO: Move to weights module.
 @bp.route('/api/process/<page_id>', methods=["POST"])
 def process(page_id):
     workout = Workout.query.filter_by(day_id=page_id).first()
     workout.soreness = request.form['soreness']
     workout.grade = request.form['grade']
-    logger.debug(workout.soreness)
-    logger.debug(workout.grade)
+    # logger.debug(workout.soreness)
+    # logger.debug(workout.grade)
+    if not event_exists('Weights', page_id):
+        logger.debug('event does not exist. Creating workout event.')
+        event = create_weights_event(page_id, workout.grade)
+        add_event_to_db(event, page_id, None)
     db.session.add(workout)
     db.session.commit()
     return redirect(url_for('weights.weights', page_id=page_id))
