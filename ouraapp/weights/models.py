@@ -36,7 +36,7 @@ class Exercise(db.Model):
             'id': self.id,
             'exercise_name': self.exercise_name,
             'sets': self.sets,
-            'rep_range': self.sets,
+            'rep_range': self.rep_range,
             'reps': self.reps,
             'weight': self.weight
         }
