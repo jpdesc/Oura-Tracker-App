@@ -77,7 +77,7 @@ def ensure_workout_log_exists(page_id):
 
 def get_workout_id():
     current_template = get_current_template()
-    print(f'current_template= {current_template}')
+    logger.debug(f'current_template= {current_template}')
     num_days = current_template.num_days
     if current_template.weights:
         last_workout = Weights.query.filter_by(
