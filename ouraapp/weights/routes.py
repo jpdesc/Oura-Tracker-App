@@ -21,6 +21,7 @@ logger = logging.getLogger("ouraapp")
 def weights(page_id):
     this_week = Weights.query.filter_by(day_id=page_id,
                                         user_id=current_user.id).first()
+
     # logger.debug(f'this_week= {this_week}')
     if this_week:
         this_week_excs = Exercise.query.filter(
@@ -92,7 +93,12 @@ def edit_weights(page_id, from_base):
     logger.debug(
         f'workout_week = {weights.workout_week}, workout_id={weights.workout_id}, template_id={weights.template_id}'
     )
+
     if from_base == 'yes' and not weights.exercise_objs:
+        if not weights.template_id:
+            weights.template_id = get_current_template().id
+            db.session.add(weights)
+            db.session.commit()
         base = get_next_base_workout(weights.workout_id, weights.template_id)
         logger.debug(f'base = {base}')
         try:
