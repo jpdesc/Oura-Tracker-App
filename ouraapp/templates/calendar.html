@@ -30,46 +30,46 @@ import interactionPlugin from '@fullcalendar/interaction';
 
     let calendar = new FullCalendar.Calendar(calendarEl, {
       events: [
-      {% for event in events %}
+      {% for event_obj in events %}
         {
-      {% if event.subclass == 'Oura' %}
+      {% if event_obj.subclass == 'Oura' %}
         backgroundColor: sleep_color,
         borderColor: sleep_color,
-        title: ' {{ event['title'] }}' + ' {{ event['score'] }}',
-      {% if event.title == 'Sleep' %}
+        title: ' {{ event_obj.title }}' + ' {{ event_obj.score|round|int }}',
+      {% if event_obj.title == 'Sleep' %}
         icon: "bed",
-        {% elif event.title == 'Readiness' %}
+        {% elif event_obj.title == 'Readiness' %}
         icon: "bolt",
         {% endif %}
 
       {% else %}
-       {% if event.title == 'Weights' %}
+       {% if event_obj.title == 'Weights' %}
             icon: "dumbbell",
-        {% elif event.title == 'Wellness' %}
+        {% elif event_obj.title == 'Wellness' %}
             icon: "spa",
-        {% elif event.title == 'Swim' %}
+        {% elif event_obj.title == 'Swim' %}
             icon: "person-swimming",
-        {% elif event.title == 'Hike' %}
+        {% elif event_obj.title == 'Hike' %}
             icon: "person-hiking",
         {% endif %}
-      title : ' {{ event['title']}}' + ' {{ event['score'] }}',
+      title : ' {{ event_obj.title }}' + ' {{ event_obj.score }}',
       {% endif %}
-      id: '{{ event['id'] }}',
-      start : '{{ event['date'] }}',
-      url: '{{ url_for('dashboard.log', page_id = event['id']) }}',
+      id: '{{ event_obj.day_id }}',
+      start : '{{ event_obj.date }}',
+      url: '{{ url_for('dashboard.log', page_id = event_obj.day_id) }}',
 
 
 
-      {% if event.title[:3] == 'Wel' %}
+      {% if event_obj.title[:3] == 'Wel' %}
       backgroundColor: journal_color,
       borderColor: journal_color,
-      {% elif event.title[:3] == 'Wei' %}
+      {% elif event_obj.title[:3] == 'Wei' %}
       backgroundColor: weights_color,
       borderColor: weights_color,
-      {% elif event.title[:2] == 'Sw' %}
+      {% elif event_obj.title[:2] == 'Sw' %}
       backgroundColor: swim_color,
       borderColor: swim_color,
-      {% elif event.title == 'Hike' %}
+      {% elif event_obj.title == 'Hike' %}
       backgroundColor: hike_color,
         borderColor: hike_color,
       {% endif %}

@@ -3,6 +3,7 @@ from datetime import date
 from flask_login import current_user
 from ouraapp.format import str_fmt_date
 from ouraapp.models import Day
+from ouraapp.helpers import get_date
 from .models import Tag
 from ouraapp.calendar.models import Events
 from ouraapp.weights.models import Weights, Exercise
@@ -56,33 +57,45 @@ def event_exists(title, day_id):
                                   user_id=current_user.id).first()
 
 
-def create_wellness_event(submitted_log):
-    return {
-        'title': 'Wellness',
-        'score': get_wellness_score(submitted_log),
-        'date': str_fmt_date(submitted_log.date),
-        'id': submitted_log.id
-    }
+def create_event(submitted_log):
+    event = Event.query.filter_by(user_id=current_user.id,
+                                  day_id=page_id).first()
+    if not event:
+        event = Event()
+    event.title = submitted_log.title
+    if submitted_log.title == 'Wellness':
+        event.score = get_wellness_score(submitted_log)
+    elif submitted_log.title == 'Sleep':
+        event.score = submitted_log.sleep_score
+        event.subclass = 'Oura'
+    elif submitted_log.title == 'Readiness':
+        event.score = submitted_log.readiness_score
+        event.subclass = 'Oura'
+    else:
+        event.score = submitted_log.grade
+    event.day_id = submitted_log.day_id
+    event.date = get_date(submitted_log.day_id)
+    event.user_id = current_user.id
+    db.session.add(event)
+    db.session.commit()
 
 
-def create_workout_event(submitted_log):
-    return {
-        'title': submitted_log.type,
-        'score': submitted_log.grade,
-        'date': str_fmt_date(submitted_log.date),
-        'id': submitted_log.id
-    }
+# def create_workout_event(submitted_log):
+#     return {
+#         'title': submitted_log.type,
+#         'score': submitted_log.grade,
+#         'date': str_fmt_date(submitted_log.date),
+#         'id': submitted_log.id
+#     }
 
-
-def create_weights_event(page_id, score):
-    day = Day.query.filter_by(id=page_id).first()
-    return {
-        'title': 'Weights',
-        'score': score,
-        'date': str_fmt_date(day.date),
-        'id': page_id
-    }
-
+# def create_weights_event(page_id, score):
+#     day = Day.query.filter_by(id=page_id).first()
+#     return {
+#         'title': 'Weights',
+#         'score': score,
+#         'date': str_fmt_date(day.date),
+#         'id': page_id
+#     }
 
 # def create_all_cal_events():
 #     wellness = Log.query.order_by(Log.id).all()
@@ -112,36 +125,29 @@ def create_weights_event(page_id, score):
 #             'subclass': 'Oura'
 #         })
 
+# def add_event_to_db(title, page_id, existing_event):
+#     if existing_event:
+#         existing_event.event = json_event
+#         db.session.add(existing_event)
+#         logger.debug('editing existing event.')
+#     else:
+#         logger.debug('creating new event.')
+#         event = Events(event=json_event,
+#                        day_id=page_id,
+#                        title=title,
+#                        user_id=current_user.id)
+#         db.session.add(event)
+#     db.session.commit()
 
-def add_event_to_db(new_event_dict, page_id, existing_event):
-    title = new_event_dict['title']
-    logger.debug(f'title={title}')
-    json_event = json.dumps(new_event_dict)
-    logger.debug(f'json_event={json_event}')
-    if existing_event:
-        existing_event.event = json_event
-        db.session.add(existing_event)
-        logger.debug('editing existing event.')
-    else:
-        logger.debug('creating new event.')
-        event = Events(event=json_event,
-                       day_id=page_id,
-                       title=title,
-                       user_id=current_user.id)
-        db.session.add(event)
-    db.session.commit()
-
-
-def add_title_and_day():
-    all_events = Events.query.order_by(Events.id).all()
-    for event in all_events:
-        if event.event:
-            dict = json.loads(event.event)
-            event.title = dict['title']
-            event.day_id = int(dict['id'])
-            db.session.add(event)
-            db.session.commit()
-
+# def add_title_and_day():
+#     all_events = Events.query.order_by(Events.id).all()
+#     for event in all_events:
+#         if event.event:
+#             dict = json.loads(event.event)
+#             event.title = dict['title']
+#             event.day_id = int(dict['id'])
+#             db.session.add(event)
+#             db.session.commit()
 
 # def remove_extra_events():
 #     all_events = Events.query.order_by(Events.day_id).all()

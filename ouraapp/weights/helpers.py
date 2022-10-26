@@ -7,6 +7,7 @@ from flask_login import current_user
 from ouraapp.models import db
 from .models import Weights, Template, BaseWorkout, Exercise
 from ouraapp.dashboard.models import Workout
+from ouraapp.helpers import get_date
 import logging
 
 logger = logging.getLogger("ouraapp")
@@ -69,6 +70,7 @@ def ensure_workout_log_exists(page_id):
     if not workout:
         workout = Workout(user_id=current_user.id,
                           day_id=page_id,
+                          date=get_date(page_id),
                           type="Weights")
         db.session.add(workout)
         db.session.commit()

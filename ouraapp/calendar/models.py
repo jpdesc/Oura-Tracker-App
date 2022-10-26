@@ -9,4 +9,5 @@ class Events(db.Model):
     title = db.Column(db.String)
     score = db.Column(db.Float)
     event = db.Column(db.JSON)
+    subclass = db.Column(db.String)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
