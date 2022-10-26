@@ -34,5 +34,5 @@ def get_page_id():
 
 
 def get_date(page_id):
-    day = Day.query.filter_by(day_id=page_id).first()
+    day = Day.query.filter_by(id=page_id).first()
     return day.date
