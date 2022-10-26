@@ -60,13 +60,13 @@ import interactionPlugin from '@fullcalendar/interaction';
 
 
 
-      {% if event_obj.title[:3] == 'Wel' %}
+      {% if event_obj.title == 'Wellness' %}
       backgroundColor: journal_color,
       borderColor: journal_color,
-      {% elif event_obj.title[:3] == 'Wei' %}
+      {% elif event_obj.title == 'Weights' %}
       backgroundColor: weights_color,
       borderColor: weights_color,
-      {% elif event_obj.title[:2] == 'Sw' %}
+      {% elif event_obj.title == 'Swim' %}
       backgroundColor: swim_color,
       borderColor: swim_color,
       {% elif event_obj.title == 'Hike' %}
