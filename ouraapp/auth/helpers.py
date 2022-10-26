@@ -105,7 +105,7 @@ def add_sleep_to_db(json_dict):
             # logger.debug(
             #     f'existing sleep obj in database: {database.Sleep.query.filter_by(id=id, user_id=current_user.id).first()}'
             # )
-            create_event(prev_night_data)
+            create_event(prev_night_data, 'Sleep')
             db.session.add(prev_night_data)
     db.session.commit()
 
@@ -127,13 +127,7 @@ def add_readiness_to_db(json_dict):
                 temperature=entry['score_temperature'],
                 readiness_score=entry['score'],
                 user_id=current_user.id)
-            add_event_to_db({
-                'title': 'Readiness',
-                'score': entry['score'],
-                'date': day.strftime('%Y-%m-%d'),
-                'id': db_day.id,
-                'subclass': 'Oura'
-            })
+            create_event(prev_night_data, 'Readiness')
             db.session.add(prev_night_data)
     db.session.commit()
 

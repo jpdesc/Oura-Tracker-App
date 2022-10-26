@@ -2,7 +2,7 @@ from io import BytesIO
 from flask import render_template, redirect, url_for, request, send_file
 # from ouraapp.weights.helpers import get_weights_data, get_current_template
 from .models import Sleep, Log, Readiness, Workout
-from .helpers import add_event_to_db, get_date, add_tags, create_event, event_exists, clear_workout
+from .helpers import get_date, add_tags, create_event, clear_workout
 from ouraapp.helpers import get_page_id
 from ouraapp.format import format_date
 from flask_login import login_required, current_user
@@ -54,7 +54,7 @@ def log(page_id):
                             user_id=user_id)
         if selected_tags or added_tags:
             add_tags(added_tags, selected_tags, wellness_info)
-        create_event(wellness_info)
+        create_event(wellness_info, 'Wellness')
         db.session.add(wellness_info)
         db.session.commit()
         return redirect(url_for('dashboard.log', page_id=page_id))
@@ -76,7 +76,7 @@ def log(page_id):
                                soreness=soreness,
                                grade=grade,
                                workout_log=workout_log)
-        create_event(workout_info)
+        create_event(workout_info, workout_info.type)
         db.session.add(workout_info)
         db.session.commit()
         return redirect(url_for('dashboard.log', page_id=page_id))
