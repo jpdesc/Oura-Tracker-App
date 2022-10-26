@@ -1,8 +1,8 @@
 from io import BytesIO
-from flask import render_template, redirect, url_for, request, send_file, Blueprint
+from flask import render_template, redirect, url_for, request, send_file
 # from ouraapp.weights.helpers import get_weights_data, get_current_template
 from .models import Sleep, Log, Readiness, Workout
-from .helpers import add_event_to_db, get_date, add_tags, create_wellness_event, create_workout_event, event_exists
+from .helpers import add_event_to_db, get_date, add_tags, create_wellness_event, create_workout_event, event_exists, clear_workout
 from ouraapp.helpers import get_page_id
 from ouraapp.format import format_date
 from flask_login import login_required, current_user
@@ -172,3 +172,10 @@ def download(page_id):
     return send_file(BytesIO(workout.data),
                      attachment_filename=workout.filename,
                      as_attachment=True)
+
+
+@bp.route('/delete_workout/<page_id>')
+@login_required
+def delete_workout(page_id):
+    delete_workout(page_id)
+    return redirect(url_for('dashboard.log', page_id=page_id))

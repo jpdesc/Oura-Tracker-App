@@ -5,7 +5,8 @@ from ouraapp.format import str_fmt_date
 from ouraapp.models import Day
 from .models import Tag
 from ouraapp.calendar.models import Events
-from ouraapp.weights.models import Weights, Template
+from ouraapp.weights.models import Weights, Exercise
+from ouraapp.dashboard.models import Workout
 from ouraapp import db
 import logging
 
@@ -151,3 +152,13 @@ def add_title_and_day():
 #             event.day_id = int(dict['id'])
 #             db.session.add(event)
 #             db.session.commit()
+
+
+def clear_workout(page_id):
+    weights = Weights.query.filter_by(day_id=page_id,
+                                      user_id=current_user.id).first()
+    exercise = Exercise.query.filter_by(weights_id=weights.id).delete()
+    workout = Workout.query.filter_by(day_id=page_id,
+                                      user_id=current_user.id).delete()
+    db.session.delete(weights)
+    db.session.commit()
