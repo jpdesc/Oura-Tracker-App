@@ -4,7 +4,7 @@ from datetime import date, timedelta, datetime
 import time
 from oura import OuraClient
 from dotenv import load_dotenv
-from ouraapp.calendar.helpers import create_event
+from ouraapp.dashboard.helpers import create_event
 from flask import render_template, current_app
 from flask_login import current_user
 from ouraapp.models import Day
@@ -105,7 +105,7 @@ def add_sleep_to_db(json_dict):
             # logger.debug(
             #     f'existing sleep obj in database: {database.Sleep.query.filter_by(id=id, user_id=current_user.id).first()}'
             # )
-            create_event(prev_night_data)
+            create_event(prev_night_data, 'Sleep')
             db.session.add(prev_night_data)
     db.session.commit()
 
@@ -134,7 +134,7 @@ def add_readiness_to_db(json_dict):
                 'id': db_day.id,
                 'subclass': 'Oura'
             })
-            db.session.add(prev_night_data)
+            db.session.add(prev_night_data, 'Readiness')
     db.session.commit()
 
 

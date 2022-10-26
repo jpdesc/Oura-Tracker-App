@@ -1,7 +1,7 @@
 import re
 from ouraapp.api import bp
 from flask import request, abort, redirect, url_for
-from ouraapp.dashboard.helpers import add_event_to_db, create_event
+from ouraapp.dashboard.helpers import create_event
 from ouraapp.weights.models import Weights, Exercise
 from ouraapp.dashboard.models import Workout
 from ouraapp.extensions import db
@@ -71,10 +71,7 @@ def process(page_id):
     workout.grade = request.form['grade']
     # logger.debug(workout.soreness)
     # logger.debug(workout.grade)
-    if not event_exists('Weights', page_id):
-        logger.debug('event does not exist. Creating workout event.')
-        event = create_event(workout)
-        add_event_to_db(event, page_id, None)
+    create_event(workout, 'Weights')
     db.session.add(workout)
     db.session.commit()
     return redirect(url_for('weights.weights', page_id=page_id))
