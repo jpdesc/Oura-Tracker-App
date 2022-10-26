@@ -22,3 +22,6 @@ def db_event_fix():
         event_dict = json.loads(event.event)
         event.score = event_dict['score']
         event.date = date_fmt_str(event_dict['date'])
+        db.session.add(event)
+
+    db.session.commit()
