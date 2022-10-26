@@ -22,10 +22,11 @@ def get_db_events():
 def db_event_fix():
     events = Events.query.filter_by(user_id=1).all()
     for event in events:
-        event_dict = json.loads(event.event)
-        event.score = event_dict['score']
-        event.date = date_fmt_str(event_dict['date'])
-        event.title = event_dict['title']
+        if event.event:
+            event_dict = json.loads(event.event)
+            event.score = event_dict['score']
+            event.date = date_fmt_str(event_dict['date'])
+            event.title = event_dict['title']
         if event.title == 'Readiness' or event.title == 'Sleep':
             event.subclass = 'Oura'
         db.session.add(event)
