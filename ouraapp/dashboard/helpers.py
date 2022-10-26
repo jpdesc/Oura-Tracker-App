@@ -78,7 +78,7 @@ def create_weights_event(page_id, score):
     day = Day.query.filter_by(id=page_id).first()
     return {
         'title': 'Weights',
-        'score': None,
+        'score': score,
         'date': str_fmt_date(day.date),
         'id': page_id
     }

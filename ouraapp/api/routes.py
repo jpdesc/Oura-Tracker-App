@@ -65,7 +65,8 @@ def remove_row(page_id):
 #TODO: Move to weights module.
 @bp.route('/api/process/<page_id>', methods=["POST"])
 def process(page_id):
-    workout = Workout.query.filter_by(day_id=page_id).first()
+    workout = Workout.query.filter_by(day_id=page_id,
+                                      user_id=current_user.id).first()
     workout.soreness = request.form['soreness']
     workout.grade = request.form['grade']
     # logger.debug(workout.soreness)
