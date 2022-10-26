@@ -1,5 +1,6 @@
 from flask_login import current_user
 import json
+from ouraapp.format import date_fmt_str
 from .models import Events
 
 
@@ -13,3 +14,11 @@ def get_db_events():
         event_dict = json.loads(json_event)
         events.append(event_dict)
     return events
+
+
+def db_event_fix():
+    events = Events.query.filter_by(user_id=current_user.id).all()
+    for event in events:
+        event_dict = json.loads(event.event)
+        event.score = event_dict['score']
+        event.date = date_fmt_str(event_dict['date'])
