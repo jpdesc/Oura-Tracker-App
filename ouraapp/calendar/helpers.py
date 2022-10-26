@@ -1,6 +1,7 @@
 from flask_login import current_user
 import json
 from ouraapp.format import date_fmt_str
+from ouraapp.extensions import db
 from .models import Events
 
 
