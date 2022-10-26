@@ -127,14 +127,8 @@ def add_readiness_to_db(json_dict):
                 temperature=entry['score_temperature'],
                 readiness_score=entry['score'],
                 user_id=current_user.id)
-            add_event_to_db({
-                'title': 'Readiness',
-                'score': entry['score'],
-                'date': day.strftime('%Y-%m-%d'),
-                'id': db_day.id,
-                'subclass': 'Oura'
-            })
-            db.session.add(prev_night_data, 'Readiness')
+            create_event(prev_night_data, 'Readiness')
+            db.session.add(prev_night_data)
     db.session.commit()
 
 
