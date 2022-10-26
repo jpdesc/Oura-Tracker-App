@@ -4,7 +4,7 @@ from datetime import date, timedelta, datetime
 import time
 from oura import OuraClient
 from dotenv import load_dotenv
-from ouraapp.calendar.helpers import create_event
+from ouraapp.dashboard.helpers import create_event
 from flask import render_template, current_app
 from flask_login import current_user
 from ouraapp.models import Day
