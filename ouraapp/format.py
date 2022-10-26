@@ -1,4 +1,4 @@
-from datetime import date
+import datetime
 
 
 def format_date(date):
@@ -11,4 +11,4 @@ def str_fmt_date(date_obj):
 
 
 def date_fmt_str(string):
-    return date.strptime(string, '%Y-%m-%d')
+    return datetime.datetime.strptime(string, '%Y-%m-%d').date()

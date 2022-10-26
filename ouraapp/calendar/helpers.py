@@ -18,11 +18,10 @@ def get_db_events():
 
 
 def db_event_fix():
-    events = Events.query.filter_by(user_id=current_user.id).all()
+    events = Events.query.filter_by(user_id=1).all()
     for event in events:
         event_dict = json.loads(event.event)
         event.score = event_dict['score']
         event.date = date_fmt_str(event_dict['date'])
         db.session.add(event)
-
     db.session.commit()
