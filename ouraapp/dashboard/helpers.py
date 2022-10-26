@@ -160,7 +160,7 @@ def clear_workout(page_id):
     exercise = Exercise.query.filter_by(weights_id=weights.id).delete()
     workout = Workout.query.filter_by(day_id=page_id,
                                       user_id=current_user.id).delete()
-    event = Event.query.filter_by(day_id=page_id,
-                                  user_id=current_user.id).delete()
+    event = Events.query.filter_by(day_id=page_id,
+                                   user_id=current_user.id).delete()
     db.session.delete(weights)
     db.session.commit()
