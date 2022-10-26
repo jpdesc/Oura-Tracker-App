@@ -31,3 +31,8 @@ def get_page_id():
     today = date.today()
     db_obj = Day.query.filter_by(date=today).first()
     return db_obj.id
+
+
+def get_date(page_id):
+    day = Day.query.filter_by(day_id=page_id).first()
+    return day.date

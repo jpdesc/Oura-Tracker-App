@@ -1,7 +1,7 @@
 import re
 from ouraapp.api import bp
 from flask import request, abort, redirect, url_for
-from ouraapp.dashboard.helpers import add_event_to_db, event_exists, create_weights_event
+from ouraapp.dashboard.helpers import add_event_to_db, create_event
 from ouraapp.weights.models import Weights, Exercise
 from ouraapp.dashboard.models import Workout
 from ouraapp.extensions import db
@@ -73,7 +73,7 @@ def process(page_id):
     # logger.debug(workout.grade)
     if not event_exists('Weights', page_id):
         logger.debug('event does not exist. Creating workout event.')
-        event = create_weights_event(page_id, workout.grade)
+        event = create_event(workout)
         add_event_to_db(event, page_id, None)
     db.session.add(workout)
     db.session.commit()
