@@ -51,24 +51,25 @@ def add_tags(added_tags, selected_tags, db_obj):
         db_obj.tags.append(tag_obj)
 
 
-def event_exists(title, day_id):
-    return Events.query.filter_by(day_id=day_id,
-                                  title=title,
-                                  user_id=current_user.id).first()
+# def event_exists(title, day_id):
+#     return Events.query.filter_by(day_id=day_id,
+#                                   title=title,
+#                                   user_id=current_user.id).first()
 
 
-def create_event(submitted_log):
-    event = Event.query.filter_by(user_id=current_user.id,
-                                  day_id=page_id).first()
+def create_event(submitted_log, title):
+    event = Events.query.filter_by(user_id=current_user.id,
+                                   day_id=submitted_log.id,
+                                   title=title).first()
     if not event:
-        event = Event()
-    event.title = submitted_log.title
-    if submitted_log.title == 'Wellness':
+        event = Events()
+    event.title = title
+    if title == 'Wellness':
         event.score = get_wellness_score(submitted_log)
-    elif submitted_log.title == 'Sleep':
+    elif title == 'Sleep':
         event.score = submitted_log.sleep_score
         event.subclass = 'Oura'
-    elif submitted_log.title == 'Readiness':
+    elif title == 'Readiness':
         event.score = submitted_log.readiness_score
         event.subclass = 'Oura'
     else:
