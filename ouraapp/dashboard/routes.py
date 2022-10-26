@@ -177,5 +177,5 @@ def download(page_id):
 @bp.route('/delete_workout/<page_id>')
 @login_required
 def delete_workout(page_id):
-    delete_workout(page_id)
+    clear_workout(page_id)
     return redirect(url_for('dashboard.log', page_id=page_id))
