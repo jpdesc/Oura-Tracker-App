@@ -90,7 +90,7 @@ def get_rid_of_bonus_events():
             if event.title not in titles:
                 titles[event.title] = 1
             else:
-                event.delete()
+                db.session.delete(event)
     db.session.commit()
 
 
