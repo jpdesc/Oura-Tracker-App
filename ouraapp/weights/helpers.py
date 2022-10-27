@@ -34,11 +34,17 @@ def check_improvement(this_week, last_week_id):
             weights_id=last_week_id,
             exercise_name=exercise.exercise_name).first()
         if last_week_excs:
-            exercise.weight_improve = int(exercise.weight) > int(
-                last_week_excs.weight)
-            exercise.reps_improve = int(exercise.weight) >= int(
-                last_week_excs.weight) and int(exercise.reps) > int(
-                    last_week_excs.reps)
+            try:
+                exercise.weight_improve = int(exercise.weight) > int(
+                    last_week_excs.weight)
+            except ValueError:
+                exercise.weight_improve = False
+            try:
+                exercise.reps_improve = int(exercise.weight) >= int(
+                    last_week_excs.weight) and int(exercise.reps) > int(
+                        last_week_excs.reps)
+            except ValueError:
+                exercise.reps_improve = False
         db.session.add(exercise)
         exercise_list.append(exercise)
     db.session.commit()
