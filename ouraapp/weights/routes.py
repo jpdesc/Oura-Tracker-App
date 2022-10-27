@@ -99,6 +99,9 @@ def edit_weights(page_id, from_base):
             weights.template_id = get_current_template().id
             db.session.add(weights)
             db.session.commit()
+        logger.debug(
+            f'weights.workout_id = {weights.workout_id}, weights.template_id= {weights.template_id}'
+        )
         base = get_next_base_workout(weights.workout_id, weights.template_id)
         logger.debug(f'base = {base}')
         try:
