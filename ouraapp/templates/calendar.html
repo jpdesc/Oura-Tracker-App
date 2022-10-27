@@ -35,7 +35,7 @@ import interactionPlugin from '@fullcalendar/interaction';
       {% if event_obj.subclass == 'Oura' %}
         backgroundColor: sleep_color,
         borderColor: sleep_color,
-        title: ' {{ event_obj.title }}' + ' {{ event_obj.score|round|int }}'
+        title: ' {{ event_obj.title }}' + ' {{ event_obj.score|round|int }}',
       {% if event_obj.title == 'Sleep' %}
         icon: "bed",
         {% elif event_obj.title == 'Readiness' %}
