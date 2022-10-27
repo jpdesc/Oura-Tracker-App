@@ -89,6 +89,9 @@ def get_workout_id():
         logger.debug(f'last_workout = {last_workout}')
         if last_workout.workout_id:
             logger.debug(f'last_workout.workout_id exists')
+            logger.debug(
+                f'num_days = {num_days}, int(last_workout.workout_id) + 1 = {int(last_workout.workout_id) + 1}'
+            )
             if int(last_workout.workout_id) + 1 <= num_days:
                 logger.debug(
                     f'last_workout_id + 1: {int(last_workout.workout_id) + 1}, add another day'
