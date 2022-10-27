@@ -81,6 +81,19 @@ def create_event(submitted_log, title):
     db.session.commit()
 
 
+def get_rid_of_bonus_events():
+    all_days = Day.query.order_by(id).all()
+    for day in all_days:
+        titles = {}
+        events = Events.query.filter_by(user_id=1, day_id=day.id).all()
+        for event in events:
+            if event.title not in titles:
+                titles[event.title] = 1
+            else:
+                event.delete()
+    db.session.commit()
+
+
 # def create_workout_event(submitted_log):
 #     return {
 #         'title': submitted_log.type,
