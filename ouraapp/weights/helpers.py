@@ -100,9 +100,9 @@ def get_workout_id():
                     f'last_workout_id + 1: {int(last_workout.workout_id) + 1}, add another day'
                 )
                 return int(last_workout.workout_id) + 1
-        else:
-            logger.debug(f'id = 1')
-            return 1
+            else:
+                logger.debug(f'id = 1')
+                return 1
     else:
         logger.debug('id=1')
         return 1
