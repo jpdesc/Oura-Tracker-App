@@ -87,6 +87,8 @@ def get_workout_id():
                 Weights.id.desc()).first()
         if last_workout.workout_id:
             if int(last_workout.workout_id) + 1 <= num_days:
+                logger.debug(
+                    f'last_workout_id + 1: {int(last_workout.workout_id) + 1}')
                 return int(last_workout.workout_id) + 1
         else:
             return 1
