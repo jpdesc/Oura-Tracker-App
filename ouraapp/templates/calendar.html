@@ -51,7 +51,7 @@ import interactionPlugin from '@fullcalendar/interaction';
         {% elif event_obj.title == 'Hike' %}
             icon: "person-hiking",
         {% endif %}
-        {% if not event.title == 'Wellness' %}
+        {% if not event_obj.title == 'Wellness' %}
             title: ' {{ event_obj.title }}' + ' {{ event_obj.score|round|int }}',
         {% else %}
             title: ' {{ event_obj.title }}' + ' {{ event_obj.score }}',
