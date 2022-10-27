@@ -82,17 +82,23 @@ def get_workout_id():
     logger.debug(f'current_template= {current_template}')
     num_days = current_template.num_days
     if current_template.weights:
+        logger.debug(f'current_template.weights = True')
         last_workout = Weights.query.filter_by(
             template_id=current_template.id).order_by(
                 Weights.id.desc()).first()
+        logger.debug(f'last_workout = {last_workout}')
         if last_workout.workout_id:
+            logger.debug(f'last_workout.workout_id exists')
             if int(last_workout.workout_id) + 1 <= num_days:
                 logger.debug(
-                    f'last_workout_id + 1: {int(last_workout.workout_id) + 1}')
+                    f'last_workout_id + 1: {int(last_workout.workout_id) + 1}, add another day'
+                )
                 return int(last_workout.workout_id) + 1
         else:
+            logger.debug(f'id = 1')
             return 1
     else:
+        logger.debug('id=1')
         return 1
 
 
