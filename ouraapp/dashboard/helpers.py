@@ -82,7 +82,7 @@ def create_event(submitted_log, title):
 
 
 def get_rid_of_bonus_events():
-    all_days = Day.query.order_by(id).all()
+    all_days = Day.query.order_by(Day.id).all()
     for day in all_days:
         titles = {}
         events = Events.query.filter_by(user_id=1, day_id=day.id).all()

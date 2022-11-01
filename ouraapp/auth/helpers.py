@@ -30,6 +30,13 @@ def pull_oura_data():
     readiness_summary = oura_client.readiness_summary(start=str(start_date))
     sleep_json = json.dumps(sleep_summary)
     readiness_json = json.dumps(readiness_summary)
+    # print(f'pull_oura_data output: {[sleep_json, readiness_json]}')
+    # sleep_obj = open('sleep_data.txt', 'w')
+    # readiness_obj = open('readiness_data.txt', 'w')
+    # sleep_obj.write(sleep_json)
+    # readiness_obj.write(readiness_json)
+    # sleep_obj.close()
+    # readiness_obj.close()
     return [sleep_json, readiness_json]
 
 
