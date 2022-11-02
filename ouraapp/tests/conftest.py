@@ -5,6 +5,11 @@ import decorator
 from flask.testing import FlaskClient
 from ouraapp.auth.models import User
 from flask_login import login_user
+import os
+from ouraapp.extensions import db
+from datetime import date
+from ouraapp.helpers import update_days_db
+from ouraapp.auth.routes import setup_oura_data
 
 
 @pytest.fixture()
@@ -12,19 +17,29 @@ def app():
     app = ouraapp.create_app()
     app.config.update({
         "TESTING": True,
+        "SQLALCHEMY_DATABASE_URI": os.getenv('TEST_DATABASE_URL')
     })
-
-    # other setup can go here
-
-    yield app
-
-    # clean up / reset resources here
-
-
-@pytest.fixture()
-def app_ctx(app):
     with app.app_context():
+        db.create_all()
+        create_user()
+        update_days_db()
+        print(User.query.all())
         yield app
+        db.session.remove()
+        db.drop_all()
+
+
+def create_user(access_token=True):
+    user = User(email='server.jpdesc@gmail.com',
+                username='test',
+                password='test',
+                name='test',
+                oura_access_token=os.getenv("OURA_PERSONAL_ACCESS_TOKEN"),
+                join_date=date.today())
+    if access_token is False:
+        user.oura_access_token = None
+    db.session.add(user)
+    db.session.commit()
 
 
 @pytest.fixture()
@@ -32,7 +47,14 @@ def client(app):
     ctx = app.test_request_context()
     ctx.push()
     app.test_client_class = FlaskClient
+    print(User.query.all())
     return app.test_client()
+
+
+@pytest.fixture()
+def data_loaded_client(client):
+    setup_oura_data()
+    return client
 
 
 @pytest.fixture()
@@ -43,9 +65,9 @@ def runner(app):
 @pytest.fixture()
 def login(client):
     """Login helper function"""
-    with client:
-        user = User.query.filter_by(username='test').first()
-        login_user(user)
+    user = User.query.filter_by(username='test').first()
+    login_user(user)
+    print(user)
 
 
 # @pytest.fixture()

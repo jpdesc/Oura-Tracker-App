@@ -1,10 +1,11 @@
 import pytest
-# from ouraapp.dashboard.models import Readiness
+from ouraapp.dashboard.models import Readiness
 from ouraapp.auth.helpers import pull_oura_data
 from dotenv import load_dotenv
 import os
 from . import login_user, force_login
 from flask_login import current_user
+from ouraapp.extensions import db
 
 # from run import app
 
@@ -25,17 +26,17 @@ from flask_login import current_user
 
 # @force_login(cb=lambda s: login_user(s, 1))
 def test_pull_oura_data(login):
-    assert pull_oura_data()
+    oura_data = pull_oura_data()
+    assert oura_data
+    assert oura_data[0][0][0]  #data in sleep category
+    assert oura_data[1][0][0]  #data in readiness category
 
+    # @force_login(cb=lambda s: login_user(s, 1))
+    # def test_login(client, login):
 
-# @force_login(cb=lambda s: login_user(s, 1))
-# def test_login(client, login):
+    #     assert current_user.id == 1
 
-#     assert current_user.id == 1
-
-# def test_readiness(mocker):
-#     mocker.patch.object(ouraapp.auth.helpers, 'oura_token',
-#                         os.getenv('OURA_PERSONAL_ACCESS_TOKEN'))
-#     readiness_db_class = Readiness.query.filter_by(id=100).first()
-#     for attr in readiness_db_class:
-#         assert attr != None
+    # def test_readiness(mocker):
+    # readiness_db_class = Readiness.query.filter_by(id=100).first()
+    # for attr in readiness_db_class:
+    #     assert attr != None

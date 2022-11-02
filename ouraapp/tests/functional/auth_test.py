@@ -44,8 +44,3 @@ def test_index_page__logged_out(client):
     response = client.get('/')
     assert response.status_code == 200
     assert b"password" in response.data
-
-
-# def test_login(client):
-#     response = login(client)
-#     assert response.status_code == 200
