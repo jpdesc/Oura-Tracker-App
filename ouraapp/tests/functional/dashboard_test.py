@@ -7,7 +7,7 @@ import json
 
 @force_login(cb=lambda s: login_user(s, 1))
 def test_dashboard_response(client):
-    response = client.get('/dashboard/log')
+    response = client.get('/dashboard/log/280')
     assert response.status_code == 200
     assert b"Workout" in response.data
 

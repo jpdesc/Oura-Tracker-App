@@ -34,7 +34,6 @@ def test_index_page__logged_in(client):
     '''
     response = client.get('/')
     assert response.status_code == 302
-    assert b"password" not in response.data
 
 
 @force_login(cb=lambda s: login_user(s, None))
@@ -45,3 +44,8 @@ def test_index_page__logged_out(client):
     response = client.get('/')
     assert response.status_code == 200
     assert b"password" in response.data
+
+
+# def test_login(client):
+#     response = login(client)
+#     assert response.status_code == 200
