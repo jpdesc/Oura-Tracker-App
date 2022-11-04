@@ -1,11 +1,16 @@
 import pytest
-
+from ouraapp.insights.forms import FilterForm
 from ouraapp.dashboard.models import Sleep
 from ouraapp.insights.helpers import format_filters
 
-# def test_format_filters():
-#     data_dict = {'sleep': ['Sleep Score', '>', 70]}
-#     assert format_filters(data_dict) == Sleep.sleep_score > 70
+FORM_DATA = {}
+
+
+def test_format_filters(loaded_login):
+    form = FilterForm()
+    formatted_filter = format_filters(form=None)
+    assert formatted_filter == Sleep.sleep_score > 70
+
 
 #  filter_fields = {'sleep': ['']
 #         'sleep': [

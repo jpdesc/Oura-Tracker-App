@@ -11,7 +11,6 @@ db_fields = {
     'seconds_sleep': Sleep.seconds_sleep,
     'total_rem_sleep': Sleep.total_rem_sleep,
     'total_deep_sleep': Sleep.total_deep_sleep,
-    'food_cutoff': Sleep.food_cutoff,
     'restlessness': Sleep.restlessness,
     'sleep_efficiency': Sleep.sleep_efficiency,
     'readiness_score': Readiness.readiness_score,
@@ -37,7 +36,6 @@ avg_fields = {
     'avg_readiness_score': ('readiness_score', Readiness),
     'avg_recovery_index': ('recovery_index', Readiness),
     'avg_hrv_balance': ('hrv_balance', Readiness),
-    'avg_food_cutoff': ('food_cutoff', Sleep)
 }
 
 
@@ -164,10 +162,7 @@ def get_overall_averages():
     averages = {}
     for key, value in avg_fields.items():
         db_attr = db_fields[value[0]]
-        if key == 'avg_food_cutoff':
-            averages[key] = db.session.query(
-                func.round(func.avg(db_attr).cast(Numeric), 1)).scalar()
-        elif key == 'avg_total_sleep':
+        if key == 'avg_total_sleep':
             averages[key] = convert_seconds(
                 db.session.query(func.avg((db_attr))).scalar())
         else:
