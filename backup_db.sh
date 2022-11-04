@@ -29,6 +29,7 @@ ls -t | tail -$excess | xargs rm
 aws s3 sync . s3://ouradbbackups --delete
 fi
 
+su postgres
 
 dropdb -f loaded_test
 createdb -O postgres -T oura_db loaded_test
