@@ -11,6 +11,8 @@ cd /srv/jwa
 
 pg_dump -U postgres -C -c oura_db > "$filename"
 
+
+
 cd /var/lib/ouraapp/backups/uploads/
 
 chmod 777 *
@@ -26,3 +28,7 @@ then
 ls -t | tail -$excess | xargs rm
 aws s3 sync . s3://ouradbbackups --delete
 fi
+
+
+dropdb -f loaded_test
+createdb -O postgres -T oura_db loaded_test
