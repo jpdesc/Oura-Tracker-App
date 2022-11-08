@@ -80,7 +80,7 @@ def login(client):
     """Login helper function"""
     user = User.query.filter_by(username='test').first()
     login_user(user)
-    print(user)
+    # print(user)
 
 
 @pytest.fixture()

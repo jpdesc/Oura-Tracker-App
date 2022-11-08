@@ -182,13 +182,14 @@
                                 {% endif %}
 
                             </ul>
+                            {% if workout.workout_log %}
                             <div>
                                 <hr>
                                 <h6>Log <i class="fa-solid fa-pen-to-square"></i></h6>
                                 <hr> <i>{{workout.workout_log}}</i><br>
 
                             </div>
-
+                            {% endif %}
 
                             {% else %}
                             <form method="POST" enctype="multipart/form-data">
