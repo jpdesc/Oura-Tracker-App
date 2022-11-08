@@ -97,12 +97,16 @@
         }
     };
 
+
     const grid = new gridjs.Grid({
         columns: [
             { id: 'id', 'hidden': true },
             { id: 'exercise_name', name: 'Exercise', sort: false, 'attributes': editableCellAttributes },
-            { id: 'sets', name: 'Sets', sort: false, 'attributes': editableCellAttributes },
+            { id: 'last_week', name: 'Last Week', sort: false, 'attributes': editableCellAttributes },
+            {% if show_rep_range %}
             { id: 'rep_range', name: 'Rep Range', sort: false, 'attributes': editableCellAttributes },
+            {% endif %}
+            { id: 'sets', name: 'Sets', sort: false, 'attributes': editableCellAttributes },
             { id: 'reps', name: 'Reps', sort: false, 'attributes': editableCellAttributes },
             { id: 'weight', name: 'Weight', sort: false, 'attributes': editableCellAttributes },
         ],

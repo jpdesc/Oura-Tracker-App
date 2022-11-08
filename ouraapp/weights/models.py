@@ -18,6 +18,40 @@ class Weights(db.Model):
     exercise_objs = db.relationship('Exercise', backref='weights')
 
 
+def check_last_week_excs(exercise_name, last_week_id):
+    exercise_prev = Exercise.query.filter_by(exercise_name=exercise_name,
+                                             weights_id=last_week_id).first()
+    return exercise_prev
+
+
+def get_last_week_excs(weights_id, exercise_name):
+    this_week = Weights.query.filter_by(id=weights_id).first()
+    last_week = Weights.query.filter_by(
+        workout_week=this_week.workout_week - 1,
+        workout_id=this_week.workout_id,
+        template_id=this_week.template_id).first()
+    exercise_prev = check_last_week_excs(exercise_name, last_week.id)
+    weeks_subtract = 2
+    while not exercise_prev and last_week.workout_week > 1:
+        last_week = Weights.query.filter_by(
+            workout_week=this_week.workout_week - weeks_subtract,
+            workout_id=this_week.workout_id,
+            template_id=this_week.template_id).first()
+        exercise_prev = check_last_week_excs(exercise_name, last_week.id)
+        weeks_subtract += 1
+    print(exercise_prev)
+    return exercise_prev
+
+
+def prev_excs_data(excs_obj):
+    exercise_prev = get_last_week_excs(excs_obj.weights_id,
+                                       excs_obj.exercise_name)
+    if exercise_prev:
+        return f'{exercise_prev.reps} x {exercise_prev.weight}'
+    else:
+        return 'No previous data.'
+
+
 class Exercise(db.Model):
     __tablename__ = 'exercise'
     id = db.Column(db.Integer, primary_key=True)
@@ -38,7 +72,8 @@ class Exercise(db.Model):
             'sets': self.sets,
             'rep_range': self.rep_range,
             'reps': self.reps,
-            'weight': self.weight
+            'weight': self.weight,
+            'last_week': prev_excs_data(self)
         }
 
 

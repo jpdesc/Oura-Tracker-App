@@ -67,6 +67,7 @@ def edit_weights(page_id, from_base):
     # logger.debug(f'page_id = {page_id}')
     weights = Weights.query.filter_by(user_id=current_user.id,
                                       day_id=page_id).first()
+    show_rep_range = False
 
     # logger.debug(f'weights_obj = {weights}')
     if not weights:
@@ -109,6 +110,7 @@ def edit_weights(page_id, from_base):
         except AttributeError:
             flash('You must create a base template to load from.')
             return redirect(url_for('weights.init_template', page_id=page_id))
+
         for entry in workout_params.values():
             if entry[0]:
                 exercise = Exercise(exercise_name=entry[0],
@@ -119,6 +121,8 @@ def edit_weights(page_id, from_base):
                                     weight='',
                                     day_id=page_id)
                 db.session.add(exercise)
+            if entry[2] or entry[3]:
+                show_rep_range = True
         db.session.commit()
     if from_base == 'no':
         clear_exercises(page_id)
@@ -130,7 +134,8 @@ def edit_weights(page_id, from_base):
                            form=form,
                            page_id=page_id,
                            from_base=from_base,
-                           weights=weights)
+                           weights=weights,
+                           show_rep_range=show_rep_range)
 
 
 @bp.route('/create_template/<template_name>/<day>/<page_id>',
