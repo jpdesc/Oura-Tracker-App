@@ -115,7 +115,6 @@
 
 
                         {% else %}
-                        <div>
                             <form method="POST">
 
                                 {{ wellness_form.hidden_tag() }}
@@ -123,7 +122,9 @@
                                 {% for field in [wellness_form.focus, wellness_form.energy, wellness_form.mood,
                                 wellness_form.stress]
                                 %}
-                                {{ field.label(class="form-label") }}
+
+                                <span class="radio-label">{{ field.label(class="form-label") }}</span>
+                                <span class="radio">
                                 {% for subfield in field %}
 
 
@@ -132,7 +133,11 @@
                                     <td>{{ subfield.label(class="form-label") }}</td>
                                 </tr>
 
+
+
                                 {% endfor %}
+                                </span>
+
                                 <br>
                                 {% endfor %}<br>
                                 {{ wellness_form.journal.label(class="form-label") }} <br>
@@ -145,7 +150,7 @@
                                 <br>
                                 {{ wellness_form.submit1(class="btn btn-dark") }}
                             </form>
-                        </div>
+
                         {% endif %}
                     </div>
                 </div>
@@ -205,22 +210,26 @@
                                     Template</a><br><br>
                                 <a href={{url_for('weights.edit_weights', page_id=page_id, from_base='yes')}} class="link-success">Start Weights Workout (from template)</a><br><br>
                                 <a href={{url_for('weights.edit_weights', page_id=page_id, from_base='no')}} class="link-success">Start Weights Workout (empty)</a><br><br>
-                                {{ workout_form.soreness.label(class="form-label" )}}<br>
+                                <span class="radio-label">{{ workout_form.soreness.label(class="form-label" )}}</span>
+                                <span class="radio">
                                 {% for subfield in workout_form.soreness %}
                                 <tr>
                                     <td>{{ subfield }}</td>
                                     <td>{{ subfield.label(class="form-label") }}</td>
                                 </tr>
                                 {% endfor %}<br><br>
-                                {{ workout_form.grade.label(class="form-label") }}<br>
+                                </span>
 
+                                <span class="radio-label">{{ workout_form.grade.label(class="form-label") }}</span>
+                                <span class="radio">
                                 {% for subfield in workout_form.grade %}
                                 <tr>
                                     <td>{{ subfield }}</td>
                                     <td>{{ subfield.label(class="form-label") }}</td>
                                 </tr>
-                                {% endfor %}<br><br>
-                                {{ workout_form.file.label(class="form-label") }}<br>
+                                {% endfor %}</span><br><br>
+
+                                {{ workout_form.file.label(class="form-label") }}
                                 {{ workout_form.file }}<br><br>
 
                                 {{ workout_form.workout_log.label(class="form-label") }}<br>
