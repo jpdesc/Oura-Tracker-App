@@ -9,7 +9,7 @@ pipeline {
         }
         stage('Build') {
             steps {
-                git branch: 'main', url: 'hhttps://github.com/jpdesc/Oura-Tracker-App.git'
+                git branch: 'main', url: 'https://github.com/jpdesc/Oura-Tracker-App.git'
                 sh 'python3 run.py'
             }
         }
