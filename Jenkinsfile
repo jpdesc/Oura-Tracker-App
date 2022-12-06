@@ -2,6 +2,9 @@ pipeline {
     agent any
 
     stages {
+        stage('Setup') {
+
+        }
         stage('Checkout') {
             steps {
                 checkout([$class: 'GitSCM', branches: [[name: 'main']], extensions: [], userRemoteConfigs: [[url: 'https://github.com/jpdesc/Oura-Tracker-App.git']]])
