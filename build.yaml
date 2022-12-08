@@ -1,6 +1,6 @@
 ---
 - hosts: localhost
-- tasks:
+  tasks:
     - name: copy requirements file if not in /srv/jenkins
       ansible.builtin.copy:
         src: /Users/jackdescombes/projects/oura_proj/requirements.txt
