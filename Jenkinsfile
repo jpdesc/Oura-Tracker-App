@@ -3,17 +3,26 @@ pipeline {
 
     stages {
         stage('Setup') {
+            steps {
+                ansiblePlaybook 'build.yaml'
 
+            }
+                // Run ansible to download dependencies and activate venv
         }
         stage('Checkout') {
             steps {
-                checkout([$class: 'GitSCM', branches: [[name: 'main']], extensions: [], userRemoteConfigs: [[url: 'https://github.com/jpdesc/Oura-Tracker-App.git']]])
+                dir('/srv/jenkins') {
+                    checkout([$class: 'GitSCM', branches: [[name: 'main']], extensions: [], userRemoteConfigs: [[url: 'https://github.com/jpdesc/Oura-Tracker-App.git']]])
+                }
             }
         }
         stage('Build') {
             steps {
-                git branch: 'main', url: 'https://github.com/jpdesc/Oura-Tracker-App.git'
-                sh 'python3 run.py'
+                dir('srv/jenkins') {
+                    git branch: 'main', url: 'https://github.com/jpdesc/Oura-Tracker-App.git'
+                    sh '. /venvs/jenkins_env/bin/activate'
+                    sh 'python3 run.py'
+                }
             }
         }
         stage('Test') {
