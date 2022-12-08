@@ -1,12 +1,14 @@
 ---
-- name: copy requirements file if not in /srv/jenkins
-  ansible.builtin.copy:
-    src: /Users/jackdescombes/projects/oura_proj/requirements.txt
-    dest: /srv/jenkins/requirements.txt
-    mode: "0755"
+- hosts: all
+- tasks:
+    - name: copy requirements file if not in /srv/jenkins
+      ansible.builtin.copy:
+        src: /Users/jackdescombes/projects/oura_proj/requirements.txt
+        dest: /srv/jenkins/requirements.txt
+        mode: "0755"
 
-- name: Install specified python requirements in indicated (virtualenv)
-  pip:
-    requirements: /srv/jenkins/requirements.txt
-    virtualenv: /venvs/jenkins_env
-    virtualenv_python: python3
+    - name: Install specified python requirements in indicated (virtualenv)
+      pip:
+        requirements: /srv/jenkins/requirements.txt
+        virtualenv: /venvs/jenkins_env
+        virtualenv_python: python3
