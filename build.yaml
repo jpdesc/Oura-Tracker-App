@@ -1,5 +1,5 @@
 ---
-- hosts: all
+- hosts: localhost
 - tasks:
     - name: copy requirements file if not in /srv/jenkins
       ansible.builtin.copy:
