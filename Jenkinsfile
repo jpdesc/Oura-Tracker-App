@@ -5,6 +5,8 @@ pipeline {
         stage('Setup') {
             steps {
                 ansiblePlaybook installation: 'Ansible', playbook: 'build.yaml'
+                properties([[$class: 'EnvInjectJobProperty', info: [loadFilesFromMaster: false, propertiesFilePath: '/srv/jenkins/.env', secureGroovyScript: [classpath: [],
+                oldScript: '', sandbox: false, script: '']], keepBuildVariables: true, keepJenkinsSystemVariables: true, on: true]])
             }
                 // Run ansible to download dependencies and activate venv
         }
@@ -18,6 +20,7 @@ pipeline {
                 git branch: 'main', url: 'https://github.com/jpdesc/Oura-Tracker-App.git'
                 sh """
                 . /venvs/jenkins_env/bin/activate
+                pwd
                 python3 run.py
                 """
             }
