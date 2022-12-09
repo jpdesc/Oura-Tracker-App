@@ -19,7 +19,7 @@ pipeline {
                 sh """
                 . /venvs/jenkins_env/bin/activate
                 pwd
-                /srv/jenkins/.env > .env
+                cat /srv/jenkins/.env > .env
                 cat .env
                 python3 run.py
                 """
