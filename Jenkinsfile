@@ -5,8 +5,6 @@ pipeline {
         stage('Setup') {
             steps {
                 ansiblePlaybook installation: 'Ansible', playbook: 'build.yaml'
-                properties([[$class: 'EnvInjectJobProperty', info: [loadFilesFromMaster: false, propertiesFilePath: '/srv/jenkins/.env', secureGroovyScript: [classpath: [],
-                oldScript: '', sandbox: false, script: '']], keepBuildVariables: true, keepJenkinsSystemVariables: true, on: true]])
             }
                 // Run ansible to download dependencies and activate venv
         }
