@@ -1,12 +1,6 @@
 ---
 - hosts: localhost
   tasks:
-    - name: copy requirements file if not in /srv/jenkins
-      ansible.builtin.copy:
-        src: /Users/jackdescombes/projects/oura_proj/requirements.txt
-        dest: /srv/jenkins/requirements.txt
-        mode: "0755"
-
     - name: Install specified python requirements in indicated (virtualenv)
       pip:
         requirements: /srv/jenkins/requirements.txt
