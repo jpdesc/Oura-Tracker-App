@@ -19,6 +19,7 @@ pipeline {
                 sh """
                 . /venvs/jenkins_env/bin/activate
                 pwd
+                echo ${WORKSPACE}
                 python3 run.py
                 """
             }
