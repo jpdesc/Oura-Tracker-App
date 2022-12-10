@@ -39,16 +39,17 @@ def loaded_db_app():
 
 
 def create_user(access_token=True):
-    user = User(email='server.jpdesc@gmail.com',
-                username='test',
-                password='test',
-                name='test',
-                oura_access_token=os.getenv("OURA_PERSONAL_ACCESS_TOKEN"),
-                join_date=date.today())
-    if access_token is False:
-        user.oura_access_token = None
-    db.session.add(user)
-    db.session.commit()
+    if not User.query.filter_by(username='test').first():
+        user = User(email='server.jpdesc@gmail.com',
+                    username='test',
+                    password='test',
+                    name='test',
+                    oura_access_token=os.getenv("OURA_PERSONAL_ACCESS_TOKEN"),
+                    join_date=date.today())
+        if access_token is False:
+            user.oura_access_token = None
+            db.session.add(user)
+            db.session.commit()
 
 
 @pytest.fixture()
