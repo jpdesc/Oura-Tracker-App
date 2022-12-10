@@ -6,7 +6,7 @@ pipeline {
             steps {
                 ansiblePlaybook installation: 'Ansible', playbook: 'build.yaml'
             }
-                // Run ansible to download dependencies and activate venv
+                // Run ansible to download dependencies
         }
         stage('Checkout') {
             steps {
