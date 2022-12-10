@@ -1,6 +1,11 @@
 ---
 - hosts: localhost
   tasks:
+    - name: Manually create the initial virtualenv
+      command:
+        cmd: python3 -m venv /venvs/jenkins
+        creates: /venvs/jenkins
+
     - name: Install specified python requirements in indicated (virtualenv)
       pip:
         requirements: /srv/jenkins/requirements.txt
