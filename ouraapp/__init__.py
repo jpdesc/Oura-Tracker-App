@@ -1,8 +1,8 @@
+import os
+import logging
 from flask import Flask
 from .extensions import migrate, bootstrap, login_manager, db, mail
 from .helpers import update_days_db
-import os
-import logging
 
 
 def create_app():
