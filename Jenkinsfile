@@ -19,6 +19,7 @@ pipeline {
                 sh """
                 . /venvs/jenkins_env/bin/activate
                 cat /srv/jenkins/.env > .env
+                cat /srv/jenkins/logs/ouraapp.logs > logs/ouraapp.logs
                 flask run
                 """
             }
