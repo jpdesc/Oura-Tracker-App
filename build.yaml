@@ -4,5 +4,5 @@
     - name: Install specified python requirements in indicated (virtualenv)
       pip:
         requirements: /srv/jenkins/requirements.txt
-        virtualenv: /venvs/jenkins_env
+        virtualenv: /venvs/jenkins
         virtualenv_python: python3
