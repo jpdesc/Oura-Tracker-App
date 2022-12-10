@@ -32,7 +32,7 @@ def create_app():
         app.register_blueprint(profile_bp)
 
         if os.getcwd() == '/':
-            os.chdir('/srv')
+            os.chdir('/srv/jwa')
         logging.basicConfig(format='%(asctime)s - %(levelname)s - %(message)s',
                             filename=f'{os.getcwd()}/logs/ouraapp.log',
                             level=logging.DEBUG,
