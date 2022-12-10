@@ -17,7 +17,7 @@ pipeline {
             steps {
                 git branch: 'main', url: 'https://github.com/jpdesc/Oura-Tracker-App.git'
                 sh """
-                ./srv/jenkins/setup.sh
+                /srv/jenkins/setup.sh
                 python3 run.py
                 """
             }
@@ -25,7 +25,7 @@ pipeline {
         stage('Test') {
             steps {
                 sh """
-                ./srv/jenkins/setup.sh
+                /srv/jenkins/setup.sh
                 python3 -m pytest
                 """
             }
