@@ -19,6 +19,7 @@ pipeline {
                 sh """
                 . /venvs/jenkins_env/bin/activate
                 cat /srv/jenkins/.env > .env
+                touch ./logs/ouraapp.log
                 python3 run.py
                 """
             }
