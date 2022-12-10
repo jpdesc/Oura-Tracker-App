@@ -28,7 +28,7 @@ pipeline {
                 sh """
                 . /venvs/jenkins/bin/activate
                 cat /srv/jenkins/.env > .env
-                python3 -m pytest
+                pytest
                 """
             }
         }
