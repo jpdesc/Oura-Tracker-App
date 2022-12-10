@@ -18,6 +18,7 @@ pipeline {
                 git branch: 'main', url: 'https://github.com/jpdesc/Oura-Tracker-App.git'
                 sh """
                 . /venvs/jenkins_env/bin/activate
+                cat /srv/jenkins/.env > .env
                 flask run
                 """
             }
