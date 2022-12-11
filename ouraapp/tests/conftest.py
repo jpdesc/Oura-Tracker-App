@@ -78,7 +78,7 @@ def runner(app):
 @pytest.fixture()
 def login(client):
     """Login helper function"""
-    user = User.query.filter_by(username='test').first()
+    user = User.query.filter_by(username='test_user').first()
     print(f'user= {user}')
     login_user(user)
     # print(user)
