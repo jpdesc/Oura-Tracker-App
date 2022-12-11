@@ -40,7 +40,7 @@ def loaded_db_app():
 
 def create_user(access_token=True):
     user = User(email='server.jpdesc@gmail.com',
-                username='test',
+                username='test_user',
                 password='test',
                 name='test',
                 oura_access_token=os.getenv("OURA_PERSONAL_ACCESS_TOKEN"),
