@@ -22,7 +22,8 @@ def app():
     })
     with app.app_context():
         db.create_all()
-        create_user()
+        if not User.query.filter_by(username='test_user').first():
+            create_user()
         update_days_db()
         # print(User.query.all())
         yield app
