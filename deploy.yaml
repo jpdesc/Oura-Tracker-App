@@ -1,6 +1,5 @@
 ---
-hosts: server.jpdesc.com
-
+- hosts: server.jpdesc.com
   tasks:
     - name: Read-write git checkout from github
       ansible.builtin.git:
