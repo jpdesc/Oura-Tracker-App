@@ -32,5 +32,10 @@ pipeline {
                 """
             }
         }
+        stage('Deploy') {
+            steps {
+                ansiblePlaybook installation: 'Ansible', playbook: 'deploy.yaml'
+            }
+        }
     }
 }

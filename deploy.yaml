@@ -1,0 +1,14 @@
+---
+hosts: server.jpdesc.com
+
+  tasks:
+    - name: Read-write git checkout from github
+      ansible.builtin.git:
+        repo: https://github.com/jpdesc/Oura-Tracker-App.git
+        dest: /srv/jwa
+        force: yes
+
+    - name: Restart apache
+      ansible.builtin.service:
+        name: apache2
+        state: restarted
