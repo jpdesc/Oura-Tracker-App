@@ -42,8 +42,7 @@ def get_last_week_excs(weights_id, exercise_name):
             weeks_subtract += 1
         print(exercise_prev)
         return exercise_prev
-    else:
-        return None
+    return None
 
 
 def prev_excs_data(excs_obj):
