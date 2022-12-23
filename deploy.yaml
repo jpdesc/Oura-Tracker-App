@@ -1,5 +1,5 @@
 ---
-- hosts: root@server.jpdesc.com
+- hosts: server.jpdesc.com
   remote_user: root
   tasks:
     - name: debug command
