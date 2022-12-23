@@ -1,4 +1,3 @@
 all:
   hosts:
-    jenkins.jpdesc.com:
     root@server.jpdesc.com:
