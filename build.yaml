@@ -14,4 +14,4 @@
 
     - name: debug command
       command:
-        cmd: ansible -m ping all
+        cmd: ansible -m ping -vvvv all
