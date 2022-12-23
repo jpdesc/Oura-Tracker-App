@@ -1,6 +1,7 @@
 ---
 - hosts: server.jpdesc.com
   tasks:
+  remote_user: root
     - name: Read-write git checkout from github
       ansible.builtin.git:
         repo: https://github.com/jpdesc/Oura-Tracker-App.git
