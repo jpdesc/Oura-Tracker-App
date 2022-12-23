@@ -1,0 +1,4 @@
+all:
+  hosts:
+    jenkins.jpdesc.com:
+    server.jpdesc.com:
