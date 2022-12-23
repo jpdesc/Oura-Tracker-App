@@ -30,17 +30,20 @@ def get_last_week_excs(weights_id, exercise_name):
         workout_week=this_week.workout_week - 1,
         workout_id=this_week.workout_id,
         template_id=this_week.template_id).first()
-    exercise_prev = check_last_week_excs(exercise_name, last_week.id)
-    weeks_subtract = 2
-    while not exercise_prev and last_week.workout_week > 1:
-        last_week = Weights.query.filter_by(
-            workout_week=this_week.workout_week - weeks_subtract,
-            workout_id=this_week.workout_id,
-            template_id=this_week.template_id).first()
+    if last_week:
         exercise_prev = check_last_week_excs(exercise_name, last_week.id)
-        weeks_subtract += 1
-    print(exercise_prev)
-    return exercise_prev
+        weeks_subtract = 2
+        while not exercise_prev and last_week.workout_week > 1:
+            last_week = Weights.query.filter_by(
+                workout_week=this_week.workout_week - weeks_subtract,
+                workout_id=this_week.workout_id,
+                template_id=this_week.template_id).first()
+            exercise_prev = check_last_week_excs(exercise_name, last_week.id)
+            weeks_subtract += 1
+        print(exercise_prev)
+        return exercise_prev
+    else:
+        return None
 
 
 def prev_excs_data(excs_obj):
