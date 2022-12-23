@@ -2,10 +2,6 @@
 - hosts: server.jpdesc.com
   remote_user: root
   tasks:
-    - name: debug command
-      command:
-        cmd: ansible -m ping all
-
     - name: Read-write git checkout from github
       ansible.builtin.git:
         repo: https://github.com/jpdesc/Oura-Tracker-App.git

@@ -12,6 +12,6 @@
         virtualenv: /venvs/jenkins
         virtualenv_python: python3
 
-    - name: debug command
-      command:
-        cmd: ansible -m ping -vvv all
+    # - name: debug command
+    #   command:
+    #     cmd: ansible -m ping -vvv all
