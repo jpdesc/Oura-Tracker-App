@@ -54,6 +54,9 @@ def prev_excs_data(excs_obj):
         return 'No previous data.'
 
 
+#
+
+
 class Exercise(db.Model):
     __tablename__ = 'exercise'
     id = db.Column(db.Integer, primary_key=True)
