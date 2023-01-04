@@ -3,7 +3,7 @@
 {% block content %}
 <form method="POST">
     {{ form.hidden_tag() }}
-    <table>
+    <table cellspacing="100">
         {% for field in form.exercise_params %}
         <tr>
             <td>{{ field.excs.label(class="form-label") }}</td>
