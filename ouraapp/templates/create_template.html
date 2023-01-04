@@ -3,20 +3,20 @@
 {% block content %}
 <form method="POST">
     {{ form.hidden_tag() }}
-   {% for field in form.exercise_params %}
-    {{ field.excs.label(class="form-label") }} <br>
-    {{ field.excs()}}<br><br>
-
-    {{ field.sets.label(class="form-label") }} <br>
-    {{ field.sets()}}<br><br>
-
-    {{ field.reps1.label(class="form-label") }} <br>
-    {{ field.reps1()}}<br><br>
-
-    {{ field.reps2.label(class="form-label") }} <br>
-    {{ field.reps2()}}<br><br>
-   {% endfor %}
-
+    <table>
+        {% for field in form.exercise_params %}
+        <tr>
+            <td>{{ field.excs.label(class="form-label") }}</td>
+            <td>{{ field.excs()}}</td>
+            <td>{{ field.sets.label(class="form-label") }}</td>
+            <td>{{ field.sets()}}</td>
+            <td>{{ field.reps1.label(class="form-label") }}</td>
+            <td>{{ field.reps1()}}</td>
+            <td>{{ field.reps2.label(class="form-label") }}</td>
+            <td>{{ field.reps2()}}</td>
+        </tr>
+        {% endfor %}
+    </table><br>
     {{ form.submit(class="btn btn-secondary") }}
 
 </form>
