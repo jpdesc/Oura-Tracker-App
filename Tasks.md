@@ -1,4 +1,1 @@
-- Modularize code w/ flask blueprints
-- Create workout template from app
-- Edit/delete functionality in workout tables
-- Testing suite
+-Spacing on navbar margins fixed
