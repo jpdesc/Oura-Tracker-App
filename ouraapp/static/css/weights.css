@@ -6,6 +6,10 @@ table {
     font-family: 'Montserrat', sans-serif;
 } */
 
+.container {
+    padding: 3px 15px;
+}
+
 hr {
     border: dotted;
     border-width: 4px 0 0 0;
@@ -14,6 +18,17 @@ hr {
     margin: 5px auto;
 }
 
+.exercise-cluster {
+    /* position: relative; */
+    /* margin-left: 25px; */
+    /* display: inline-block; */
+
+}
+
+.row {
+    text-align: left;
+    margin: auto;
+}
 
 .create_template {
     text-align: center;
