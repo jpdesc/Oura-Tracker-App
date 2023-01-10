@@ -24,9 +24,14 @@ class TemplateForm(FlaskForm):
 
 class TemplateForm2(FlaskForm):
     excs = StringField('Exercise Name: ', validators=[Optional()])
-    sets = IntegerField('Sets: ', validators=[Optional()])
-    reps1 = IntegerField('Rep range: ', validators=[Optional()])
-    reps2 = IntegerField(validators=[Optional()])
+    sets = IntegerField('Sets: ',
+                        validators=[Optional()],
+                        render_kw={'style': 'width: 5ch'})
+    reps1 = IntegerField('Rep range: ',
+                         validators=[Optional()],
+                         render_kw={'style': 'width: 5ch'})
+    reps2 = IntegerField(validators=[Optional()],
+                         render_kw={'style': 'width: 5ch'})
 
 
 class WorkoutForm(FlaskForm):

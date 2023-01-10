@@ -22,7 +22,6 @@ def log(page_id):
     # logger.debug(
     #     f'User is authenticated: user id = {User.query.filter_by(id=current_user.id)}'
     # )
-
     date = get_date(page_id)
     wellness_form = JournalForm()
     workout_form = WorkoutForm()
