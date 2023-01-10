@@ -168,7 +168,7 @@ def create_template(template_name, day, page_id):
                         page_id=page_id))
         flash('You have created a new workout template: {template.name}')
         return redirect(url_for('dashboard.log', page_id=page_id))
-    return render_template('create_template.html', form=workout_form)
+    return render_template('create_template.html', form=workout_form, day=1)
 
 
 @bp.route('/init_template/<page_id>', methods=['GET', 'POST'])

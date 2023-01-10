@@ -6,23 +6,27 @@
 
 {% block content %}
 
-<div class="container create-template">
+<div class="container create_template">
+    <h1>Workout Template (Day {{day}})</h1><br>
 
 <form method="POST">
     {{ form.hidden_tag() }}
         {% for field in form.exercise_params %}
+        <div class=ex-num>{{loop.index}}.</div>
         <div class="row">
             <div class="col-md-4">
+
+
                 {{ field.excs.label(class="form-label") }}<br>
                 {{ field.excs()}}
             </div>
 
-            <div class="col-md-3">
+            <div class="col-md-4">
                 {{ field.sets.label(class="form-label") }}<br>
                 {{ field.sets()}}
             </div>
 
-            <div class="col-md-3">
+            <div class="col-md-4">
                 Rep Range: <br>
                 {{ field.reps1()}} - {{ field.reps2()}}
             </div>
