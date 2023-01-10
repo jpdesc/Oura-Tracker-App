@@ -2,6 +2,10 @@ table {
     border-spacing: 15px;
 }
 
+/* body {
+    font-family: 'Montserrat', sans-serif;
+} */
+
 hr {
     border: dotted;
     border-width: 4px 0 0 0;

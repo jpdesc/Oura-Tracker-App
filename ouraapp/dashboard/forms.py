@@ -11,7 +11,7 @@ def tag_query():
 
 
 class JournalForm(FlaskForm):
-    journal = StringField('Notes:',
+    journal = StringField('How are you feeling?',
                           validators=[DataRequired()],
                           widget=TextArea(),
                           render_kw={
@@ -31,7 +31,7 @@ class JournalForm(FlaskForm):
                         choices=['1', '2', '3', '4', '5'],
                         validators=[InputRequired()])
     food_cutoff = FloatField('How many hours before bed was your last meal?')
-    new_tags = StringField('Add new tags:',
+    new_tags = StringField('Create new:',
                            widget=TextArea(),
                            render_kw={
                                'cols': 15,
@@ -46,9 +46,9 @@ class WorkoutForm(FlaskForm):
     grade = RadioField('Workout Grade:', choices=['1', '2', '3', '4', '5'])
     type = SelectField(
         choices=['Swim', 'Weights', 'Calisthenics', 'Yoga', 'Other'])
-    specify_other = StringField("Specify other: ")
+    specify_other = StringField("Create new: ")
     file = FileField('Upload Workout File:')
-    workout_log = StringField('Workout Notes:',
+    workout_log = StringField('How was your workout?',
                               widget=TextArea(),
                               render_kw={
                                   'cols': 25,
