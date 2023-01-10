@@ -135,7 +135,7 @@ def edit_log(page_id):
             add_tags(added_tags, selected_tags, log)
         db.session.add(log)
         db.session.commit()
-        create_event(log)
+        create_event(log, 'Wellness')
         return redirect(url_for('dashboard.log', page_id=page_id))
 
     if workout_form.validate_on_submit():
@@ -149,7 +149,7 @@ def edit_log(page_id):
             workout.file = workout_form.file.data
         db.session.add(workout)
         db.session.commit()
-        create_event(workout)
+        create_event(workout, 'Workout')
         return redirect(url_for('dashboard.log', page_id=page_id))
     return render_template('edit_post.html',
                            wellness_form=wellness_form,

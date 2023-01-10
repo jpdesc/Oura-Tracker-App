@@ -1,23 +1,46 @@
 {% extends "base.html" %}
 
+
 {% block content %}
+
+<div class="container">
+
 <form method="POST">
     {{ form.hidden_tag() }}
-    <table cellspacing="100">
+    <table>
         {% for field in form.exercise_params %}
+        <div class="row">
+            <div class="col-lg-12">
         <tr>
-            <td>{{ field.excs.label(class="form-label") }}</td>
-            <td>{{ field.excs()}}</td>
-            <td>{{ field.sets.label(class="form-label") }}</td>
-            <td>{{ field.sets()}}</td>
-            <td>{{ field.reps1.label(class="form-label") }}</td>
-            <td>{{ field.reps1()}}</td>
-            <td>{{ field.reps2.label(class="form-label") }}</td>
-            <td>{{ field.reps2()}}</td>
+                <td>{{ field.excs.label(class="form-label") }}</td>
+                <td>{{ field.excs()}}</td>
+                <td>{{ field.sets.label(class="form-label") }}</td>
+                <td>{{ field.sets()}}</td>
+                </div>
         </tr>
+        </div>
+        <div class="row">
+            <tr>
+
+            </tr>
+        </div>
+        <div class='row'>
+            <tr>
+                <div class="col-lg-12">
+                    <td>Rep Range:</td>
+                    <td>{{ field.reps1()}}</td>
+                    <td>-</td>
+                    <td>{{ field.reps2()}}</td>
+            </tr>
+
+            </div>
+            </div>
+        </tr>
+        </div>
         {% endfor %}
     </table><br>
     {{ form.submit(class="btn btn-secondary") }}
 
 </form>
+</div>
 {% endblock %}

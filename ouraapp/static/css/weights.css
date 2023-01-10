@@ -1,3 +1,8 @@
+table {
+    border-spacing: 15px;
+}
+
+
 .flex-container {
     display: flex;
     flex-wrap: nowrap;
