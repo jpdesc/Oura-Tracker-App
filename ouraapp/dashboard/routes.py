@@ -2,6 +2,7 @@ from io import BytesIO
 from flask import render_template, redirect, url_for, request, send_file
 # from ouraapp.weights.helpers import get_weights_data, get_current_template
 from .models import Sleep, Log, Readiness, Workout
+from ouraapp.calendar.models import Events
 from .helpers import get_date, add_tags, create_event, clear_workout
 from ouraapp.helpers import get_page_id
 from ouraapp.format import format_date
@@ -135,6 +136,10 @@ def edit_log(page_id):
             add_tags(added_tags, selected_tags, log)
         db.session.add(log)
         db.session.commit()
+        curr_event = Events.query.filter_by(day_id=page_id).first()
+        if curr_event:
+            db.session.delete(curr_event)
+            db.session.commit()
         create_event(log, 'Wellness')
         return redirect(url_for('dashboard.log', page_id=page_id))
 
@@ -149,6 +154,10 @@ def edit_log(page_id):
             workout.file = workout_form.file.data
         db.session.add(workout)
         db.session.commit()
+        curr_workout = Workout.query.filter_by(day_id=page_id).first()
+        if curr_workout:
+            db.session.delete(curr_workout)
+            db.session.commit()
         create_event(workout, 'Workout')
         return redirect(url_for('dashboard.log', page_id=page_id))
     return render_template('edit_post.html',
