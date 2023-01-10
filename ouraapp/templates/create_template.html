@@ -7,26 +7,26 @@
 {% block content %}
 
 <div class="container create_template">
-    <h1>Workout Template (Day {{day}})</h1><br>
+    <h1>Workout Template (Day {{day}})</h1><br><br>
 
 <form method="POST">
     {{ form.hidden_tag() }}
         {% for field in form.exercise_params %}
         <div class=ex-num>{{loop.index}}.</div>
-        <div class="container exercise-cluster">
+        <div class="container-smooth exercise-cluster">
         <div class="row">
-            <div class="col-md-5">
+            <div class="col-md-5 excs">
 
 
                 {{ field.excs.label(class="form-label") }}<br>
                 {{ field.excs()}}
             </div>
-            <div class="col-md-4">
+            <div class="col-md-4 excs">
                 Rep Range: <br>
                 {{ field.reps1()}} - {{ field.reps2()}}
             </div>
 
-            <div class="col-md-3">
+            <div class="col-md-3 excs">
                 {{ field.sets.label(class="form-label") }}<br>
                 {{ field.sets()}}
             </div>

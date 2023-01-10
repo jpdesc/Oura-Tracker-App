@@ -7,7 +7,16 @@ table {
 } */
 
 .container {
-    padding: 3px 15px;
+    padding: 3px 20px;
+}
+
+.excs {
+    margin: 0 auto;
+}
+
+.navbar {
+    margin-bottom: 1em;
+    padding: 1em;
 }
 
 hr {

@@ -6,6 +6,10 @@ h5 {
     text-align: center;
 }
 
+.navbar {
+    margin-bottom: 1em;
+    padding: 1em;
+}
 
 .button-left {
     float: left;
