@@ -71,31 +71,24 @@ def edit_weights(page_id, from_base):
 
     # logger.debug(f'weights_obj = {weights}')
     if not weights:
-        if from_base:
-            weights = Weights(day_id=page_id,
-                              user_id=current_user.id,
-                              template_id=get_current_template().id,
-                              workout_id=get_workout_id(),
-                              workout_week=get_workout_week_num())
-            logger.debug(
-                f'workout_week = {weights.workout_week}, workout_id={weights.workout_id}, template_id={weights.template_id}'
-            )
-        else:
-            weights = Weights(day_id=page_id, user_id=current_user.id)
-        db.session.add(weights)
-        db.session.commit()
+        weights = Weights(day_id=page_id,
+                          user_id=current_user.id,
+                          template_id=get_current_template().id,
+                          workout_id=get_workout_id(),
+                          workout_week=get_workout_week_num())
+        logger.debug(
+            f'workout_week = {weights.workout_week}, workout_id={weights.workout_id}, template_id={weights.template_id}'
+        )
 
-    # logger.debug(f'day_id = {weights.day_id}')
-    # logger.debug(f'weights_id = {weights.id}')
-    # logger.debug(f'page_id = {page_id}')
+        weights = Weights(day_id=page_id, user_id=current_user.id)
+    db.session.add(weights)
+    db.session.commit()
 
-    # for exercise in weights.exercise_objs:
-    #     print(exercise.exercise_name)
     logger.debug(
         f'workout_week = {weights.workout_week}, workout_id={weights.workout_id}, template_id={weights.template_id}'
     )
 
-    if from_base == 'yes' and not weights.exercise_objs:
+    if not weights.exercise_objs:
         if not weights.template_id:
             weights.template_id = get_current_template().id
             db.session.add(weights)
@@ -124,8 +117,8 @@ def edit_weights(page_id, from_base):
             if entry[2] or entry[3]:
                 show_rep_range = True
         db.session.commit()
-    if from_base == 'no':
-        clear_exercises(page_id)
+
+    clear_exercises(page_id)
 
     workout = ensure_workout_log_exists(page_id)
     form = WeightsForm(soreness=workout.soreness, grade=workout.grade)

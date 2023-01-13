@@ -43,33 +43,33 @@ class WorkoutForm(FlaskForm):
 
 
 class CustomPR(FlaskForm):
-    custom_pr_name = StringField('Exercise Name: ')
-    custom_pr_weight = IntegerField('1 Rep Max: ')
+    custom_pr_name = StringField('Exercise Name: ',
+                                 render_kw={'style': 'width: 15ch'})
+    custom_pr_weight = IntegerField('1 Rep Max: ',
+                                    render_kw={'style': 'width: 5ch'})
 
 
 class InitWorkoutForm(FlaskForm):
-    name_workout_plan = StringField('Name of workout plan: ',
-                                    validators=[InputRequired()])
-    set_base = BooleanField('Create a base template for your workouts?',
-                            render_kw={'onchange': "showFields()"})
-    days = IntegerField('Enter the number of workouts per weekly cycle: ',
-                        validators=[Optional(),
-                                    NumberRange(min=1, max=7)])
-    set_pr = BooleanField('Enter one rep maxes at start of program?',
+    name_workout_plan = StringField('Name of workout plan: ')
+    days = IntegerField('# of workouts in template: ')
+    bench_pr = IntegerField('Bench Press',
+                            validators=[Optional()],
+                            render_kw={'style': 'width: 5ch'})
+    squat_pr = IntegerField('Back Squat',
+                            validators=[Optional()],
+                            render_kw={'style': 'width: 5ch'})
+    deadlift_pr = IntegerField('Deadlift',
+                               validators=[Optional()],
+                               render_kw={'style': 'width: 5ch'})
+    ohp_pr = IntegerField('Overhead Press',
                           validators=[Optional()],
-                          render_kw={'onchange': "showFields()"})
-    bench_pr = IntegerField('Bench 1 Rep Max: ', validators=[Optional()])
-    squat_pr = IntegerField('Back Squat 1 Rep Max: ', validators=[Optional()])
-    deadlift_pr = IntegerField('Deadlift 1 Rep Max: ', validators=[Optional()])
-    ohp_pr = IntegerField('Overhead Press 1 Rep Max: ',
-                          validators=[Optional()])
-    custom_pr = BooleanField('Record additional PRs? ',
-                             validators=[Optional()],
-                             render_kw={'onchange': "showFields()"})
+                          render_kw={'style': 'width: 5ch'})
+
     custom_prs = FieldList(FormField(CustomPR),
-                           min_entries=1,
-                           max_entries=5,
-                           validators=[Optional()])
+                           min_entries=4,
+                           max_entries=8,
+                           validators=[Optional()],
+                           render_kw={'style': 'width: 5ch'})
     submit = SubmitField("Submit")
 
 
