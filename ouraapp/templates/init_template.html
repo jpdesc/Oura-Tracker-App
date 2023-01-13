@@ -16,71 +16,74 @@
     {{ init_form.hidden_tag() }}
 
 
-
-    <div>
-        {{ init_form.name_workout_plan.label(class="form-label") }} <br>
-        {{ init_form.name_workout_plan()}}<br><br>
-
-    </div>
-
-    <div id="set-base">
-        {{ init_form.days.label(class="form-label") }} <br>
-        {{ init_form.days()}}<br><br>
+    <div class="row form-fields">
+        <div class="col">{{ init_form.name_workout_plan.label(class="form-label") }} <br>
+        {{ init_form.name_workout_plan()}}</div>
+        <div class="col">
+            {{ init_form.days.label(class="form-label") }} <br>
+            {{ init_form.days()}}
+        </div>
 
     </div>
-
+    <div class="one-rep-max">
     <h5>Enter One-Rep Max (optional)</h5>
     <br>
 
         <table class="table">
-            <tr>
-                <th>
-                    Exercise
-                </th>
-                <th>
-                    Weight
-                </th>
-            </tr>
-            <tr>
-                <td>{{ init_form.bench_pr.label(class="form-label") }}</td>
-                <td>{{ init_form.bench_pr()}}</td>
-            </tr>
-            <tr>
-                <td>{{ init_form.squat_pr.label(class="form-label") }}</td>
-                <td>{{ init_form.squat_pr()}}</td>
-            </tr>
-            <tr>
-                <td>{{ init_form.deadlift_pr.label(class="form-label") }}</td>
-                <td>{{ init_form.deadlift_pr()}}</td>
-            </tr>
-            <tr>
-                <td>{{ init_form.ohp_pr.label(class="form-label") }}</td>
-                <td>{{ init_form.ohp_pr()}}</td>
-            </tr>
+            <thead class="thead-light">
+                <tr>
+                    <th>
+                        Exercise
+                    </th>
+                    <th>
+                        Weight
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>{{ init_form.bench_pr.label(class="form-label") }}</td>
+                    <td>{{ init_form.bench_pr()}}</td>
+                </tr>
+                <tr>
+                    <td>{{ init_form.squat_pr.label(class="form-label") }}</td>
+                    <td>{{ init_form.squat_pr()}}</td>
+                </tr>
+                <tr>
+                    <td>{{ init_form.deadlift_pr.label(class="form-label") }}</td>
+                    <td>{{ init_form.deadlift_pr()}}</td>
+                </tr>
+                <tr>
+                    <td>{{ init_form.ohp_pr.label(class="form-label") }}</td>
+                    <td>{{ init_form.ohp_pr()}}</td>
+                </tr>
 
-            {% for entry in init_form.custom_prs %}
+                {% for entry in init_form.custom_prs %}
 
-            <tr class='optional-row' id='{{loop.index}}'>
-                <td>
-                    {{ entry.custom_pr_name()}}
-                </td>
-                <td>
-                    {{ entry.custom_pr_weight()}}
-                </td>
-            </tr>
+                <tr class='optional-row' id='{{loop.index}}'>
+                    <td>
+                        {{ entry.custom_pr_name()}}
+                    </td>
+                    <td>
+                        {{ entry.custom_pr_weight()}}
+                    </td>
+                </tr>
 
 
 
-            {% endfor %}
+                {% endfor %}
+
+
+
             <tr>
                 <td></td>
                 <td><button type="button" class="minus">-</button><button type="button" class="plus">+</button></td>
             </tr>
         </table>
+        </tbody>
 
-
-    {{ init_form.submit(class="btn btn-secondary") }}
-
+    {{ init_form.submit(class="btn btn-secondary submit") }}
+        </div>
 
 </form>
 

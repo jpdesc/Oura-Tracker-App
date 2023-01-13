@@ -1,5 +1,7 @@
 table {
     border-spacing: 15px;
+    text-align: center;
+    margin: auto;
 }
 
 /* body {
@@ -9,6 +11,17 @@ table {
 .table {
     text-align: center;
     width: 50%;
+}
+
+.form-fields {
+    position: relative;
+    padding: 25px 75px;
+}
+
+.submit {
+    position: relative;
+    margin-left: 30%;
+    margin-bottom: 5%;
 }
 
 .container {
@@ -43,6 +56,10 @@ h1 {
 
 .optional-row {
     display: none;
+}
+
+.one-rep-max {
+    text-align: center;
 }
 
 .row {
