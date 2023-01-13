@@ -17,16 +17,19 @@
 
 
     <div class="row form-fields">
-        <div class="col">{{ init_form.name_workout_plan.label(class="form-label") }} <br>
-        {{ init_form.name_workout_plan()}}</div>
-        <div class="col">
+        <div class="col left-input">{{ init_form.name_workout_plan.label(class="form-label") }} <br>
+        {{ init_form.name_workout_plan()}}<br><br></div>
+        <div class="col right-input">
             {{ init_form.days.label(class="form-label") }} <br>
             {{ init_form.days()}}
         </div>
-
     </div>
+
+    <hr>
+    <br>
+
     <div class="one-rep-max">
-    <h5>Enter One-Rep Max (optional)</h5>
+    <h5>Current One-Rep Maxes (optional):</h5>
     <br>
 
         <table class="table">

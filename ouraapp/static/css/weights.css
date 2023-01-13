@@ -14,8 +14,17 @@ table {
 }
 
 .form-fields {
-    position: relative;
-    padding: 25px 75px;
+    padding: 30px 75px;
+    text-align: center;
+    width: 75%;
+}
+
+.left-input {
+    text-align: center;
+}
+
+.right-input {
+    text-align: center;
 }
 
 .submit {
@@ -54,16 +63,22 @@ h1 {
     padding-bottom: 25px;
 }
 
+h5 {
+    text-align: center;
+}
+
 .optional-row {
     display: none;
 }
 
 .one-rep-max {
     text-align: center;
+    width: 60%;
+    margin: auto;
 }
 
 .row {
-    text-align: left;
+    text-align: center;
     margin: auto;
 }
 
