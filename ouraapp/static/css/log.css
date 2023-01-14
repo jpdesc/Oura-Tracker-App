@@ -23,6 +23,11 @@ h5 {
     justify-content: flex-end;
  }
 
+ .radio-grouping {
+    /* text-align: center; */
+    max-width: 330px;
+ }
+
 /* .workout-links{
     display: flex;
 } */
@@ -40,8 +45,11 @@ h5 {
     /* padding: 10px; */
     /* margin: 10px; */
     justify-content: start;
+    text-align: left;
+    margin-left: 10%;
 }
  .radio{
     float: inline-end;
+    margin-right: 10%;
 
  }

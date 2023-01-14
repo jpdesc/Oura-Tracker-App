@@ -118,7 +118,7 @@
                             <form method="POST">
 
                                 {{ wellness_form.hidden_tag() }}
-                                <!-- <div class="radio-grouping"> -->
+                                <div class="radio-grouping">
                                 {% for field in [wellness_form.focus, wellness_form.energy, wellness_form.mood,
                                 wellness_form.stress]
                                 %}
@@ -139,11 +139,14 @@
                                         {% endfor %}
                                     </span>
 
-                                <!-- </div> -->
+
 
 
                                 <br>
                                 {% endfor %}<br>
+                                    </div>
+
+
                                 {{ wellness_form.journal.label(class="form-label") }} <br>
                                 {{ wellness_form.journal()}}<br><br>
                                 {{ wellness_form.select_tags.label(class="form-label") }} <br>
@@ -214,6 +217,8 @@
                                     Template</a><br><br>
                                 <a href={{url_for('weights.edit_weights', page_id=page_id, from_base='yes')}} class="link-success">Start Weights Workout (from template)</a><br><br>
                                 <a href={{url_for('weights.edit_weights', page_id=page_id, from_base='no')}} class="link-success">Start Weights Workout (empty)</a><br><br>
+
+                                <div class="radio-grouping">
                                 <span class="radio-label">{{ workout_form.soreness.label(class="form-label" )}}</span>
                                 <span class="radio">
                                 {% for subfield in workout_form.soreness %}
@@ -232,6 +237,8 @@
                                     <td>{{ subfield.label(class="form-label") }}</td>
                                 </tr>
                                 {% endfor %}</span><br><br>
+                                </div>
+
 
                                 {{ workout_form.file.label(class="form-label") }}
                                 {{ workout_form.file }}<br><br>

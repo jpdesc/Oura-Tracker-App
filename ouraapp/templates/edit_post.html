@@ -111,7 +111,7 @@
 
                                 {{ wellness_form.hidden_tag() }}
 
-
+                                <div class="radio-grouping">
                                 {% for field in [wellness_form.focus, wellness_form.energy, wellness_form.mood,
                                 wellness_form.stress] %}
                                 {{ field.label(class="form-label") }}
@@ -123,6 +123,8 @@
                                 {% endfor %}
                                 <br>
                                 {% endfor %}<br>
+
+                                </div>
                                 <!-- {% if not sleep.food_cutoff %}
                                 {{ wellness_form.food_cutoff.label(class="form-label") }} <br>
                                 {{ wellness_form.food_cutoff()}}<br><br>
@@ -178,6 +180,7 @@
                                     Workout (from template)</a><br><br>
                                 <a href={{url_for('weights.edit_weights', page_id=page_id, from_base='no' )}} class="link-success">Start Weights Workout
                                     (empty)</a><br><br>
+                                <div class="radio-grouping">
                                 {{ workout_form.soreness.label(class="form-label")}}<br>
                                 {% for subfield in workout_form.soreness %}
                                 <tr>
@@ -193,6 +196,8 @@
                                     <td>{{ subfield.label(class="form-label") }}</td>
                                 </tr>
                                 {% endfor %}<br><br>
+                                </div>
+
                                 {{ workout_form.file.label(class="form-label") }}<br>
                                 {{ workout_form.file }}<br><br>
 
