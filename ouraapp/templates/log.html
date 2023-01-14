@@ -118,25 +118,29 @@
                             <form method="POST">
 
                                 {{ wellness_form.hidden_tag() }}
-
+                                <div class="radio-grouping">
                                 {% for field in [wellness_form.focus, wellness_form.energy, wellness_form.mood,
                                 wellness_form.stress]
                                 %}
 
-                                <span class="radio-label">{{ field.label(class="form-label") }}</span>
-                                <span class="radio">
-                                {% for subfield in field %}
+
+                                    <span class="radio-label">{{ field.label(class="form-label") }}</span>
+                                    <span class="radio">
+                                        {% for subfield in field %}
 
 
-                                <tr>
-                                    <td>{{ subfield }}</td>
-                                    <td>{{ subfield.label(class="form-label") }}</td>
-                                </tr>
+                                        <tr>
+                                            <td>{{ subfield }}</td>
+                                            <td>{{ subfield.label(class="form-label") }}</td>
+                                        </tr>
 
 
 
-                                {% endfor %}
-                                </span>
+                                        {% endfor %}
+                                    </span>
+
+                                </div>
+
 
                                 <br>
                                 {% endfor %}<br>
