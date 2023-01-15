@@ -11,13 +11,11 @@ def tag_query():
 
 
 class JournalForm(FlaskForm):
-    journal = StringField('How are you feeling?',
-                          validators=[DataRequired()],
-                          widget=TextArea(),
-                          render_kw={
-                              'cols': 25,
-                              'rows': 4
-                          })
+    journal = StringField(
+        'How are you feeling?',
+        validators=[DataRequired()],
+        widget=TextArea(),
+    )
     focus = RadioField('Focus: ',
                        choices=['1', '2', '3', '4', '5'],
                        validators=[InputRequired()])
@@ -31,12 +29,10 @@ class JournalForm(FlaskForm):
                         choices=['1', '2', '3', '4', '5'],
                         validators=[InputRequired()])
     food_cutoff = FloatField('How many hours before bed was your last meal?')
-    new_tags = StringField('Create new:',
-                           widget=TextArea(),
-                           render_kw={
-                               'cols': 15,
-                               'rows': 1
-                           })
+    new_tags = StringField(
+        'Create new:',
+        widget=TextArea(),
+    )
     select_tags = QuerySelectMultipleField(query_factory=tag_query)
     submit1 = SubmitField("Submit Wellness")
 
@@ -48,10 +44,8 @@ class WorkoutForm(FlaskForm):
         choices=['Swim', 'Weights', 'Calisthenics', 'Yoga', 'Other'])
     specify_other = StringField("Create new: ")
     file = FileField('Upload Workout File:')
-    workout_log = StringField('How was your workout?',
-                              widget=TextArea(),
-                              render_kw={
-                                  'cols': 25,
-                                  'rows': 4
-                              })
+    workout_log = StringField(
+        'How was your workout?',
+        widget=TextArea(),
+    )
     submit2 = SubmitField("Submit Workout")

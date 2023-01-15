@@ -10,6 +10,18 @@ h5 {
     margin-bottom: 1em;
     padding: 1em;
 }
+.main-container {
+    max-width: 1000px;
+
+}
+
+.card-inner {
+    padding: 8%;
+}
+
+.text-area {
+    width: 90%;
+}
 
 .button-left {
     float: left;
@@ -46,7 +58,8 @@ h5 {
     /* margin: 10px; */
     justify-content: start;
     text-align: left;
-    margin-left: 10%;
+    margin-right: 5px;
+    margin-left: 5%;
 }
  .radio{
     float: inline-end;
