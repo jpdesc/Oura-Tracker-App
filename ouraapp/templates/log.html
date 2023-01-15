@@ -152,13 +152,20 @@
 
                                 {{ wellness_form.journal.label(class="form-label") }} <br>
                                 {{ wellness_form.journal(class="text-area")}}<br><br>
+                                <div class="row">
+                                    <div class="col">
+                                        {{ wellness_form.select_tags.label(class="form-label") }} <br>
+                                        {{ wellness_form.select_tags()}}<br><br>
+                                    </div>
+                                    <div class="col">
+                                        {{ wellness_form.new_tags.label(class="form-label") }} <br>
+                                        {{ wellness_form.new_tags(class="text-area")}}
+                                        <br>
+                                        <br>
+                                    </div>
+                                </div>
 
-                                {{ wellness_form.select_tags.label(class="form-label") }} <br>
-                                {{ wellness_form.select_tags()}}<br><br>
-                                {{ wellness_form.new_tags.label(class="form-label") }} <br>
-                                {{ wellness_form.new_tags(class="text-area")}}
-                                <br>
-                                <br>
+
                                 {{ wellness_form.submit1(class="btn btn-dark") }}
                             </form>
 
