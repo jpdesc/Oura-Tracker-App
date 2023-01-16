@@ -80,8 +80,9 @@ def get_filters(form, date_range):
 
 
 def get_filtered_avgs(filtered_objs):
+
     filter_avgs = {}
-    id_nums = [day.id + 1 for day in filtered_objs]
+    id_nums = [day.day_id for day in filtered_objs]
     for key, value in avg_fields.items():
         db_attr = db_fields[value[0]]
         attr = value[0]
