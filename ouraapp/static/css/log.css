@@ -40,9 +40,9 @@ h5 {
     max-width: 330px;
  }
 
-/* .workout-links{
-    display: flex;
-} */
+.prompt {
+    text-align: center;
+}
 
  .right-link {
      justify-content: start;
@@ -69,9 +69,9 @@ h5 {
      text-align: center;
  }
 
- /* .carousel-control-prev, .carousel-control-next, .carousel-indicators .carousel-caption {
-    filter: invert(100%);
- } */
+.tags {
+    text-align: center;
+}
 
 
 
@@ -83,6 +83,12 @@ h5 {
 .text {
     padding: 0px;
 }
+
+.carousel-indicators {
+    margin-top: 10px;
+}
+
+
 
  #carouselWeights {
     width: 100%;

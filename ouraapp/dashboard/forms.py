@@ -42,7 +42,7 @@ class WorkoutForm(FlaskForm):
     grade = RadioField('Workout Grade:', choices=['1', '2', '3', '4', '5'])
     type = SelectField(
         choices=['Swim', 'Weights', 'Calisthenics', 'Yoga', 'Other'])
-    specify_other = StringField("Create new: ")
+    specify_other = StringField("Create New: ")
     file = FileField('Upload Workout File:')
     workout_log = StringField(
         'How was your workout?',

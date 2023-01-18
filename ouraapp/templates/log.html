@@ -150,21 +150,24 @@
                                     </div>
 
 
-                                {{ wellness_form.journal.label(class="form-label") }} <br>
+                                {{ wellness_form.journal.label(class="form-label prompt") }} <br>
                                 {{ wellness_form.journal(class="text-area")}}<br><br>
+
+                                <hr>
                                 <div class="row">
-                                    <div class="col">
-                                        {{ wellness_form.select_tags.label(class="form-label") }} <br>
+                                    <div class="col tags">
+                                        <span>Select <i class="fa-solid fa-tags"></i></i></span>
+                                         <br>
                                         {{ wellness_form.select_tags()}}<br><br>
                                     </div>
-                                    <div class="col">
-                                        {{ wellness_form.new_tags.label(class="form-label") }} <br>
+                                    <div class="col tags">
+                                        <span>Create <i class="fa-solid fa-tags"></i></span>
                                         {{ wellness_form.new_tags(class="text-area")}}
                                         <br>
                                         <br>
                                     </div>
                                 </div>
-
+                                <hr>
 
                                 {{ wellness_form.submit1(class="btn btn-dark") }}
                             </form>
@@ -225,7 +228,7 @@
                                 {{ workout_form.type.label(class="form-label") }}:<br>
                                 {{ workout_form.type()}} <br><br>
                                 <i>
-                                    <div>--or--</div><br>
+                                    <div class="prompt">--or--</div><br>
                                 </i>
                                 {{ workout_form.specify_other.label(class="form-label")}}<br>
                                 {{ workout_form.specify_other(class="text-area") }}<br><br>
@@ -256,7 +259,7 @@
                                 <!-- {{ workout_form.file.label(class="form-label") }}
                                 {{ workout_form.file(class="text-area")}}<br><br> -->
 
-                                {{ workout_form.workout_log.label(class="form-label") }}<br>
+                                {{ workout_form.workout_log.label(class="form-label prompt") }}<br>
                                 {{ workout_form.workout_log(class="text-area") }}<br><br>
                                 <hr>
 
@@ -273,7 +276,7 @@
                                         <div class="carousel-inner">
                                             <div class="carousel-item active">
                                                 <br>
-                                               <p><a class="btn btn-xs btn-success" href={{url_for('weights.init_template', page_id=page_id)}}><i
+                                               <p><a class="btn btn-xs btn-light" href={{url_for('weights.init_template', page_id=page_id)}}><i
                                                         class="fa-solid fa-plus"></i> New Program</a><br></p>
 
                                                 <!-- <a href="#" class="btn btn-sm btn-success"><span class="glyphicon glyphicon-plus"></span> Default text here</a> -->
@@ -283,13 +286,13 @@
                                             </div>
                                             <div class="carousel-item">
                                                 <br>
-                                                <p><a class="btn btn-xs btn-success" href={{url_for('weights.edit_weights', page_id=page_id, from_base='yes' )}}><i
+                                                <p><a class="btn btn-xs btn-light" href={{url_for('weights.edit_weights', page_id=page_id, from_base='yes' )}}><i
                                                             class="fa-solid fa-play"></i> Next Workout</a><br></p>
 
                                             </div>
                                             <div class="carousel-item">
                                                 <br>
-                                                <p><a class="btn btn-xs btn-success" href={{url_for('weights.edit_weights', page_id=page_id, from_base='no' )}}><i
+                                                <p><a class="btn btn-xs btn-light" href={{url_for('weights.edit_weights', page_id=page_id, from_base='no' )}}><i
                                                             class="fa-solid fa-play"></i> Custom Workout</a><br></p>
                                                 <!-- <a class="d-block" href={{url_for('weights.edit_weights', page_id=page_id, from_base='no' )}} class="link-success">Start Workout
                                                 (blank)</a> -->
