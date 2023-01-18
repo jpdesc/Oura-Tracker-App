@@ -73,7 +73,9 @@ h5 {
     text-align: center;
 }
 
-
+.submit {
+    text-align: right;
+}
 
  .carousel-inner {
     padding: 10px 45px 25px;

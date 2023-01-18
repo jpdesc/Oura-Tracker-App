@@ -30,11 +30,11 @@ class JournalForm(FlaskForm):
                         validators=[InputRequired()])
     food_cutoff = FloatField('How many hours before bed was your last meal?')
     new_tags = StringField(
-        'Create New',
+        'New Type',
         widget=TextArea(),
     )
     select_tags = QuerySelectMultipleField(query_factory=tag_query)
-    submit1 = SubmitField("Submit Wellness")
+    submit1 = SubmitField("")
 
 
 class WorkoutForm(FlaskForm):
@@ -42,10 +42,10 @@ class WorkoutForm(FlaskForm):
     grade = RadioField('Workout Grade:', choices=['1', '2', '3', '4', '5'])
     type = SelectField(
         choices=['Swim', 'Weights', 'Calisthenics', 'Yoga', 'Other'])
-    specify_other = StringField("Create New: ")
+    specify_other = StringField("New Type: ")
     file = FileField('Upload Workout File:')
     workout_log = StringField(
         'How was your workout?',
         widget=TextArea(),
     )
-    submit2 = SubmitField("Submit Workout")
+    submit2 = SubmitField("")
