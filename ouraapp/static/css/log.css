@@ -68,3 +68,11 @@ h5 {
  h6 {
      text-align: center;
  }
+
+ .carousel-control-prev, .carousel-control-next {
+    filter: invert(100%);
+ }
+
+ .carousel-inner {
+    padding: 50px;
+ }
