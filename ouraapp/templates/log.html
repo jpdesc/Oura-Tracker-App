@@ -126,24 +126,17 @@
                                 wellness_form.stress]
                                 %}
 
-
                                     <span class="radio-label">{{ field.label(class="form-label") }}</span>
                                     <span class="radio">
                                         {% for subfield in field %}
-
 
                                         <tr>
                                             <td>{{ subfield }}</td>
                                             <td>{{ subfield.label(class="form-label") }}</td>
                                         </tr>
 
-
-
                                         {% endfor %}
                                     </span>
-
-
-
 
                                 <br>
                                 {% endfor %}<br>
@@ -224,6 +217,36 @@
 
                             {% else %}
                             <form method="POST" enctype="multipart/form-data">
+                                <div class="radio-grouping">
+                                    <span class="radio-label">{{ workout_form.soreness.label(class="form-label" )}}</span>
+                                    <span class="radio">
+                                        {% for subfield in workout_form.soreness %}
+                                        <tr>
+                                            <td>{{ subfield }}</td>
+                                            <td>{{ subfield.label(class="form-label") }}</td>
+                                        </tr>
+                                        {% endfor %}
+                                    </span><br>
+
+
+                                    <span class="radio-label">Intensity:</span>
+                                    <span class="radio">
+                                        {% for subfield in workout_form.grade %}
+                                        <tr>
+                                            <td>{{ subfield }}</td>
+                                            <td>{{ subfield.label(class="form-label") }}</td>
+                                        </tr>
+                                        {% endfor %}
+                                    </span><br><br>
+                                </div>
+
+
+                                <!-- {{ workout_form.file.label(class="form-label") }}
+                                                                {{ workout_form.file(class="text-area")}}<br><br> -->
+
+                                {{ workout_form.workout_log.label(class="form-label prompt") }}<br>
+                                {{ workout_form.workout_log(class="text-area") }}<br><br>
+                                <hr>
                                 {{ workout_form.hidden_tag() }}
                                 {{ workout_form.type.label(class="form-label") }}:<br>
                                 {{ workout_form.type()}} <br><br>
@@ -232,39 +255,13 @@
                                 </i>
                                 {{ workout_form.specify_other.label(class="form-label")}}<br>
                                 {{ workout_form.specify_other(class="text-area") }}<br><br>
-                                <hr><br>
-
-                                <div class="radio-grouping">
-                                <span class="radio-label">{{ workout_form.soreness.label(class="form-label" )}}</span>
-                                <span class="radio">
-                                {% for subfield in workout_form.soreness %}
-                                <tr>
-                                    <td>{{ subfield }}</td>
-                                    <td>{{ subfield.label(class="form-label") }}</td>
-                                </tr>
-                                {% endfor %}</span><br>
 
 
-                                <span class="radio-label">Workout<br>Intensity:</span>
-                                <span class="radio">
-                                {% for subfield in workout_form.grade %}
-                                <tr>
-                                    <td>{{ subfield }}</td>
-                                    <td>{{ subfield.label(class="form-label") }}</td>
-                                </tr>
-                                {% endfor %}</span><br><br>
-                                </div>
 
-
-                                <!-- {{ workout_form.file.label(class="form-label") }}
-                                {{ workout_form.file(class="text-area")}}<br><br> -->
-
-                                {{ workout_form.workout_log.label(class="form-label prompt") }}<br>
-                                {{ workout_form.workout_log(class="text-area") }}<br><br>
-                                <hr>
 
 <!-- Weights Module -->
-                                <h6>Weightlifting</h6><hr>
+                                <div class="p-3 border bg-light"><h6>Weightlifting</h6>
+                                </div>
 
 
                                     <div id="carouselWeights" class="carousel carousel-dark slide" data-bs-ride="false">
