@@ -16,7 +16,7 @@ h5 {
 }
 
 .card-inner {
-    padding: 8%;
+    padding: 3%;
 }
 
 .text-area {
@@ -69,10 +69,21 @@ h5 {
      text-align: center;
  }
 
- .carousel-control-prev, .carousel-control-next {
+ /* .carousel-control-prev, .carousel-control-next, .carousel-indicators .carousel-caption {
     filter: invert(100%);
- }
+ } */
+
+
 
  .carousel-inner {
-    padding: 50px;
+    padding: 10px 45px 25px;
+    text-align: center;
+ }
+
+.text {
+    padding: 0px;
+}
+
+ #carouselWeights {
+    width: 100%;
  }
