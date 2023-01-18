@@ -64,3 +64,7 @@ h5 {
     float: inline-end;
 
  }
+
+ h6 {
+     text-align: center;
+ }

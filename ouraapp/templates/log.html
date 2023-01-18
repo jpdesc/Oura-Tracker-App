@@ -229,10 +229,7 @@
                                 </i>
                                 {{ workout_form.specify_other.label(class="form-label")}}<br>
                                 {{ workout_form.specify_other(class="text-area") }}<br><br>
-                                <a href={{url_for('weights.init_template', page_id=page_id)}} class="link-success">Start New Weights
-                                    Template</a><br><br>
-                                <a href={{url_for('weights.edit_weights', page_id=page_id, from_base='yes')}} class="link-success">Start Weights Workout (from template)</a><br><br>
-                                <a href={{url_for('weights.edit_weights', page_id=page_id, from_base='no')}} class="link-success">Start Weights Workout (empty)</a><br><br>
+                                <hr><br>
 
                                 <div class="radio-grouping">
                                 <span class="radio-label">{{ workout_form.soreness.label(class="form-label" )}}</span>
@@ -256,11 +253,19 @@
                                 </div>
 
 
-                                {{ workout_form.file.label(class="form-label") }}
-                                {{ workout_form.file(class="text-area")}}<br><br>
+                                <!-- {{ workout_form.file.label(class="form-label") }}
+                                {{ workout_form.file(class="text-area")}}<br><br> -->
 
                                 {{ workout_form.workout_log.label(class="form-label") }}<br>
                                 {{ workout_form.workout_log(class="text-area") }}<br><br>
+                                <hr>
+                                <h6>Weightlifting</h6><hr><br>
+                                <a href={{url_for('weights.init_template', page_id=page_id)}} class="link-success">Create New Program</a><br><br>
+                                <a href={{url_for('weights.edit_weights', page_id=page_id, from_base='yes' )}} class="link-success">Start Workout (continue program)</a><br><br>
+                                <a href={{url_for('weights.edit_weights', page_id=page_id, from_base='no' )}} class="link-success">Start Workout
+                                    (blank)</a><br><br>
+
+                                <hr>
                                 {{ workout_form.submit2(class="btn btn-dark") }}
 
 

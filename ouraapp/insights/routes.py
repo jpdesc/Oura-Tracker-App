@@ -19,13 +19,9 @@ def insights():
             Sleep.id).all())
     filter_objs, filter_avgs, filtered_days = None, None, None
     if request.method == "POST":
-        print(filter_form)
         date_range = get_date_range(filter_form)
         filter_objs = get_filters(filter_form, date_range)
-        print(f'filter_objs: {filter_objs}')
         filter_avgs = get_filtered_avgs(filter_objs)
-
-        print(f'filter_avgs: {filter_avgs}')
         filtered_days = len(filter_objs)
     return render_template('insights.html',
                            averages=averages,
