@@ -15,17 +15,10 @@ h5 {
 
 }
 
-.radio-form {
-    height: 130px;
 
-}
-
- .log {
-     height: 80px;
- }
 
  .inner-select {
-    height: 125px;
+    height: 150px;
  }
 
 .text-area {
@@ -48,14 +41,27 @@ h5 {
     .radio-grouping {
         font-size: small;
             max-width: 350px;
-            height: 250px;
+            height: 190px;
 
         }
     .select {
         font-size: small;
-            height: 30%;
+        height: 175px;
 
         }
+
+    .carousel-inner {
+        font-size: small;
+}
+
+.radio-form {
+    height: 100px;
+
+}
+
+.log {
+    height: 40px;
+}
 
 
 
@@ -65,24 +71,40 @@ h5 {
             margin-bottom: 5%;
         }
 
+
  }
 
   @media (min-width: 800px) {
       .radio-grouping {
           max-width: 350px;
-          height: 280px;
+          height: 220px;
       }
 
       .select {
-          height: 30%;
+          height: 45%;
 
       }
+
+        .radio-form {
+            height: 130px;
+
+        }
+
+        .log {
+            height: 60px;
+        }
+
+                 .carousel-inner {
+                     font-size: small;
+                 }
 
       .submit {
           text-align: right;
           height: 15%;
           margin-bottom: 5%;
       }
+
+
 
   }
 
@@ -118,7 +140,7 @@ h5 {
 
 
  .carousel-inner {
-    padding: 10px 45px 25px;
+    padding: 0 45px 25px;
     text-align: center;
  }
 
@@ -126,9 +148,9 @@ h5 {
     padding: 0px;
 }
 
-.carousel-indicators {
+/* .carousel-indicators {
     margin-top: 10px;
-}
+} */
 
 .col-wrap {
     height: 100%;
