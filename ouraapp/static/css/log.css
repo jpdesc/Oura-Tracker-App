@@ -1,152 +1,141 @@
-@import url('https://fonts.googleapis.com/css2?family=Open+Sans:wght@300&display=swap');
-
-
+@import url("https://fonts.googleapis.com/css2?family=Open+Sans:wght@300&display=swap");
 
 h5 {
-    text-align: center;
+  text-align: center;
 }
 
 .navbar {
-    margin-bottom: 1em;
-    padding: 1em;
+  margin-bottom: 1em;
+  padding: 1em;
 }
 .main-container {
-    max-width: 1000px;
-
+  max-width: 1000px;
 }
 
-
-
- .inner-select {
-    height: 150px;
- }
+.inner-select {
+  height: 150px;
+}
+.right-icon {
+  display: block;
+  text-align: right;
+}
 
 .text-area {
-    width: 95%;
+  width: 95%;
 }
 
 .button-left {
-    float: left;
-    padding: 10px;
-    display: flex;
- }
- .button-right{
-    padding: 10px;
-    float: right;
-    display: flex;
-    justify-content: flex-end;
- }
-
- @media (max-width: 800px) {
-    .radio-grouping {
-        font-size: small;
-            max-width: 350px;
-            height: 190px;
-
-        }
-    .select {
-        font-size: small;
-        height: 140px;
-
-        }
-
-
-    .btn {
-        font-size: small;
+  float: left;
+  padding: 10px;
+  display: flex;
+}
+.button-right {
+  padding: 10px;
+  float: right;
+  display: flex;
+  justify-content: flex-end;
 }
 
-.radio-form {
-    height: 100px;
-
-}
-
-.log {
-    height: 40px;
-}
-
-
-
-    .submit {
-            text-align: right;
-            height: 15%;
-            margin-bottom: 5%;
-        }
-
-
- }
-
-  @media (min-width: 800px) {
-      .radio-grouping {
-          max-width: 350px;
-          height: 220px;
-      }
-
-      .select {
-          height: 45%;
-
-      }
-
-        .radio-form {
-            height: 130px;
-
-        }
-
-        .log {
-            height: 60px;
-        }
-
-                 .carousel-inner {
-                     font-size: small;
-                 }
-
-      .submit {
-          text-align: right;
-          height: 15%;
-          margin-bottom: 5%;
-      }
-
-
-
+@media (max-width: 800px) {
+  .radio-grouping {
+    font-size: small;
+    max-width: 350px;
+    height: 190px;
   }
 
+  .select {
+    font-size: small;
+    height: 140px;
+  }
+
+  .btn {
+    font-size: small;
+  }
+
+  .radio-form {
+    height: 100px;
+  }
+
+  .radio-form.sub {
+    height: 70px;
+  }
+
+  .log {
+    height: 40px;
+    font-size: small;
+  }
+
+  .submit {
+    text-align: right;
+    height: 15%;
+    margin-bottom: 5%;
+  }
+}
+
+@media (min-width: 800px) {
+  .radio-grouping {
+    max-width: 350px;
+    height: 220px;
+  }
+
+  .select {
+    height: 45%;
+  }
+
+  .radio-form {
+    height: 130px;
+  }
+
+  .log {
+    height: 60px;
+  }
+
+  .carousel-inner {
+    font-size: small;
+  }
+
+  .submit {
+    text-align: right;
+    height: 15%;
+    margin-bottom: 5%;
+  }
+}
 
 .prompt {
-    text-align: center;
+  text-align: center;
 }
 
- .right-link {
-     justify-content: start;
- }
-
- .right-link{
-    justify-content: flex-end;
- }
-.radio-label{
-    justify-content: start;
-    text-align: left;
-    margin-right: 3px;
+.right-link {
+  justify-content: start;
 }
- .radio{
-    float: inline-end;
- }
 
- h6 {
-     text-align: center;
- }
+.right-link {
+  justify-content: flex-end;
+}
+.radio-label {
+  justify-content: start;
+  text-align: left;
+  margin-right: 3px;
+}
+.radio {
+  float: inline-end;
+}
+
+h6 {
+  text-align: center;
+}
 
 .tags {
-    text-align: center;
+  text-align: center;
 }
 
-
-
- .carousel-inner {
-    padding: 0 45px 25px;
-    text-align: center;
- }
+.carousel-inner {
+  padding: 0 45px 25px;
+  text-align: center;
+}
 
 .text {
-    padding: 0px;
+  padding: 0px;
 }
 
 /* .carousel-indicators {
@@ -154,21 +143,21 @@ h5 {
 } */
 
 .col-wrap {
-    height: 100%;
+  height: 100%;
 }
 
 .col-head {
-    height: 14%;
+  height: 14%;
 }
 
 .inner-col {
-    height: 86%;
+  height: 86%;
 }
 
 .container-bottom {
-    margin-top: 25px;
+  margin-top: 25px;
 }
 
- #carouselWeights {
-    width: 100%;
- }
+#carouselWeights {
+  width: 100%;
+}
