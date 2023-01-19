@@ -84,142 +84,165 @@
     <div class="container">
         <div class="container overflow-hidden">
             <div class="row row-cols-2">
+
                 <div class="col ">
+                    <div class="col-wrap">
+<div class="p-3 border bg-light col-head">
+    <H5>Wellness <i class="fa-solid fa-spa"></i></H5>
+</div>
+<div class="p-3 border inner-col">
 
-                    <div class="p-3 border bg-light">
-                        <H5>Wellness <i class="fa-solid fa-spa"></i></H5>
+
+    {% if log %}
+    <ul>
+        <li>Focus: {{log.focus}}</li>
+        <li>Energy: {{log.energy}}</li>
+        <li>Mood: {{log.mood}}</li>
+        <li>Stress: {{log.stress}}</li>
+    </ul>
+    <hr>
+    <div>
+        <h6>Log <i class="fa-solid fa-pen-to-square"></i></h6>
+        <hr>
+        <i>{{log.journal}}</i>
+        <hr>
+        <i class="fa-regular fa-tags"></i>
+        {% for tag in log.tags %}
+        <a href="{{ url_for('insights.insights', filters=[tag]) }}">{{tag}}</a>
+        {% endfor %}
+    </div>
+
+    {% if not workout %}
+    <br>
+    <a href="{{ url_for('dashboard.edit_log', page_id=page_id) }}" class="btn btn-info">Edit
+        Wellness</a>
+    {% endif %}
+
+
+    {% else %}
+    <form method="POST">
+
+        {{ wellness_form.hidden_tag() }}
+        <div class="radio-grouping">
+            <div class="radio-form">
+                {% for field in [wellness_form.focus, wellness_form.energy, wellness_form.mood,
+                wellness_form.stress]
+                %}
+
+                <span class="radio-label">{{ field.label(class="form-label") }}</span>
+                <span class="radio">
+                    {% for subfield in field %}
+
+                    <tr>
+                        <td>{{ subfield }}</td>
+                        <td>{{ subfield.label(class="form-label") }}</td>
+                    </tr>
+
+                    {% endfor %}
+                </span>
+
+                <br>
+                {% endfor %}<br>
+            </div>
+
+            <div class="log">
+                {{ wellness_form.journal.label(class="form-label prompt") }} <br>
+                {{ wellness_form.journal(class="text-area")}}
+                <hr>
+            </div>
+
+        </div>
+
+
+
+
+
+        <div class="select">
+            <div class="inner-select">
+                <div class="row">
+                    <div class="col tags">
+                        <span>Select <i class="fa-solid fa-tags"></i></i></span>
+
+                        {{ wellness_form.select_tags()}}
                     </div>
-                    <div class="p-3 border ">
-                        <div class="card-inner">
-                        {% if log %}
-                        <ul>
-                            <li>Focus: {{log.focus}}</li>
-                            <li>Energy: {{log.energy}}</li>
-                            <li>Mood: {{log.mood}}</li>
-                            <li>Stress: {{log.stress}}</li>
-                        </ul>
-                        <hr>
-                        <div>
-                            <h6>Log <i class="fa-solid fa-pen-to-square"></i></h6>
-                            <hr>
-                            <i>{{log.journal}}</i>
-                            <hr>
-                            <i class="fa-regular fa-tags"></i>
-                            {% for tag in log.tags %}
-                            <a href="{{ url_for('insights.insights', filters=[tag]) }}">{{tag}}</a>
-                            {% endfor %}
-                        </div>
+                    <div class="col tags">
+                        <span>Create <i class="fa-solid fa-tags"></i></span>
+                        {{ wellness_form.new_tags(class="text-area")}}
 
-                        {% if not workout %}
-                        <br>
-                        <a href="{{ url_for('dashboard.edit_log', page_id=page_id) }}" class="btn btn-info">Edit
-                            Wellness</a>
-                        {% endif %}
-
-
-                        {% else %}
-                            <form method="POST">
-
-                                {{ wellness_form.hidden_tag() }}
-                                <div class="radio-grouping">
-                                {% for field in [wellness_form.focus, wellness_form.energy, wellness_form.mood,
-                                wellness_form.stress]
-                                %}
-
-                                    <span class="radio-label">{{ field.label(class="form-label") }}</span>
-                                    <span class="radio">
-                                        {% for subfield in field %}
-
-                                        <tr>
-                                            <td>{{ subfield }}</td>
-                                            <td>{{ subfield.label(class="form-label") }}</td>
-                                        </tr>
-
-                                        {% endfor %}
-                                    </span>
-
-                                <br>
-                                {% endfor %}<br>
-                                    </div>
-
-
-                                {{ wellness_form.journal.label(class="form-label prompt") }} <br>
-                                {{ wellness_form.journal(class="text-area")}}<br><br>
-
-                                <hr>
-                                <div class="row">
-                                    <div class="col tags">
-                                        <span>Select <i class="fa-solid fa-tags"></i></i></span>
-                                         <br>
-                                        {{ wellness_form.select_tags()}}<br><br>
-                                    </div>
-                                    <div class="col tags">
-                                        <span>Create <i class="fa-solid fa-tags"></i></span>
-                                        {{ wellness_form.new_tags(class="text-area")}}
-                                        <br>
-                                        <br>
-                                    </div>
-                                </div>
-                                <hr>
-                                <div class="submit">
-                                    <button type=submit class="btn btn-dark"><span><i class="fa-solid fa-right-to-bracket"></i></span></button>
-                                </div>
-
-                            </form>
-
-                        {% endif %}
                     </div>
-                    </div>
+
                 </div>
+            </div>
+
+            <hr>
+        </div>
+
+
+
+        <div class="submit">
+            <button type=submit class="btn btn-dark"><span><i class="fa-solid fa-right-to-bracket"></i></span></button>
+    </form>
+
+    {% endif %}
+</div>
+                    </div>
+
+
+                    </div>
+
+                </div>
+<!-- Workout Module -->
 
                 <div class="col">
-                    <div>
-                        <div class="p-3 border bg-light">
+                    <div class="col-wrap">
+                        <div class="p-3 border bg-light col-head">
                             <H5>Workout <i class="fa-solid fa-person-running"></i></H5>
                         </div>
-                        <div class="p-3 border ">
-                            <div class="card-inner">
-                            {% if workout %}
-                            <ul>
-                                <li>Workout <br>
-                                    Type: {{workout.type}}</li>
-                                {% if workout.soreness %}
-                                <li>Soreness: {{workout.soreness}}</li>
-                                {% endif %}
-                                {% if workout.grade %}
-                                <li>Workout <br>
-                                    Grade: {{workout.grade}}</li>
-                                {% endif %}
+                    <div class="p-3 border inner-col">
 
-                                {% if workout.filename %}
-                                <li>Uploaded Workout: <a
-                                        href="{{url_for('dashoard.download', page_id=page_id)}}">{{workout.filename}}</a></li>
-                                {% endif %}
-                                <br>
+                        {% if workout %}
+                        <ul>
+                            <li>Workout <br>
+                                Type: {{workout.type}}</li>
+                            {% if workout.soreness %}
+                            <li>Soreness: {{workout.soreness}}</li>
+                            {% endif %}
+                            {% if workout.grade %}
+                            <li>Workout <br>
+                                Intensity: {{workout.grade}}</li>
+                            {% endif %}
+
+                            {% if workout.filename %}
+                            <li>Uploaded Workout: <a
+                                    href="{{url_for('dashoard.download', page_id=page_id)}}">{{workout.filename}}</a></li>
+                            {% endif %}
+                            <br>
 
 
-                                {% if workout.type == "Weights" %}
-                                <div class="workout-links">
+                            {% if workout.type == "Weights" %}
+                            <div class="workout-links">
 
-                                <a href={{url_for('weights.weights', page_id=page_id)}}>View Workout</a><br>
-                                <a href={{url_for('weights.edit_weights', page_id=page_id, from_base='yes' )}}>Edit Workout</a>
-                                <a href={{url_for('dashboard.delete_workout', page_id=page_id)}}>Delete Workout</a>
-                                </div>
-                                {% endif %}
-
-                            </ul>
-                            {% if workout.workout_log %}
-                            <div>
-                                <hr>
-                                <h6>Log <i class="fa-solid fa-pen-to-square"></i></h6>
-                                <hr> <i>{{workout.workout_log}}</i><br>
-
+                            <a href={{url_for('weights.weights', page_id=page_id)}}>View Workout</a><br>
+                            <a href={{url_for('weights.edit_weights', page_id=page_id, from_base='yes' )}}>Edit Workout</a>
+                            <a href={{url_for('dashboard.delete_workout', page_id=page_id)}}>Delete Workout</a>
                             </div>
                             {% endif %}
 
-                            {% else %}
-                            <form method="POST" enctype="multipart/form-data">
-                                <div class="radio-grouping">
+                        </ul>
+                        {% if workout.workout_log %}
+                        <div>
+                            <hr>
+                            <h6>Log <i class="fa-solid fa-pen-to-square"></i></h6>
+                            <hr> <i>{{workout.workout_log}}</i><br>
+
+                        </div>
+                        {% endif %}
+
+                        {% else %}
+ <!-- Workout Empty  -->
+                        <form method="POST" enctype="multipart/form-data">
+                            <div class="radio-grouping">
+                                <div class="radio-form">
                                     <span class="radio-label">{{ workout_form.soreness.label(class="form-label" )}}</span>
                                     <span class="radio">
                                         {% for subfield in workout_form.soreness %}
@@ -238,49 +261,59 @@
                                             <td>{{ subfield }}</td>
                                             <td>{{ subfield.label(class="form-label") }}</td>
                                         </tr>
-                                        {% endfor %}
-                                    </span><br><br>
+                                        {% endfor %}<br>
+                                    </span>
                                 </div>
 
 
-                                <!-- {{ workout_form.file.label(class="form-label") }}
-                                                                {{ workout_form.file(class="text-area")}}<br><br> -->
-
-                                {{ workout_form.workout_log.label(class="form-label prompt") }}<br>
-                                {{ workout_form.workout_log(class="text-area") }}<br><br>
-                                <hr>
-                                <div class="row">
-                                    <div class="col">
-                                        {{ workout_form.hidden_tag() }}
-                                        {{ workout_form.type.label(class="form-label") }}:<br>
-                                        {{ workout_form.type()}} <br><br>
-                                    </div>
-                                    <div class="col">
-                                        {{ workout_form.specify_other.label(class="form-label")}}<br>
-                                        {{ workout_form.specify_other(class="text-area") }}<br><br>
-                                    </div>
+                                <div class="log">
+                                    {{ workout_form.workout_log.label(class="form-label prompt") }}<br>
+                                    {{ workout_form.workout_log(class="text-area") }}
                                     <hr>
-
                                 </div>
 
-                            <div class="submit">
-                                <button type=submit class="btn btn-dark"><span><i class="fa-solid fa-right-to-bracket"></i></span></button>
+
                             </div>
-                                {% endif %}
-                                </form>
+
+
+
+                            <div class="select">
+                                <div class="inner-select">
+                                    <div class="row">
+                                        <div class="col tags">
+                                            {{ workout_form.hidden_tag() }}
+                                            {{ workout_form.type.label(class="form-label") }}:<br>
+                                            {{ workout_form.type()}} <br><br><br>
+                                        </div>
+                                        <div class="col tags">
+                                            {{ workout_form.specify_other.label(class="form-label")}}<br>
+                                            {{ workout_form.specify_other(class="text-area") }}<br><br><br>
+                                        </div>
+                                    </div>
+                                </div>
+                                <hr>
                             </div>
+
+
+
+                        <div class="submit">
+                            <button type=submit class="btn btn-dark"><span><i class="fa-solid fa-right-to-bracket"></i></span></button>
+                            </form>
+                            {% endif %}
                         </div>
-                    </div>
+
+
                 </div>
-
-<!-- End Weights Module -->
-
-
-
+                </div>
+            </div>
+<!-- End Workout Module -->
 
 
 
 
+
+
+            </div>
                         </div>
                         {% if workout and not log %}
                         <a href="{{ url_for('dashboard.edit_log', page_id=page_id) }}" class="btn btn-info">Edit <i
@@ -291,9 +324,9 @@
                             </div>
 
                     {% endif %}
-                </div>
+
             </div>
-<div class="container">
+<div class="container container-bottom">
     <div class="container overflow-hidden">
             <div class="row row-cols-2">
                 <div class="col"></div>
@@ -302,51 +335,47 @@
                     <div class="p-3 border bg-light">
                         <H5>Weightlifting <i class="fa-solid fa-dumbbell"></i></H5>
                     </div>
-                    <div class="p-3 border ">
-                        <div class="card-inner">
-                            <div id="carouselWeights" class="carousel carousel-dark slide p3 border" data-bs-ride="false">
-                                <ol class="carousel-indicators">
-                                    <li data-bs-target="#carouselWeights" data-bs-slide-to="0" class="active"></li>
-                                    <li data-bs-target="#carouselWeights" data-bs-slide-to="1"></li>
-                                    <li data-bs-target="#carouselWeights" data-bs-slide-to="2"></li>
-                                </ol>
-                                <div class="carousel-inner">
-                                    <div class="carousel-item active">
-                                        <br>
-                                        <p><a class="btn btn-xs btn-light" href={{url_for('weights.init_template', page_id=page_id)}}><i
-                                                    class="fa-solid fa-plus"></i> New Program</a><br></p>
+                    <div id="carouselWeights" class="carousel carousel-dark slide p3 border" data-bs-ride="false">
+                        <ol class="carousel-indicators">
+                            <li data-bs-target="#carouselWeights" data-bs-slide-to="0" class="active"></li>
+                            <li data-bs-target="#carouselWeights" data-bs-slide-to="1"></li>
+                            <li data-bs-target="#carouselWeights" data-bs-slide-to="2"></li>
+                        </ol>
+                        <div class="carousel-inner">
+                            <div class="carousel-item active">
+                                <br>
+                                <p><a class="btn btn-xs btn-light" href={{url_for('weights.init_template', page_id=page_id)}}><i
+                                            class="fa-solid fa-plus"></i> New Program</a><br></p>
 
-                                        <!-- <a href="#" class="btn btn-sm btn-success"><span class="glyphicon glyphicon-plus"></span> Default text here</a> -->
+                                <!-- <a href="#" class="btn btn-sm btn-success"><span class="glyphicon glyphicon-plus"></span> Default text here</a> -->
 
-                                        <!-- <p>Some representative placeholder content for the first slide.</p> -->
+                                <!-- <p>Some representative placeholder content for the first slide.</p> -->
 
-                                    </div>
-                                    <div class="carousel-item">
-                                        <br>
-                                        <p><a class="btn btn-xs btn-light" href={{url_for('weights.edit_weights', page_id=page_id, from_base='yes'
-                                                )}}><i class="fa-solid fa-play"></i> Next Workout</a><br></p>
+                            </div>
+                            <div class="carousel-item">
+                                <br>
+                                <p><a class="btn btn-xs btn-light" href={{url_for('weights.edit_weights', page_id=page_id, from_base='yes'
+                                        )}}><i class="fa-solid fa-play"></i> Next Workout</a><br></p>
 
-                                    </div>
-                                    <div class="carousel-item">
-                                        <br>
-                                        <p><a class="btn btn-xs btn-light" href={{url_for('weights.edit_weights', page_id=page_id, from_base='no'
-                                                )}}><i class="fa-solid fa-play"></i> Custom Workout</a><br></p>
-                                        <!-- <a class="d-block" href={{url_for('weights.edit_weights', page_id=page_id, from_base='no' )}} class="link-success">Start Workout
-                                                                            (blank)</a> -->
-                                    </div>
-                                </div>
-                                <a class="carousel-control-prev" data-bs-target="#carouselWeights" type="button" data-bs-slide="prev">
-                                    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                                    <span class="sr-only">Previous</span>
-                                </a>
-                                <a class="carousel-control-next" data-bs-target="#carouselWeights" type="button" data-bs-slide="next">
-                                    <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                                    <span class="sr-only">Next</span>
-                                </a>
-
-                            </div><br>
+                            </div>
+                            <div class="carousel-item">
+                                <br>
+                                <p><a class="btn btn-xs btn-light" href={{url_for('weights.edit_weights', page_id=page_id, from_base='no'
+                                        )}}><i class="fa-solid fa-play"></i> Custom Workout</a><br></p>
+                                <!-- <a class="d-block" href={{url_for('weights.edit_weights', page_id=page_id, from_base='no' )}} class="link-success">Start Workout
+                                                                    (blank)</a> -->
+                            </div>
                         </div>
-                    </div>
+                        <a class="carousel-control-prev" data-bs-target="#carouselWeights" type="button" data-bs-slide="prev">
+                            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                            <span class="sr-only">Previous</span>
+                        </a>
+                        <a class="carousel-control-next" data-bs-target="#carouselWeights" type="button" data-bs-slide="next">
+                            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                            <span class="sr-only">Next</span>
+                        </a>
+
+                    </div><br>
                 </div>
             </div>
         </div>
@@ -376,3 +405,4 @@
 
 </div>
 {% endblock %}
+</div>

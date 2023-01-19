@@ -15,12 +15,21 @@ h5 {
 
 }
 
-.card-inner {
-    padding: 3%;
+.radio-form {
+    height: 130px;
+
 }
 
+ .log {
+     height: 80px;
+ }
+
+ .inner-select {
+    height: 125px;
+ }
+
 .text-area {
-    width: 90%;
+    width: 95%;
 }
 
 .button-left {
@@ -35,10 +44,48 @@ h5 {
     justify-content: flex-end;
  }
 
- .radio-grouping {
-    /* text-align: center; */
-    max-width: 330px;
+ @media (max-width: 800px) {
+    .radio-grouping {
+        font-size: small;
+            max-width: 350px;
+            height: 250px;
+
+        }
+    .select {
+        font-size: small;
+            height: 30%;
+
+        }
+
+
+
+    .submit {
+            text-align: right;
+            height: 15%;
+            margin-bottom: 5%;
+        }
+
  }
+
+  @media (min-width: 800px) {
+      .radio-grouping {
+          max-width: 350px;
+          height: 280px;
+      }
+
+      .select {
+          height: 30%;
+
+      }
+
+      .submit {
+          text-align: right;
+          height: 15%;
+          margin-bottom: 5%;
+      }
+
+  }
+
 
 .prompt {
     text-align: center;
@@ -52,17 +99,12 @@ h5 {
     justify-content: flex-end;
  }
 .radio-label{
-    /* float: inline-start; */
-    /* display: flex; */
-    /* padding: 10px; */
-    /* margin: 10px; */
     justify-content: start;
     text-align: left;
-    margin-right: 5px;
+    margin-right: 3px;
 }
  .radio{
     float: inline-end;
-
  }
 
  h6 {
@@ -73,9 +115,7 @@ h5 {
     text-align: center;
 }
 
-.submit {
-    text-align: right;
-}
+
 
  .carousel-inner {
     padding: 10px 45px 25px;
@@ -90,7 +130,21 @@ h5 {
     margin-top: 10px;
 }
 
+.col-wrap {
+    height: 100%;
+}
 
+.col-head {
+    height: 14%;
+}
+
+.inner-col {
+    height: 86%;
+}
+
+.container-bottom {
+    margin-top: 25px;
+}
 
  #carouselWeights {
     width: 100%;
