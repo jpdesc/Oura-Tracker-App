@@ -105,7 +105,7 @@
             </ul>
         </div>
 
-        <hr>
+        <!-- <hr> -->
 
         <div class="log sub">
             <span class="right-icon"><i class="fa-solid fa-pen-to-square"></i></span>
@@ -113,7 +113,7 @@
             <i>{{log.journal}}</i>
         </div>
     </div>
-    <hr>
+    <!-- <hr> -->
     <div class="tags select">
         <span class="right-icon"><i class="fa-regular fa-tags"></i></span><hr><br>
         {% for tag in log.tags %}
@@ -208,44 +208,62 @@
                             <H5>Workout <i class="fa-solid fa-person-running"></i></H5>
                         </div>
                     <div class="p-3 border inner-col">
-
                         {% if workout %}
-                        <ul>
-                            <li>Workout <br>
-                                Type: {{workout.type}}</li>
-                            {% if workout.soreness %}
-                            <li>Soreness: {{workout.soreness}}</li>
-                            {% endif %}
-                            {% if workout.grade %}
-                            <li>Workout <br>
-                                Intensity: {{workout.grade}}</li>
-                            {% endif %}
+                        <div class="radio-grouping">
+                            <div class="radio-form sub">
+                                <ul>
+                                <li> Type: {{workout.type}}</li>
+                                {% if workout.soreness %}
+                                <li>Soreness: {{workout.soreness}}</li>
+                                {% endif %}
+                                {% if workout.grade %}
+                                <li>Intensity: {{workout.grade}}</li>
+                                {% endif %}
+                                </ul>
 
-                            {% if workout.filename %}
-                            <li>Uploaded Workout: <a
-                                    href="{{url_for('dashoard.download', page_id=page_id)}}">{{workout.filename}}</a></li>
-                            {% endif %}
-                            <br>
-
-
-                            {% if workout.type == "Weights" %}
-                            <div class="workout-links">
-
-                            <a href={{url_for('weights.weights', page_id=page_id)}}>View Workout</a><br>
-                            <a href={{url_for('weights.edit_weights', page_id=page_id, from_base='yes' )}}>Edit Workout</a>
-                            <a href={{url_for('dashboard.delete_workout', page_id=page_id)}}>Delete Workout</a>
+                            </div>
+                            <!-- <hr> -->
+                            {% if workout.workout_log %}
+                            <div class="log sub">
+                                <span class="right-icon"><i class="fa-solid fa-pen-to-square"></i></span>
+                                <hr> <i>{{workout.workout_log}}</i><br>
                             </div>
                             {% endif %}
+                        </div>
 
-                        </ul>
-                        {% if workout.workout_log %}
-                        <div>
+                        <div class="select sub">
+                            <span class="right-icon"><i class="fa-solid fa-link"></i></span>
                             <hr>
-                            <h6>Log <i class="fa-solid fa-pen-to-square"></i></h6>
-                            <hr> <i>{{workout.workout_log}}</i><br>
+                            <div class="inner-select">
+                                {% if workout.type == "Weights" %}
+                                <div class="workout-links">
+                                    <a href={{url_for('weights.weights', page_id=page_id)}}>View Workout</a><br>
+                                    <a href={{url_for('weights.edit_weights', page_id=page_id, from_base='yes' )}}>Edit Workout</a>
+                                    <a href={{url_for('dashboard.delete_workout', page_id=page_id)}}>Delete Workout</a>
+                                </div>
+                                {% endif %}
+                            </div>
+
+
+                         </div>
+
+                        <hr>
+                        <div class="submit">
+                            {% if log and workout %}
+                                <div class="wrapper">
+                                    <a class="btn btn-light" href="{{ url_for('dashboard.edit_log', page_id=page_id) }}"><i class="fa-solid fa-person-walking"></i> Edit <i
+                                    class="fa-solid fa-spa"></i></a>
+                                </div>
+                            {% elif workout and not log %}
+                                <div class="wrapper">
+                                    <a href="{{ url_for('dashboard.edit_log', page_id=page_id) }}" class="btn btn-light">Edit <i
+                                    class="fa-solid fa-person-running"></i></a>
+
+                                </div>
+
+                            {% endif %}
 
                         </div>
-                        {% endif %}
 
                         {% else %}
  <!-- Workout Empty  -->
@@ -370,24 +388,17 @@
 
             </div>
                         </div>
-                        {% if workout and not log %}
-                        <a href="{{ url_for('dashboard.edit_log', page_id=page_id) }}" class="btn btn-info">Edit <i
-                                class="fa-solid fa-person-running"></i></a>
-                    </div>
+
+                        </div>
 
 
                 </div>
 
-                    {% endif %}
+
 
             </div>
 
-    {% if log and workout %}
-    <div class="wrapper">
-        <a href="{{ url_for('dashboard.edit_log', page_id=page_id) }}">Edit <i
-                class="fa-solid fa-spa"></i></a>
-    </div>
-    {% endif %}
+
     <br>
     <br>
 </div>
