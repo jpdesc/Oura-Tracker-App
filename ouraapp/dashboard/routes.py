@@ -60,7 +60,6 @@ def log(page_id):
         return redirect(url_for('dashboard.log', page_id=page_id))
 
     if workout_form.validate_on_submit():
-        file = request.files[str(workout_form.file.name)]
         type = workout_form.type.data
         if type == "Other":
             type = workout_form.specify_other.data
@@ -68,10 +67,8 @@ def log(page_id):
         grade = workout_form.grade.data
         workout_log = workout_form.workout_log.data
         workout_info = Workout(user_id=current_user.id,
-                               data=file.read(),
                                date=date,
                                day_id=page_id,
-                               filename=file.filename,
                                type=type,
                                soreness=soreness,
                                grade=grade,
@@ -117,7 +114,6 @@ def edit_log(page_id):
         workout_form = WorkoutForm(soreness=workout.soreness,
                                    type=workout.type,
                                    specify_other=None,
-                                   file=workout.data,
                                    grade=workout.grade,
                                    workout_log=workout.workout_log)
     else:
@@ -150,7 +146,6 @@ def edit_log(page_id):
             workout.type = workout_form.specify_other.data
         else:
             workout.type = workout_form.type.data
-            workout.file = workout_form.file.data
         db.session.add(workout)
         db.session.commit()
         curr_workout = Workout.query.filter_by(day_id=page_id).first()
@@ -168,14 +163,14 @@ def edit_log(page_id):
                            date=date)
 
 
-@bp.route('/download/<page_id>')
-@login_required
-def download(page_id):
-    workout = Workout.query.filter_by(id=page_id,
-                                      user_id=current_user.id).first()
-    return send_file(BytesIO(workout.data),
-                     attachment_filename=workout.filename,
-                     as_attachment=True)
+# @bp.route('/download/<page_id>')
+# @login_required
+# def download(page_id):
+#     workout = Workout.query.filter_by(id=page_id,
+#                                       user_id=current_user.id).first()
+#     return send_file(BytesIO(workout.data),
+#                      attachment_filename=workout.filename,
+#                      as_attachment=True)
 
 
 @bp.route('/delete_workout/<page_id>')
