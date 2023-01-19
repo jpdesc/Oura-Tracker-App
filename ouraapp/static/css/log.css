@@ -46,11 +46,12 @@ h5 {
         }
     .select {
         font-size: small;
-        height: 175px;
+        height: 140px;
 
         }
 
-    .carousel-inner {
+
+    .btn {
         font-size: small;
 }
 
