@@ -95,7 +95,7 @@
 
     {% if log %}
 
-    <div class="radio-grouping">
+    <div class="radio-grouping {% if workout and log %}both{% endif %}">
         <div class="radio-form sub">
             <ul>
                 <li>Focus: {{log.focus}}</li>
@@ -113,17 +113,17 @@
             <i>{{log.journal}}</i>
         </div>
     </div>
-    <!-- <hr> -->
-    <div class="tags select">
-        <span class="right-icon"><i class="fa-regular fa-tags"></i></span><hr><br>
+    <span class="right-icon"><i class="fa-regular fa-tags"></i></span><hr>
+    <div class="tags select sub {% if workout and log %}both{% endif %}">
         {% for tag in log.tags %}
         <a href="{{ url_for('insights.insights', filters=[tag]) }}">{{tag}}</a>
         {% endfor %}
     </div>
-    <hr>
-    <div class="submit">
+
+    <div class="submit sub">
+         <hr>
         {% if not workout %}
-        <a href="{{ url_for('dashboard.edit_log', page_id=page_id) }}" class="btn btn-info">Edit <i class="fa-solid fa-spa"></i></a>
+            <a href="{{ url_for('dashboard.edit_log', page_id=page_id) }}" class="btn btn-info">Edit <i class="fa-solid fa-spa"></i></a>
         {% endif %}
     </div>
 
@@ -180,16 +180,14 @@
                         <span>Add <i class="fa-solid fa-tags"></i></span>
                         {{ wellness_form.new_tags(class="text-area")}}
                     </div>
-
                 </div>
             </div>
-
-
         </div>
-        <hr>
+
 
 
         <div class="submit">
+            <hr>
             <button type=submit class="btn btn-dark"><span><i class="fa-solid fa-right-to-bracket"></i></span></button>
     </form>
 
@@ -209,7 +207,7 @@
                         </div>
                     <div class="p-3 border inner-col">
                         {% if workout %}
-                        <div class="radio-grouping">
+                        <div class="radio-grouping {% if workout and log %}both{% endif %}">
                             <div class="radio-form sub">
                                 <ul>
                                 <li> Type: {{workout.type}}</li>
@@ -223,18 +221,20 @@
 
                             </div>
                             <!-- <hr> -->
+                                <span class="right-icon"><i class="fa-solid fa-pen-to-square"></i></span>
+                                    <hr>
                             {% if workout.workout_log %}
                             <div class="log sub">
-                                <span class="right-icon"><i class="fa-solid fa-pen-to-square"></i></span>
-                                <hr> <i>{{workout.workout_log}}</i><br>
+                                 <i>{{workout.workout_log}}</i><br>
                             </div>
                             {% endif %}
                         </div>
 
-                        <div class="select sub">
-                            <span class="right-icon"><i class="fa-solid fa-link"></i></span>
+                        <span class="right-icon"><i class="fa-solid fa-link"></i></span>
                             <hr>
-                            <div class="inner-select">
+                        <div class="select sub {% if workout and log %}both{% endif %}">
+
+
                                 {% if workout.type == "Weights" %}
                                 <div class="workout-links">
                                     <a href={{url_for('weights.weights', page_id=page_id)}}>View Workout</a><br>
@@ -242,24 +242,20 @@
                                     <a href={{url_for('dashboard.delete_workout', page_id=page_id)}}>Delete Workout</a>
                                 </div>
                                 {% endif %}
-                            </div>
 
 
                          </div>
 
-                        <hr>
-                        <div class="submit">
+
+                        <div class="submit sub">
+                            <hr>
                             {% if log and workout %}
-                                <div class="wrapper">
                                     <a class="btn btn-light" href="{{ url_for('dashboard.edit_log', page_id=page_id) }}"><i class="fa-solid fa-person-walking"></i> Edit <i
                                     class="fa-solid fa-spa"></i></a>
-                                </div>
-                            {% elif workout and not log %}
-                                <div class="wrapper">
-                                    <a href="{{ url_for('dashboard.edit_log', page_id=page_id) }}" class="btn btn-light">Edit <i
-                                    class="fa-solid fa-person-running"></i></a>
 
-                                </div>
+                            {% elif workout and not log %}
+                                <a href="{{ url_for('dashboard.edit_log', page_id=page_id) }}" class="btn btn-light">Edit <i
+                                class="fa-solid fa-person-running"></i></a>
 
                             {% endif %}
 
@@ -366,10 +362,11 @@
                                 </div>
 
                             </div>
-                            <hr>
+
 
 
                         <div class="submit">
+                            <hr>
                             <button type=submit class="btn btn-dark"><span><i class="fa-solid fa-right-to-bracket"></i></span></button>
                             </form>
                             {% endif %}

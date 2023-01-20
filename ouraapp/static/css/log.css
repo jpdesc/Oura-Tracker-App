@@ -15,6 +15,7 @@ h5 {
 .inner-select {
   height: 150px;
 }
+
 .right-icon {
   display: block;
   text-align: right;
@@ -48,6 +49,14 @@ h5 {
     height: 140px;
   }
 
+  .both.select {
+    height: 50px;
+  }
+
+  /* .select.sub {
+    height: 20%;
+  } */
+
   .btn {
     font-size: small;
   }
@@ -67,8 +76,8 @@ h5 {
 
   .submit {
     text-align: right;
-    height: 15%;
-    margin-bottom: 5%;
+    height: 45px;
+    padding-bottom: 2%;
   }
 }
 
@@ -79,15 +88,31 @@ h5 {
   }
 
   .select {
-    height: 45%;
+    height: 150px;
   }
+
+  .both.select {
+    height: 50px;
+  }
+
+  /* .select.sub {
+    height: 20%;
+  } */
 
   .radio-form {
     height: 130px;
   }
 
+  .radio-form.sub {
+    height: 75px;
+  }
+
   .log {
     height: 60px;
+  }
+
+  .log.sub {
+    height: 80px;
   }
 
   .carousel-inner {
@@ -96,8 +121,8 @@ h5 {
 
   .submit {
     text-align: right;
-    height: 15%;
-    margin-bottom: 5%;
+    height: 50px;
+    padding-bottom: 2%;
   }
 }
 
