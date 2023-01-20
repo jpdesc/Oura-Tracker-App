@@ -119,6 +119,7 @@ def edit_log(page_id):
     else:
         workout_form = WorkoutForm()
     if wellness_form.validate_on_submit():
+        print('wellness_form validate on submit')
         log.focus = wellness_form.focus.data
         log.mood = wellness_form.mood.data
         log.energy = wellness_form.energy.data
@@ -139,20 +140,20 @@ def edit_log(page_id):
         return redirect(url_for('dashboard.log', page_id=page_id))
 
     if workout_form.validate_on_submit():
-        print('')
+        print('workout_form validate on submit')
         workout.soreness = workout_form.soreness.data
         workout.grade = workout_form.grade.data
         workout.workout_log = workout_form.workout_log.data
+        # curr_workout = Workout.query.filter_by(day_id=page_id).first()
+        # if curr_workout:
+        #     db.session.delete(curr_workout)
+        #     db.session.commit()
         if workout.type == 'Other':
             workout.type = workout_form.specify_other.data
         else:
             workout.type = workout_form.type.data
         db.session.add(workout)
         db.session.commit()
-        curr_workout = Workout.query.filter_by(day_id=page_id).first()
-        if curr_workout:
-            db.session.delete(curr_workout)
-            db.session.commit()
         create_event(workout, 'Workout')
         return redirect(url_for('dashboard.log', page_id=page_id))
     return render_template('edit_post.html',
