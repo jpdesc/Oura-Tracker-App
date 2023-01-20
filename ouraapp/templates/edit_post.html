@@ -9,11 +9,11 @@
 
 <div class="main-container">
 
-    <div class="container">
+<div class="container">
 
-        <h2>{{date}}</h2>
-        <hr>
-    </div>
+    <h2>{{date}}</h2>
+    <hr>
+</div>
 
 
 <div class="container card-container">
@@ -84,70 +84,119 @@
     <div class="container">
         <div class="container overflow-hidden">
             <div class="row row-cols-2">
-                <div class="col">
+                <div class="col ">
                     <div class="col-wrap">
-                        <div class="p-3 border bg-light col-head">
-                            <H5>Wellness <i class="fa-solid fa-spa"></i></H5>
-                        </div>
-                    <div class="p-3 border inner-col">
-                        <form method="POST">
+<div class="p-3 border bg-light col-head">
+    <H5>Wellness <i class="fa-solid fa-spa"></i></H5>
+</div>
+<div class="p-3 border inner-col">
 
-                            {{ wellness_form.hidden_tag() }}
-                            <div class="radio-grouping">
-                                <div class="radio-form">
-                                    {% for field in [wellness_form.focus, wellness_form.energy, wellness_form.mood,
-                                    wellness_form.stress]
-                                    %}
 
-                                    <span class="radio-label">{{ field.label(class="form-label") }}</span>
-                                    <span class="radio">
-                                        {% for subfield in field %}
+    {% if log %}
 
-                                        <tr>
-                                            <td>{{ subfield }}</td>
-                                            <td>{{ subfield.label(class="form-label") }}</td>
-                                        </tr>
+    <div class="radio-grouping {% if workout and log %}both{% endif %}">
+        <div class="radio-form sub">
+            <ul>
+                <li>Focus: {{log.focus}}</li>
+                <li>Energy: {{log.energy}}</li>
+                <li>Mood: {{log.mood}}</li>
+                <li>Stress: {{log.stress}}</li>
+            </ul>
+        </div>
 
-                                        {% endfor %}
-                                    </span>
+        <!-- <hr> -->
 
-                                    <br>
-                                    {% endfor %}<br>
-                                </div>
+        <div class="log sub">
+            <span class="right-icon"><i class="fa-solid fa-pen-to-square"></i></span>
+            <hr>
+            <i>{{log.journal}}</i>
+        </div>
+    </div>
+    <span class="right-icon"><i class="fa-regular fa-tags"></i></span><hr>
+    <div class="tags select sub {% if workout and log %}both{% endif %}">
+        {% for tag in log.tags %}
+        <a href="{{ url_for('insights.insights', filters=[tag]) }}">{{tag}}</a>
+        {% endfor %}
+    </div>
 
-                                <div class="log">
-                                    {{ wellness_form.journal.label(class="form-label prompt") }} <br>
-                                    {{ wellness_form.journal(class="text-area")}}
+    <div class="submit sub">
+         <hr>
+        {% if not workout %}
+            <a href="{{ url_for('dashboard.edit_log', page_id=page_id) }}" class="btn btn-info">Edit <i class="fa-solid fa-spa"></i></a>
+        {% endif %}
+    </div>
 
-                                </div>
-                            </div>
 
-                            <hr>
 
-                            <div class="select">
-                                <div class="inner-select">
-                                    <div class="row">
-                                        <div class="col tags">
-                                            <span>Select <i class="fa-solid fa-tags"></i></span>
+    {% else %}
+    <form method="POST">
 
-                                            {{ wellness_form.select_tags()}}
-                                        </div>
-                                        <div class="col tags">
-                                            <span>Add <i class="fa-solid fa-tags"></i></span>
-                                            {{ wellness_form.new_tags(class="text-area")}}
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
+        {{ wellness_form.hidden_tag() }}
+        <div class="radio-grouping">
+            <div class="radio-form">
+                {% for field in [wellness_form.focus, wellness_form.energy, wellness_form.mood,
+                wellness_form.stress]
+                %}
 
-                            <div class="submit">
-                                <hr>
-                                <button type=submit class="btn btn-dark"><span><i class="fa-solid fa-right-to-bracket"></i></span></button>
-                            </div>
-                        </form>
+                <span class="radio-label">{{ field.label(class="form-label") }}</span>
+                <span class="radio">
+                    {% for subfield in field %}
+
+                    <tr>
+                        <td>{{ subfield }}</td>
+                        <td>{{ subfield.label(class="form-label") }}</td>
+                    </tr>
+
+                    {% endfor %}
+                </span>
+
+                <br>
+                {% endfor %}<br>
+            </div>
+
+            <div class="log">
+                {{ wellness_form.journal.label(class="form-label prompt") }} <br>
+                {{ wellness_form.journal(class="text-area")}}
+
+            </div>
+
+        </div>
+        <hr>
+
+
+
+
+
+        <div class="select">
+            <div class="inner-select">
+                <div class="row">
+                    <div class="col tags">
+                        <span>Select <i class="fa-solid fa-tags"></i></span>
+
+                        {{ wellness_form.select_tags()}}
                     </div>
+                    <div class="col tags">
+                        <span>Add <i class="fa-solid fa-tags"></i></span>
+                        {{ wellness_form.new_tags(class="text-area")}}
                     </div>
                 </div>
+            </div>
+        </div>
+
+
+
+        <div class="submit">
+            <hr>
+            <button type=submit class="btn btn-dark"><span><i class="fa-solid fa-right-to-bracket"></i></span></button>
+        </div>
+    </form>
+
+    {% endif %}
+</div>
+                    </div>
+
+
+                    </div>
 
 <!-- Workout Module -->
 
@@ -157,6 +206,62 @@
                             <H5>Workout <i class="fa-solid fa-person-running"></i></H5>
                         </div>
                     <div class="p-3 border inner-col">
+                        {% if workout %}
+                        <div class="radio-grouping {% if workout and log %}both{% endif %}">
+                            <div class="radio-form sub">
+                                <ul>
+                                <li> Type: {{workout.type}}</li>
+                                {% if workout.soreness %}
+                                <li>Soreness: {{workout.soreness}}</li>
+                                {% endif %}
+                                {% if workout.grade %}
+                                <li>Intensity: {{workout.grade}}</li>
+                                {% endif %}
+                                </ul>
+
+                            </div>
+                            <!-- <hr> -->
+                                <span class="right-icon"><i class="fa-solid fa-pen-to-square"></i></span>
+                                    <hr>
+                            {% if workout.workout_log %}
+                            <div class="log sub">
+                                 <i>{{workout.workout_log}}</i><br>
+                            </div>
+                            {% endif %}
+                        </div>
+
+                        <span class="right-icon"><i class="fa-solid fa-link"></i></span>
+                            <hr>
+                        <div class="select sub {% if workout and log %}both{% endif %}">
+
+
+                                {% if workout.type == "Weights" %}
+                                <div class="workout-links">
+                                    <a href={{url_for('weights.weights', page_id=page_id)}}>View Workout</a><br>
+                                    <a href={{url_for('weights.edit_weights', page_id=page_id, from_base='yes' )}}>Edit Workout</a>
+                                    <a href={{url_for('dashboard.delete_workout', page_id=page_id)}}>Delete Workout</a>
+                                </div>
+                                {% endif %}
+
+
+                         </div>
+
+
+                        <div class="submit sub">
+                            <hr>
+                            {% if log and workout %}
+                                    <a class="btn btn-light" href="{{ url_for('dashboard.edit_log', page_id=page_id) }}"><i class="fa-solid fa-person-walking"></i> Edit <i
+                                    class="fa-solid fa-spa"></i></a>
+
+                            {% elif workout and not log %}
+                                <a href="{{ url_for('dashboard.edit_log', page_id=page_id) }}" class="btn btn-light">Edit <i
+                                class="fa-solid fa-person-running"></i></a>
+
+                            {% endif %}
+
+                        </div>
+
+                        {% else %}
  <!-- Workout Empty  -->
                         <form method="POST" enctype="multipart/form-data">
                             <div class="radio-grouping">
@@ -170,6 +275,8 @@
                                         </tr>
                                         {% endfor %}
                                     </span><br>
+
+
                                     <span class="radio-label">Intensity:</span>
                                     <span class="radio">
                                         {% for subfield in workout_form.grade %}
@@ -187,9 +294,11 @@
                                     {{ workout_form.workout_log(class="text-area") }}
 
                                 </div>
-                            </div>
 
+
+                            </div>
                             <hr>
+
 
                             <div class="select">
                                 <div class="inner-select">
@@ -248,29 +357,50 @@
 
                                         </div><br>
                                     </div>
+
+
                                 </div>
+
                             </div>
+
+
 
                         <div class="submit">
                             <hr>
                             <button type=submit class="btn btn-dark"><span><i class="fa-solid fa-right-to-bracket"></i></span></button>
-                            </form>
                         </div>
-                    </div>
+                            </form>
+                            {% endif %}
+                        </div>
+
+
+                </div>
                 </div>
             </div>
-        </div>
-    </div>
-</div>
-
 <!-- End Workout Module -->
 
-<br><br>
+
+
+
+
+
+            </div>
+                        </div>
+
+                        </div>
+
+
+                </div>
+
+
+
+            </div>
+
+
+    <br>
+    <br>
 </div>
-
-{% endblock %}
-
-<!-- <div class="button-left">
+<div class="button-left">
     <button class="btn btn-outline-secondary" id="back"
         onclick="window.location.href='{{ url_for('dashboard.log', page_id=page_id-1) }}'"><i
             class="fa-solid fa-angles-left"></i> Previous Day</button>
@@ -280,4 +410,10 @@
     <button class="btn btn-outline-secondary" id="forward"
         onclick="window.location.href='{{ url_for('dashboard.log', page_id=page_id+1) }}'">Next Day <i
             class="fa-solid fa-angles-right"></i></button>
-</div> -->
+</div>
+</div>
+
+
+</div>
+{% endblock %}
+</div>

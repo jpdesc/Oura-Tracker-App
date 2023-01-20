@@ -139,6 +139,7 @@ def edit_log(page_id):
         return redirect(url_for('dashboard.log', page_id=page_id))
 
     if workout_form.validate_on_submit():
+        print('')
         workout.soreness = workout_form.soreness.data
         workout.grade = workout_form.grade.data
         workout.workout_log = workout_form.workout_log.data
