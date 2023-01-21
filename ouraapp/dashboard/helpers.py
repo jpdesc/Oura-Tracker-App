@@ -58,11 +58,17 @@ def add_tags(added_tags, selected_tags, db_obj):
 
 
 def create_event(submitted_log, title):
-    event = Events.query.filter_by(user_id=current_user.id,
-                                   day_id=submitted_log.id,
-                                   title=title).first()
-    if not event:
-        event = Events()
+    print(submitted_log.day_id)
+    events = Events.query.filter_by(user_id=current_user.id,
+                                   day_id=submitted_log.day_id,
+                                   title=title).all()
+
+    for event in events:
+        print(event)
+        db.session.delete(event)
+        db.session.commit()
+
+    event = Events()
     event.title = title
     if title == 'Wellness':
         event.score = get_wellness_score(submitted_log)
