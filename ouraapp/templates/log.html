@@ -238,7 +238,7 @@
                                 {% if workout.type == "Weights" and workout.weights_data %}
                                 <div class="workout-links">
                                     <a href={{url_for('weights.weights', page_id=page_id)}}>View Workout</a><br>
-                                    <a href={{url_for('weights.edit_weights', page_id=page_id, from_base='yes' )}}>Edit Workout</a>
+                                    <a href={{url_for('weights.edit_weights', page_id=page_id, from_base=True)}}>Edit Workout</a>
                                     <a href={{url_for('dashboard.delete_workout', page_id=page_id)}}>Delete Workout</a>
                                 </div>
                                 {% endif %}
@@ -334,13 +334,13 @@
                                                 </div>
                                                 <div class="carousel-item">
                                                     <br>
-                                                    <p><a class="btn btn-xs btn-light" href={{url_for('weights.edit_weights', page_id=page_id, from_base='yes'
+                                                    <p><a class="btn btn-xs btn-light" href={{url_for('weights.edit_weights', page_id=page_id, from_base=True
                                                             )}}><i class="fa-solid fa-play"></i><br>Next Workout</a><br></p>
 
                                                 </div>
                                                 <div class="carousel-item">
                                                     <br>
-                                                    <p><a class="btn btn-xs btn-light" href={{url_for('weights.edit_weights', page_id=page_id, from_base='no'
+                                                    <p><a class="btn btn-xs btn-light" href={{url_for('weights.edit_weights', page_id=page_id, from_base=False
                                                             )}}><i class="fa-solid fa-play"></i><br>Custom Workout</a><br></p>
                                                     <!-- <a class="d-block" href={{url_for('weights.edit_weights', page_id=page_id, from_base='no' )}} class="link-success">Start Workout
                                                                                                                                                 (blank)</a> -->

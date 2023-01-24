@@ -67,27 +67,33 @@ def edit_weights(page_id, from_base):
     # logger.debug(f'page_id = {page_id}')
     weights = Weights.query.filter_by(user_id=current_user.id,
                                       day_id=page_id).first()
-    print(weights)
+    if weights:
+        if from_base != weights.from_base:
+            from_base = weights.from_base
+            db.session.add(weights)
+            db.session.commit()
+
     show_rep_range = False
     # logger.debug(f'weights_obj = {weights}')
     if not weights:
-        weights = Weights(day_id=page_id,
+        if from_base is True:
+            weights = Weights(day_id=page_id,
                           user_id=current_user.id,
                           template_id=get_current_template().id,
                           workout_id=get_workout_id(),
-                          workout_week=get_workout_week_num())
+                          workout_week=get_workout_week_num(),
+                          from_base=True)
+        else:
+            weights = Weights(day_id=page_id,
+                                user_id=current_user.id,
+                                from_base=False)
+        db.session.add(weights)
+        db.session.commit()
         # logger.debug(
         #     f'workout_week = {weights.workout_week}, workout_id={weights.workout_id}, template_id={weights.template_id}'
         # )
-    db.session.add(weights)
-    db.session.commit()
-    print(get_workout_id())
-    print(get_workout_week_num())
 
-    # logger.debug(
-    #     f'workout_week = {weights.workout_week}, workout_id={weights.workout_id}, template_id={weights.template_id}'
-    # )
-    if not weights.exercise_objs:
+    if not weights.exercise_objs and from_base is True:
         if not weights.template_id:
             print('not weights.template_id')
             weights.template_id = get_current_template().id
@@ -96,28 +102,28 @@ def edit_weights(page_id, from_base):
         # logger.debug(
         #     f'weights.workout_id = {weights.workout_id}, weights.template_id= {weights.template_id}'
         # )
-        base = get_next_base_workout(weights.workout_id, weights.template_id)
-        print(f'weights.workout_id = {weights.workout_id}, weights.template_id= {weights.template_id}')
-        # logger.debug(f'base = {base}')
-        try:
-            workout_params = json.loads(base.workout_params)
-        except AttributeError:
-            flash('You must create a base template to load from.')
-            return redirect(url_for('weights.init_template', page_id=page_id))
+            base = get_next_base_workout(weights.workout_id, weights.template_id)
+            print(f'weights.workout_id = {weights.workout_id}, weights.template_id= {weights.template_id}')
+            # logger.debug(f'base = {base}')
+            try:
+                workout_params = json.loads(base.workout_params)
+            except AttributeError:
+                flash('You must create a base template to load from.')
+                return redirect(url_for('weights.init_template', page_id=page_id))
 
-        for entry in workout_params.values():
-            if entry[0]:
-                exercise = Exercise(exercise_name=entry[0],
-                                    sets=entry[1],
-                                    rep_range=f'{entry[2]} - {entry[3]}',
-                                    weights_id=weights.id,
-                                    reps='',
-                                    weight='',
-                                    day_id=page_id)
-                db.session.add(exercise)
-            if entry[2] or entry[3]:
-                show_rep_range = True
-        db.session.commit()
+            for entry in workout_params.values():
+                if entry[0]:
+                    exercise = Exercise(exercise_name=entry[0],
+                                        sets=entry[1],
+                                        rep_range=f'{entry[2]} - {entry[3]}',
+                                        weights_id=weights.id,
+                                        reps='',
+                                        weight='',
+                                        day_id=page_id)
+                    db.session.add(exercise)
+                if entry[2] or entry[3]:
+                    show_rep_range = True
+            db.session.commit()
 
     clear_exercises(page_id)
 

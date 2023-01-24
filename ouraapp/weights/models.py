@@ -16,6 +16,7 @@ class Weights(db.Model):
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
     base_id = db.Column(db.Integer, db.ForeignKey('base_workout.id'))
     exercise_objs = db.relationship('Exercise', backref='weights')
+    from_base = db.Column(db.Boolean)
 
 
 def check_last_week_excs(exercise_name, last_week_id):
@@ -46,12 +47,14 @@ def get_last_week_excs(weights_id, exercise_name):
 
 
 def prev_excs_data(excs_obj):
-    exercise_prev = get_last_week_excs(excs_obj.weights_id,
+    weights = Weights.query.filter_by(id=excs_obj.weights_id).first()
+    if weights.from_base == True:
+        exercise_prev = get_last_week_excs(excs_obj.weights_id,
                                        excs_obj.exercise_name)
-    if exercise_prev:
-        return f'{exercise_prev.reps} x {exercise_prev.weight}'
-    else:
-        return 'No previous data.'
+        if exercise_prev:
+            return f'{exercise_prev.reps} x {exercise_prev.weight}'
+
+    return 'No previous data.'
 
 
 #
