@@ -75,5 +75,5 @@ class Workout(db.Model):
     grade = db.Column(db.Integer)
     filename = db.Column(db.String(50))
     data = db.Column(db.LargeBinary)
-    workout_log = db.Column(db.String)
+    weights_data = db.Column(db.Boolean)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))

@@ -73,13 +73,16 @@ def convert_older_weights():
 def ensure_workout_log_exists(page_id):
     workout = Workout.query.filter_by(day_id=page_id,
                                       user_id=current_user.id).first()
-    if not workout:
+    if workout:
+        workout.weights_data = True
+    else:
         workout = Workout(user_id=current_user.id,
-                          day_id=page_id,
-                          date=get_date(page_id),
-                          type="Weights")
-        db.session.add(workout)
-        db.session.commit()
+                        weights_data=True,
+                        day_id=page_id,
+                        date=get_date(page_id),
+                        type="Weights")
+    db.session.add(workout)
+    db.session.commit()
     return workout
 
 
