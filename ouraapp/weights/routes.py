@@ -67,8 +67,8 @@ def edit_weights(page_id, from_base):
     # logger.debug(f'page_id = {page_id}')
     weights = Weights.query.filter_by(user_id=current_user.id,
                                       day_id=page_id).first()
+    print(weights)
     show_rep_range = False
-
     # logger.debug(f'weights_obj = {weights}')
     if not weights:
         weights = Weights(day_id=page_id,
@@ -76,28 +76,29 @@ def edit_weights(page_id, from_base):
                           template_id=get_current_template().id,
                           workout_id=get_workout_id(),
                           workout_week=get_workout_week_num())
-        logger.debug(
-            f'workout_week = {weights.workout_week}, workout_id={weights.workout_id}, template_id={weights.template_id}'
-        )
-
-        weights = Weights(day_id=page_id, user_id=current_user.id)
+        # logger.debug(
+        #     f'workout_week = {weights.workout_week}, workout_id={weights.workout_id}, template_id={weights.template_id}'
+        # )
     db.session.add(weights)
     db.session.commit()
+    print(get_workout_id())
+    print(get_workout_week_num())
 
-    logger.debug(
-        f'workout_week = {weights.workout_week}, workout_id={weights.workout_id}, template_id={weights.template_id}'
-    )
-
+    # logger.debug(
+    #     f'workout_week = {weights.workout_week}, workout_id={weights.workout_id}, template_id={weights.template_id}'
+    # )
     if not weights.exercise_objs:
         if not weights.template_id:
+            print('not weights.template_id')
             weights.template_id = get_current_template().id
             db.session.add(weights)
             db.session.commit()
-        logger.debug(
-            f'weights.workout_id = {weights.workout_id}, weights.template_id= {weights.template_id}'
-        )
+        # logger.debug(
+        #     f'weights.workout_id = {weights.workout_id}, weights.template_id= {weights.template_id}'
+        # )
         base = get_next_base_workout(weights.workout_id, weights.template_id)
-        logger.debug(f'base = {base}')
+        print(f'weights.workout_id = {weights.workout_id}, weights.template_id= {weights.template_id}')
+        # logger.debug(f'base = {base}')
         try:
             workout_params = json.loads(base.workout_params)
         except AttributeError:
@@ -170,7 +171,6 @@ def init_template(page_id):
     init_form = InitWorkoutForm()
     if init_form.validate_on_submit():
         name = init_form.name_workout_plan.data
-        create_base = init_form.set_base.data
         days = init_form.days.data
         starting_prs = {
             'Squat': init_form.squat_pr.data,
@@ -189,11 +189,5 @@ def init_template(page_id):
                                 user_id=current_user.id)
         db.session.add(workout_plan)
         db.session.commit()
-        if create_base is True:
-            return redirect(
-                url_for('weights.create_template',
-                        day=1,
-                        template_name=name,
-                        page_id=page_id))
         return redirect(url_for('dashboard.log', page_id=page_id))
     return render_template('init_template.html', init_form=init_form)

@@ -88,30 +88,25 @@ def ensure_workout_log_exists(page_id):
 
 def get_workout_id():
     current_template = get_current_template()
-    logger.debug(f'current_template= {current_template}')
     num_days = current_template.num_days
     if current_template.weights:
-        logger.debug(f'current_template.weights = True')
-        last_workout = Weights.query.filter_by(
-            template_id=current_template.id).order_by(
-                Weights.id.desc()).first()
-        logger.debug(f'last_workout = {last_workout}')
+        weights = Weights.query.order_by(Weights.id).filter_by(user_id=current_user.id, template_id=current_template.id).all()
+        idx = -1
+        while not weights[idx].workout_id and len(weights) + idx > 0:
+            print('template_id not found')
+            db.session.delete(weights[idx])
+            idx -= 1
+        db.session.commit()
+        print(f'weights[idx] = {weights[idx]}')
+
+        last_workout = weights[idx]
         if last_workout.workout_id:
-            logger.debug(f'last_workout.workout_id exists')
-            logger.debug(
-                f'num_days = {num_days}, int(last_workout.workout_id) + 1 = {int(last_workout.workout_id) + 1}'
-            )
-            logger.debug(
-                f'add new day execute = {(int(last_workout.workout_id) + 1) <= num_days}'
-            )
             if (int(last_workout.workout_id) + 1) <= num_days:
-                logger.debug(
-                    f'last_workout_id + 1: {int(last_workout.workout_id) + 1}, add another day'
-                )
                 return int(last_workout.workout_id) + 1
             else:
                 logger.debug(f'id = 1')
                 return 1
+        return 1
     else:
         logger.debug('id=1')
         return 1
@@ -121,9 +116,16 @@ def get_workout_week_num():
     current_template = get_current_template()
     num_days = current_template.num_days
     if current_template.weights:
-        last_workout = Weights.query.filter_by(
-            template_id=current_template.id).order_by(
-                Weights.id.desc()).first()
+        weights = Weights.query.order_by(Weights.id).filter_by(user_id=current_user.id, template_id=current_template.id).all()
+        idx = -1
+        while not weights[idx].workout_week and len(weights) + idx > 0:
+            print('template_id not found')
+            db.session.delete(weights[idx])
+            idx -= 1
+        db.session.commit()
+        print(f'weights[idx] = {weights[idx]}')
+
+        last_workout = weights[idx]
         if last_workout.workout_id == num_days:
             week = last_workout.workout_week + 1
         else:
