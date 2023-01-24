@@ -141,7 +141,7 @@ def get_current_template():
 def workout_data():
     weight_workouts = Weights.query.order_by(Weights.id).all()
     for workout in weight_workouts:
-        matched = Workout.query.filter_by(day_id = workout.day_id, user_id=workout.user_id).all()
+        matched = Workout.query.filter_by(day_id=workout.day_id, user_id=workout.user_id).first()
         matched.weights_data = True
         db.session.add(matched)
     db.session.commit()
