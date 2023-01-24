@@ -144,5 +144,5 @@ def workout_data():
         matched = Workout.query.filter_by(day_id=workout.day_id, user_id=workout.user_id).first()
         if matched:
             matched.weights_data = True
-        db.session.add(matched)
+            db.session.add(matched)
     db.session.commit()
