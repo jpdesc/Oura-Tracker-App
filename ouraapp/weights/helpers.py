@@ -136,3 +136,12 @@ def get_workout_week_num():
 def get_current_template():
     return Template.query.filter_by(user_id=current_user.id).order_by(
         Template.id.desc()).first()
+
+
+def workout_data():
+    weight_workouts = Weights.query.order_by(Weights.id).all()
+    for workout in weight_workouts:
+        matched = Workout.query.filter_by(day_id = workout.day_id, user_id=workout.user_id).all()
+        matched.weights_data = True
+        db.session.add(matched)
+    db.session.commit()
