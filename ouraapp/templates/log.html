@@ -97,10 +97,10 @@
     <div class="radio-grouping {% if workout and log %}both{% endif %}">
         <div class="radio-form sub">
             <ul>
-                <li>Focus: {{log.focus}}</li>
-                <li>Energy: {{log.energy}}</li>
-                <li>Mood: {{log.mood}}</li>
-                <li>Stress: {{log.stress}}</li>
+                <li>Focus: <br class="hidden-br">{{log.focus}}</li>
+                <li>Energy: <br class="hidden-br">{{log.energy}}</li>
+                <li>Mood: <br class="hidden-br">{{log.mood}}</li>
+                <li>Stress: <br class="hidden-br">{{log.stress}}</li>
             </ul>
         </div>
 
@@ -138,7 +138,7 @@
                 wellness_form.stress]
                 %}
 
-                <span class="radio-label">{{ field.label(class="form-label") }}</span>
+                <span class="radio-label">{{ field.label(class="form-label") }}</span><br class="hidden-br">
                 <span class="radio">
                     {% for subfield in field %}
 
@@ -169,12 +169,13 @@
 
         <div class="select">
             <div class="inner-select">
-                <div class="row">
+                <div class="row primary">
                     <div class="col tags">
                         <span>Select <i class="fa-solid fa-tags"></i></span>
-
+                        <br class="hidden-br">
                         {{ wellness_form.select_tags()}}
                     </div>
+                    <br class="hidden-br"><br class="hidden-br">
                     <div class="col tags">
                         <span>Add <i class="fa-solid fa-tags"></i></span>
                         {{ wellness_form.new_tags(class="text-area")}}
@@ -309,7 +310,7 @@
                         <form method="POST" enctype="multipart/form-data">
                             <div class="radio-grouping">
                                 <div class="radio-form">
-                                    <span class="radio-label">{{ workout_form.soreness.label(class="form-label" )}}</span>
+                                    <span class="radio-label">{{ workout_form.soreness.label(class="form-label" )}}</span><br class="hidden-br">
                                     <span class="radio">
                                         {% for subfield in workout_form.soreness %}
                                         <tr>
@@ -320,7 +321,7 @@
                                     </span><br>
 
 
-                                    <span class="radio-label">Intensity:</span>
+                                    <span class="radio-label">{{ workout_form.grade.label(class="form-label" )}}</span> <br class="hidden-br">
                                     <span class="radio">
                                         {% for subfield in workout_form.grade %}
                                         <tr>
@@ -345,19 +346,21 @@
 
                             <div class="select">
                                 <div class="inner-select">
-                                    <div class="row">
-                                        <div class="col tags">
-                                            {{ workout_form.hidden_tag() }}
-                                            <span>Select <i class="fa-solid fa-person-walking"></i></span>
-                                            <br>
-                                            {{ workout_form.type()}}
-                                        </div>
-                                        <div class="col tags">
-                                            <span>Add <i class="fa-solid fa-person-walking"></i></span><br>
-                                            {{ workout_form.specify_other(class="text-area") }}
-                                        </div>
+                                    <div class="row primary">
+                                            <div class="col tags">
+                                                {{ workout_form.hidden_tag() }}
+                                                <span>Select <i class="fa-solid fa-person-walking"></i></span>
+                                                <br>
+                                                {{ workout_form.type()}}
+                                            </div>
+                                        </span>
+                                         <br class="hidden-br">
+                                            <div class="col tags">
+                                                <span>Add <i class="fa-solid fa-person-walking"></i></span><br>
+                                                {{ workout_form.specify_other(class="text-area") }}
+                                            </div>
                                     </div>
-                                    <div class="carousel-wrapper">
+                                    <div class="carousel-wrapper secondary">
                                         <div id="carouselWeights" class="carousel carousel-dark slide" data-bs-ride="false">
                                             <ol class="carousel-indicators">
                                                 <li data-bs-target="#carouselWeights" data-bs-slide-to="0" class="active"></li>

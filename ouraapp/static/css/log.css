@@ -4,6 +4,21 @@ h5 {
   text-align: center;
 }
 
+.carousel-inner {
+  padding: 0 45px 25px;
+  text-align: center;
+}
+
+.radio {
+  float: right;
+}
+
+@media (min-width: 600px) {
+  .hidden-br {
+    display: none !important;
+  }
+}
+
 .navbar {
   margin-bottom: 1em;
   padding: 1em;
@@ -37,7 +52,108 @@ h5 {
   justify-content: flex-end;
 }
 
-@media (max-width: 800px) {
+@media (max-width: 600px) {
+  .col-head {
+    height: 8%;
+  }
+
+  .inner-col {
+    height: 86%;
+  }
+
+  .hidden-br {
+    display: inline;
+  }
+
+  .radio-grouping {
+    font-size: x-small;
+    max-width: 350px;
+    height: 275px;
+  }
+
+  .radio {
+    font-size: xx-small;
+  }
+
+  .select {
+    font-size: x-small;
+    height: 190px;
+  }
+
+  .both.select {
+    height: 50px;
+  }
+
+  .primary {
+    height: 100px;
+    display: inline-block;
+  }
+
+  .inner-select {
+    text-align: center;
+  }
+
+  .secondary {
+    height: 75px;
+    text-align: center;
+  }
+
+  .carousel-wrapper {
+    font-size: x-small;
+  }
+
+  .carousel-inner {
+    padding: 0 25px 25px;
+    text-align: center;
+  }
+
+  /* .select.sub {
+    height: 20%;
+  } */
+
+  /* .carousel-inner {
+    width: 100%;
+  } */
+
+  .carousel-item {
+    font-size: x-small;
+    margin: 0px auto;
+    position: relative;
+  }
+
+  .btn {
+    font-size: x-small;
+  }
+
+  .radio-form {
+    height: 200px;
+  }
+
+  .radio-form.sub {
+    height: 70px;
+  }
+
+  .log {
+    height: 50px;
+    font-size: x-small;
+  }
+
+  .submit {
+    text-align: right;
+    height: 75px;
+    padding-bottom: 5%;
+  }
+}
+
+@media (min-width: 600px) and (max-width: 800px) {
+  .col-head {
+    height: 14%;
+  }
+
+  .inner-col {
+    height: 86%;
+  }
+
   .radio-grouping {
     font-size: small;
     max-width: 350px;
@@ -53,6 +169,9 @@ h5 {
     height: 50px;
   }
 
+  .radio {
+    font-size: x-small;
+  }
   /* .select.sub {
     height: 20%;
   } */
@@ -82,9 +201,21 @@ h5 {
 }
 
 @media (min-width: 800px) {
+  .col-head {
+    height: 14%;
+  }
+
+  .inner-col {
+    height: 86%;
+  }
+
   .radio-grouping {
     max-width: 350px;
     height: 220px;
+  }
+
+  .radio {
+    font-size: xx-small;
   }
 
   .select {
@@ -142,20 +273,15 @@ h5 {
   text-align: left;
   margin-right: 3px;
 }
-.radio {
+/* .radio {
   float: inline-end;
-}
+} */
 
 h6 {
   text-align: center;
 }
 
 .tags {
-  text-align: center;
-}
-
-.carousel-inner {
-  padding: 0 45px 25px;
   text-align: center;
 }
 
@@ -169,14 +295,6 @@ h6 {
 
 .col-wrap {
   height: 100%;
-}
-
-.col-head {
-  height: 14%;
-}
-
-.inner-col {
-  height: 86%;
 }
 
 .container-bottom {

@@ -39,7 +39,7 @@ class JournalForm(FlaskForm):
 
 class WorkoutForm(FlaskForm):
     soreness = RadioField('Soreness:', choices=['1', '2', '3', '4', '5'])
-    grade = RadioField('Workout Grade:', choices=['1', '2', '3', '4', '5'])
+    grade = RadioField('Intensity:', choices=['1', '2', '3', '4', '5'])
     type = SelectField(
         choices=['Swim', 'Weights', 'Calisthenics', 'Yoga', 'Other'])
     specify_other = StringField("New Type: ")
