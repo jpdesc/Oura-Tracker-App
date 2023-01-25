@@ -1,53 +1,47 @@
-{% extends "base.html" %}
+{% extends "base.html" %} {% block content %}
 
-{% block content %}
-<table class="table">
+<div class="container">
+  <table class="table">
     <thead>
-        <tr>
-            <th scope="col">Exercise</th>
-            <th scope="col">Sets</th>
-            <th scope="col">Reps</th>
-            <th scope="col">Weight</th>
-        </tr>
+      <tr>
+        <th scope="col">Exercise</th>
+        <th scope="col">Sets</th>
+        <th scope="col">Reps</th>
+        <th scope="col">Weight</th>
+      </tr>
     </thead>
     <tbody>
+      {% for exercise in exercise_list %}
 
-        {% for exercise in exercise_list %}
+      <tr>
+        <th scope="row">{{exercise.exercise_name}}</th>
 
-        <tr>
-            <th scope="row">
-                {{exercise.exercise_name}}</th>
+        <td>{{exercise.sets}}</td>
 
-            <td>{{exercise.sets}}</td>
-
-
-            {% if exercise.reps %}
-            {% if exercise.reps_improve == True %}
-            <td class="table-success">
-                {{exercise.reps}}</td>
-            {% else %}
-            <td>{{exercise.reps}}</td>
-            {% endif %}
-            {% else %}
-            <td>{{exercise.reps}}</td>
-            {% endif %}
-
-            {% if exercise.weight %}
-            {% if exercise.weight_improve == True %}
-            <td class="table-success">
-                {{exercise.weight}}</td>
-            {% else %}
-            <td>{{exercise.weight}}</td>
-            {% endif %}
-            {% else %}
-            <td>{{exercise.weight}}</td>
-            {% endif %}
-        </tr>
-        {% endfor %}
+        {% if exercise.reps %} {% if exercise.reps_improve == True %}
+        <td class="table-success">{{exercise.reps}}</td>
+        {% else %}
+        <td>{{exercise.reps}}</td>
+        {% endif %} {% else %}
+        <td>{{exercise.reps}}</td>
+        {% endif %} {% if exercise.weight %} {% if exercise.weight_improve ==
+        True %}
+        <td class="table-success">{{exercise.weight}}</td>
+        {% else %}
+        <td>{{exercise.weight}}</td>
+        {% endif %} {% else %}
+        <td>{{exercise.weight}}</td>
+        {% endif %}
+      </tr>
+      {% endfor %}
     </tbody>
-</table>
+  </table>
 
-<a href="{{ url_for('weights.edit_weights', page_id=page_id, from_base='yes') }}" class="btn btn-info">Edit
-    Workout</a>
+  <a
+    href="{{ url_for('weights.edit_weights', page_id=page_id, from_base=True) }}"
+    class="btn btn-info"
+    >Edit Workout</a
+  >
+</div>
 
 {% endblock %}

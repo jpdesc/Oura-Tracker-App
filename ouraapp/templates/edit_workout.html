@@ -17,62 +17,69 @@
 
 
 
-<span class= "flex-container">
+<div class="container">
 
 
 <form id="form" method="POST" enctype="multipart/form-data">
 
 {% if from_base==True %}
-<span class="heading">
+<div class="heading">
     <h5>Week {{weights.workout_week}}, Day {{weights.workout_id}}</h5>
-</span>
+</div>
 {% else %}
-<span class="heading">
+<div class="heading">
     <h5>Custom Workout</h5>
-</span>
+</div>
 {% endif %}
 
-<span class="table-block" inline="true">
 <span id="table" class="table table-striped"></span><br>
-<span class="container buttons">
+<div class="weights-form">
+
+    <span class="form-left">
+    <tr>
+        <td>Soreness: </td>
+        <td></td>
+    </tr>
+    <tr>
+    {% for subfield in form.soreness %}
+        <td>{{ subfield }}</td>
+        <td>{{ subfield.label(class="form-label") }}</td>
+    {% endfor %}
+    </tr>
+    </span>
+
+    <span class="form-right">
+        <tr>
+            <td>Intensity: </td>
+            <td></td>
+        </tr>
+        <tr>
+        {% for subfield in form.grade %}
+            <td>{{ subfield }}</td>
+            <td>{{ subfield.label(class="form-label") }}</td>
+        {% endfor %}
+        </tr>
+    </span>
+</div>
+
+<div class="buttons">
     <span class="button-left">
         <span id="addRow"> <button name="AddRow" class="btn btn-secondary">Add Row</button></span></span>
     <span class="button-left">
-        <span id="removeRow"> <button name="removeRow" class="btn btn-secondary">Remove Row</button></span>
-    </span>
+        <span id="removeRow"> <button name="removeRow" class="btn btn-secondary">Remove Row</button></span></span>
 
     <span id="submit" class="button-right">
         {{ form.submit2(class="btn btn-dark") }}
-</span>
-</span>
-</span>
-<span class="weights-form">
-
-    <div class="form-right">
-    {{ form.soreness.label(class="form-label" )}}<br>
-    {% for subfield in form.soreness %}
-    <tr>
-        <td>{{ subfield }}</td>
-        <td>{{ subfield.label(class="form-label") }}</td>
-    </tr>
-    {% endfor %}
-    <br>
-    </div>
-    <div class="form-right">
-    {{ form.grade.label(class="form-label") }}<br>
-
-    {% for subfield in form.grade %}
-    <tr>
-        <td>{{ subfield }}</td>
-        <td>{{ subfield.label(class="form-label") }}</td>
-    </tr>
-    {% endfor %}<br>
-    </div>
+    </span>
+</div>
 
 
-</span>
 </form>
-</span>
+
+
+
+
+</div>
 
 
 

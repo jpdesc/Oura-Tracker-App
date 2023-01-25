@@ -1,140 +1,150 @@
 table {
-    border-spacing: 15px;
-    text-align: center;
-    margin: auto;
+  border-spacing: 15px;
+  text-align: center;
+  margin: auto;
+  width: 75%;
 }
 
 /* body {
     font-family: 'Montserrat', sans-serif;
 } */
 
-.table {
-    text-align: center;
-    width: 50%;
+.heading {
+  margin-bottom: 30px;
+  text-align: center;
 }
 
-.form-fields {
-    padding: 30px 75px;
-    text-align: center;
-    width: 75%;
+@media (max-width: 1000px) {
+  body {
+    font-size: small;
+  }
+
+  .container {
+    max-width: 600;
+  }
 }
 
-.left-input {
-    text-align: center;
-}
-
-.right-input {
-    text-align: center;
-}
-
-.submit {
-    position: relative;
-    margin-left: 30%;
-    margin-bottom: 5%;
+@media (min-width: 1000px) {
+  body {
+    font-size: small;
+  }
+  .container {
+    max-width: 800;
+  }
 }
 
 .container {
-    padding: 3px 20px;
+  max-width: 1000px;
+}
+
+/* .table {
+  text-align: center;
+  width: 25%;
+} */
+
+.form-fields {
+  padding: 30px 75px;
+  text-align: center;
+  width: 75%;
+}
+
+.left-input {
+  text-align: center;
+}
+
+.right-input {
+  text-align: center;
+}
+
+.submit {
+  position: relative;
+  margin-left: 30%;
+  margin-bottom: 5%;
+}
+
+.container {
+  padding: 3px 20px;
 }
 
 .excs {
-    margin: 0 auto;
+  margin: 0 auto;
 }
-
 
 .weight {
-    width: 25%;
+  width: 25%;
 }
 .navbar {
-    margin-bottom: 1em;
-    padding: 1em;
+  margin-bottom: 1em;
+  padding: 1em;
 }
 
 hr {
-    border: dotted;
-    border-width: 4px 0 0 0;
-    width: 8%;
-    color: black;
-    margin: 5px auto;
+  border: dotted;
+  border-width: 4px 0 0 0;
+  width: 8%;
+  color: black;
+  margin: 5px auto;
 }
 
 h1 {
-    text-align: center;
-    padding-bottom: 25px;
+  text-align: center;
+  padding-bottom: 25px;
 }
 
 h5 {
-    text-align: center;
+  text-align: center;
 }
-
-
 
 .optional-row {
-    display: none;
+  display: none;
 }
 
-
-
 .one-rep-max {
-    text-align: center;
-    width: 60%;
-    margin: auto;
+  text-align: center;
+  width: 60%;
+  margin: auto;
 }
 
 .row {
-    text-align: center;
-    margin: auto;
+  text-align: center;
+  margin: auto;
 }
 
 .create_template {
-    text-align: center;
+  text-align: center;
 }
 
 .ex-num {
-    text-align: left;
-}
-
-.flex-container {
-    display: flex;
-    flex-wrap: nowrap;
-    flex-direction: row;
-}
-
-
-.heading {
-    text-align: center;
+  text-align: left;
 }
 
 .weights-form {
-    justify-content: left;
-    float: right;
-    text-align: left;
-    margin: 5px;
-    /* padding: 20px; */
+  text-align: center;
+  margin: 10px;
 }
 
 .form-right {
-    justify-content: left;
+  padding-left: 25px;
 }
 
 .form-left {
-    float: left;
+  padding-right: 25px;
 }
 
-.table-block {
-    display: inline-block;
-    padding: 10px;
-    justify-content: left;
-}
+/* .table-block {
+  display: inline-block;
+  padding: 10px;
+  justify-content: left;
+} */
 
 .button-left {
-    float: left;
-    padding: 10px;
-    display: flex;
+  float: left;
+  padding: 10px;
+  display: flex;
 }
 
 .button-right {
-    padding: 10px;
-    float: right;
-    display: flex;
+  padding: 10px;
+  float: right;
+  display: flex;
 }
