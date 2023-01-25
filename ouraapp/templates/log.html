@@ -97,22 +97,25 @@
     <div class="radio-grouping {% if workout and log %}both{% endif %}">
         <div class="radio-form sub">
             <ul>
-                <li>Focus: <br class="hidden-br">{{log.focus}}</li>
-                <li>Energy: <br class="hidden-br">{{log.energy}}</li>
-                <li>Mood: <br class="hidden-br">{{log.mood}}</li>
-                <li>Stress: <br class="hidden-br">{{log.stress}}</li>
+                <li>Focus: {{log.focus}}</li>
+                <li>Energy: {{log.energy}}</li>
+                <li>Mood: >{{log.mood}}</li>
+                <li>Stress: >{{log.stress}}</li>
             </ul>
+            <span class="right-icon"><i class="fa-solid fa-pen-to-square"></i></span>
         </div>
 
-        <!-- <hr> -->
+        <hr>
 
         <div class="log sub">
-            <span class="right-icon"><i class="fa-solid fa-pen-to-square"></i></span>
-            <hr>
+
+
             <i>{{log.journal}}</i>
+            <span class="right-icon"><i class="fa-regular fa-tags"></i></span>
         </div>
+
     </div>
-    <span class="right-icon"><i class="fa-regular fa-tags"></i></span><hr>
+    <hr>
     <div class="tags select sub {% if workout and log %}both{% endif %}">
         {% for tag in log.tags %}
         <a href="{{ url_for('insights.insights', filters=[tag]) }}">{{tag}}</a>
@@ -162,10 +165,6 @@
 
         </div>
         <hr>
-
-
-
-
 
         <div class="select">
             <div class="inner-select">
@@ -219,19 +218,17 @@
                                 <li>Intensity: {{workout.grade}}</li>
                                 {% endif %}
                                 </ul>
-
-                            </div>
-                            <!-- <hr> -->
                                 <span class="right-icon"><i class="fa-solid fa-pen-to-square"></i></span>
-                                    <hr>
+                            </div>
+
+                            <hr>
                             {% if workout.workout_log %}
                             <div class="log sub">
                                  <i>{{workout.workout_log}}</i><br>
                             </div>
                             {% endif %}
+                            <span class="right-icon"><i class="fa-solid fa-link"></i></span>
                         </div>
-
-                        <span class="right-icon"><i class="fa-solid fa-link"></i></span>
                             <hr>
                         <div class="select sub {% if workout and log %}both{% endif %}">
 
@@ -251,10 +248,6 @@
                                                     <p><a class="btn btn-xs btn-light" href={{url_for('weights.weights', page_id=page_id)}}><i
                                                                 class="fa-solid fa-dumbbell"></i><br>View</a><br></p>
 
-                                                    <!-- <a href="#" class="btn btn-sm btn-success"><span class="glyphicon glyphicon-plus"></span> Default text here</a> -->
-
-                                                    <!-- <p>Some representative placeholder content for the first slide.</p> -->
-
                                                 </div>
                                                 <div class="carousel-item">
                                                     <br>
@@ -264,8 +257,6 @@
                                                 <div class="carousel-item">
                                                     <br>
                                                     <p><a class="btn btn-xs btn-light" href={{url_for('dashboard.delete_workout', page_id=page_id)}}><i class="fa-solid fa-trash-can"></i><br>Delete</a><br></p>
-                                                    <!-- <a class="d-block" href={{url_for('weights.edit_weights', page_id=page_id, from_base='no' )}} class="link-success">Start Workout
-                                                                                                                                                (blank)</a> -->
                                                 </div>
                                             </div>
                                             <a class="carousel-control-prev" data-bs-target="#carouselWeightsOpts" type="button" data-bs-slide="prev">
@@ -279,15 +270,7 @@
 
                                         </div><br>
                                     </div>
-
-                                <!-- <div class="workout-links">
-                                    <a href={{url_for('weights.weights', page_id=page_id)}}>View Workout</a><br>
-                                    <a href={{url_for('weights.edit_weights', page_id=page_id, from_base=True)}}>Edit Workout</a>
-                                    <a href={{url_for('dashboard.delete_workout', page_id=page_id)}}>Delete Workout</a>
-                                </div> -->
                                 {% endif %}
-
-
                          </div>
 
 

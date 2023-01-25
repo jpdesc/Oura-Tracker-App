@@ -13,6 +13,13 @@ h5 {
   float: right;
 }
 
+.radio-form,
+.log,
+.select,
+.radio-grouping {
+  position: relative;
+}
+
 @media (min-width: 600px) {
   .hidden-br {
     display: none !important;
@@ -32,8 +39,9 @@ h5 {
 }
 
 .right-icon {
-  display: block;
-  text-align: right;
+  position: absolute;
+  right: 0;
+  bottom: 0;
 }
 
 .text-area {
@@ -78,6 +86,7 @@ h5 {
   .select {
     font-size: x-small;
     height: 190px;
+    position: relative;
   }
 
   .both.select {
@@ -163,6 +172,7 @@ h5 {
   .select {
     font-size: small;
     height: 140px;
+    position: relative;
   }
 
   .both.select {
@@ -220,6 +230,7 @@ h5 {
 
   .select {
     height: 150px;
+    position: relative;
   }
 
   .both.select {
