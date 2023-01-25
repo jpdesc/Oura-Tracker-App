@@ -65,6 +65,11 @@ h5 {
     height: 8%;
   }
 
+  .top-inner {
+    height: 190px;
+    font-size: small;
+  }
+
   .inner-col {
     height: 86%;
   }
@@ -163,6 +168,11 @@ h5 {
     height: 86%;
   }
 
+  .top-inner {
+    height: 190px;
+    font-size: small;
+  }
+
   .radio-grouping {
     font-size: small;
     max-width: 350px;
@@ -217,6 +227,10 @@ h5 {
 
   .inner-col {
     height: 86%;
+  }
+
+  .top-inner {
+    height: 240px;
   }
 
   .radio-grouping {
