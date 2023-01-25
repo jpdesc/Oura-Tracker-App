@@ -31,7 +31,7 @@ class JournalForm(FlaskForm):
     food_cutoff = FloatField('How many hours before bed was your last meal?')
     new_tags = StringField(
         'New Type',
-        widget=TextArea(),
+        # widget=TextArea(),
     )
     select_tags = QuerySelectMultipleField(query_factory=tag_query)
     submit1 = SubmitField("")

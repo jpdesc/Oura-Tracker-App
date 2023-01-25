@@ -65,18 +65,32 @@ def weights(page_id):
 @login_required
 def edit_weights(page_id, from_base):
     # logger.debug(f'page_id = {page_id}')
+    if from_base == 'True':
+        from_base = True
+    else:
+        from_base = False
+
     weights = Weights.query.filter_by(user_id=current_user.id,
                                       day_id=page_id).first()
+
     if weights:
+        print('weights exists')
         if from_base != weights.from_base:
             from_base = weights.from_base
             db.session.add(weights)
             db.session.commit()
 
     show_rep_range = False
+    print(get_current_template().id)
+    print(get_workout_id())
+    print(get_workout_week_num())
+    print(f'from_base = {from_base}')
+
     # logger.debug(f'weights_obj = {weights}')
     if not weights:
-        if from_base is True:
+        print(f'from_base = {from_base}')
+        if from_base == True:
+            print('create_with_workout_week')
             weights = Weights(day_id=page_id,
                           user_id=current_user.id,
                           template_id=get_current_template().id,
@@ -94,6 +108,7 @@ def edit_weights(page_id, from_base):
         # )
 
     if not weights.exercise_objs and from_base is True:
+        print('no exercise objs')
         if not weights.template_id:
             print('not weights.template_id')
             weights.template_id = get_current_template().id
@@ -102,31 +117,32 @@ def edit_weights(page_id, from_base):
         # logger.debug(
         #     f'weights.workout_id = {weights.workout_id}, weights.template_id= {weights.template_id}'
         # )
-            base = get_next_base_workout(weights.workout_id, weights.template_id)
-            print(f'weights.workout_id = {weights.workout_id}, weights.template_id= {weights.template_id}')
-            # logger.debug(f'base = {base}')
-            try:
-                workout_params = json.loads(base.workout_params)
-            except AttributeError:
-                flash('You must create a base template to load from.')
-                return redirect(url_for('weights.init_template', page_id=page_id))
+        base = get_next_base_workout(weights.workout_id, weights.template_id)
+        print(f'base = {base}')
+        print(f'weights.workout_id = {weights.workout_id}, weights.template_id= {weights.template_id}')
+        # logger.debug(f'base = {base}')
+        try:
+            workout_params = json.loads(base.workout_params)
+            print()
+        except AttributeError:
+            flash('You must create a base template to load from.')
+            return redirect(url_for('weights.init_template', page_id=page_id))
 
-            for entry in workout_params.values():
-                if entry[0]:
-                    exercise = Exercise(exercise_name=entry[0],
-                                        sets=entry[1],
-                                        rep_range=f'{entry[2]} - {entry[3]}',
-                                        weights_id=weights.id,
-                                        reps='',
-                                        weight='',
-                                        day_id=page_id)
-                    db.session.add(exercise)
-                if entry[2] or entry[3]:
-                    show_rep_range = True
+        for entry in workout_params.values():
+            if entry[0]:
+                exercise = Exercise(exercise_name=entry[0],
+                                    sets=entry[1],
+                                    rep_range=f'{entry[2]} - {entry[3]}',
+                                    weights_id=weights.id,
+                                    reps='',
+                                    weight='',
+                                    day_id=page_id)
+                db.session.add(exercise)
+            if entry[2] or entry[3]:
+                show_rep_range = True
             db.session.commit()
 
-    clear_exercises(page_id)
-
+    # clear_exercises(page_id)
     workout = ensure_workout_log_exists(page_id)
     form = WeightsForm(soreness=workout.soreness, grade=workout.grade)
 
@@ -168,7 +184,7 @@ def create_template(template_name, day, page_id):
                         page_id=page_id))
         flash('You have created a new workout template: {template.name}')
         return redirect(url_for('dashboard.log', page_id=page_id))
-    return render_template('create_template.html', form=workout_form, day=1)
+    return render_template('create_template.html', form=workout_form, day=day)
 
 
 @bp.route('/init_template/<page_id>', methods=['GET', 'POST'])
@@ -195,5 +211,5 @@ def init_template(page_id):
                                 user_id=current_user.id)
         db.session.add(workout_plan)
         db.session.commit()
-        return redirect(url_for('dashboard.log', page_id=page_id))
+        return redirect(url_for('weights.create_template', page_id=page_id, day=1,template_name=name))
     return render_template('init_template.html', init_form=init_form)

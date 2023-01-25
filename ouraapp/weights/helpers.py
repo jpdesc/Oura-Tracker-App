@@ -52,6 +52,7 @@ def check_improvement(this_week, last_week_id):
 
 
 def clear_exercises(page_id):
+    print('removing exercises')
     weights_obj = Weights.query.filter_by(day_id=page_id,
                                           user_id=current_user.id).first()
     if weights_obj.exercises:
