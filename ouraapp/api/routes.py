@@ -16,11 +16,6 @@ def data(page_id):
 
     query = Weights.query.filter_by(user_id=current_user.id,
                                     day_id=page_id).first()
-
-    print(query)
-    print({
-        'data': [exercise.to_dict() for exercise in query.exercise_objs],
-    })
     return {
         'data': [exercise.to_dict() for exercise in query.exercise_objs],
     }
@@ -28,7 +23,6 @@ def data(page_id):
 
 @bp.route('/api/data/<page_id>', methods=['POST'])
 def update(page_id):
-
     data = request.get_json()
     if 'id' not in data:
         abort(400)
@@ -54,7 +48,6 @@ def add_row(page_id):
 
 @bp.route('/api/remove_row/<page_id>')
 def remove_row(page_id):
-    print('remove_row')
     query = Weights.query.filter_by(day_id=page_id,
                                     user_id=current_user.id).first()
     blanks = Exercise.query.filter_by(weights_id=query.id,
@@ -71,10 +64,9 @@ def remove_row(page_id):
 def process(page_id):
     workout = Workout.query.filter_by(day_id=page_id,
                                       user_id=current_user.id).first()
-    workout.soreness = request.form['soreness']
-    workout.grade = request.form['grade']
-    # logger.debug(workout.soreness)
-    # logger.debug(workout.grade)
+    if request.form:
+        workout.soreness = request.form['soreness']
+        workout.grade = request.form['grade']
     create_event(workout, 'Weights')
     db.session.add(workout)
     db.session.commit()

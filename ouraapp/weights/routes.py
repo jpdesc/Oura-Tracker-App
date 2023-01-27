@@ -58,42 +58,42 @@ def weights(page_id):
                            page_id=page_id,
                            exercise_list=exercise_list)
 
-
-#TODO: When hitting submit workout, create a log entry for the workout.
-@bp.route('/edit_weights/from_base:<from_base>/<page_id>',
+# @bp.route('/edit_weights', defaults={'toggle': None}, methods=['GET', 'POST'])
+@bp.route('/edit_weights/from_base:<from_base>/<page_id>/<int:workout_num>/toggle_id',
           methods=['GET', 'POST'])
 @login_required
-def edit_weights(page_id, from_base):
+def edit_weights(page_id, from_base, workout_num):
     # logger.debug(f'page_id = {page_id}')
+    template = get_current_template()
+    num_days = template.num_days
+    workout_id = workout_num % num_days
+
     if from_base == 'True':
         from_base = True
     else:
         from_base = False
 
+        #Then I need to create a function that will delete the weights object and any exercises. Else proceed with line below.
     weights = Weights.query.filter_by(user_id=current_user.id,
                                       day_id=page_id).first()
+    if weights.workout_id != workout_id:
+        weights.workout_id = workout_id
+
 
     if weights:
-        print('weights exists')
+
         if from_base != weights.from_base:
             from_base = weights.from_base
-            db.session.add(weights)
-            db.session.commit()
+        db.session.add(weights)
+        db.session.commit()
 
     show_rep_range = False
-    print(get_current_template().id)
-    print(get_workout_id())
-    print(get_workout_week_num())
-    print(f'from_base = {from_base}')
-
     # logger.debug(f'weights_obj = {weights}')
     if not weights:
-        print(f'from_base = {from_base}')
         if from_base == True:
-            print('create_with_workout_week')
             weights = Weights(day_id=page_id,
                           user_id=current_user.id,
-                          template_id=get_current_template().id,
+                          template_id=template.id,
                           workout_id=get_workout_id(),
                           workout_week=get_workout_week_num(),
                           from_base=True)
@@ -108,22 +108,17 @@ def edit_weights(page_id, from_base):
         # )
 
     if not weights.exercise_objs and from_base is True:
-        print('no exercise objs')
         if not weights.template_id:
-            print('not weights.template_id')
-            weights.template_id = get_current_template().id
+            weights.template_id = template.id
             db.session.add(weights)
             db.session.commit()
         # logger.debug(
         #     f'weights.workout_id = {weights.workout_id}, weights.template_id= {weights.template_id}'
         # )
         base = get_next_base_workout(weights.workout_id, weights.template_id)
-        print(f'base = {base}')
-        print(f'weights.workout_id = {weights.workout_id}, weights.template_id= {weights.template_id}')
         # logger.debug(f'base = {base}')
         try:
             workout_params = json.loads(base.workout_params)
-            print()
         except AttributeError:
             flash('You must create a base template to load from.')
             return redirect(url_for('weights.init_template', page_id=page_id))
@@ -147,11 +142,14 @@ def edit_weights(page_id, from_base):
     form = WeightsForm(soreness=workout.soreness, grade=workout.grade)
 
     return render_template('edit_workout.html',
+                           num_days=num_days,
+                           toggle=num_days,
                            form=form,
                            page_id=page_id,
                            from_base=from_base,
                            weights=weights,
-                           show_rep_range=show_rep_range)
+                           show_rep_range=show_rep_range
+                           )
 
 
 @bp.route('/create_template/<template_name>/<day>/<page_id>',
@@ -175,7 +173,6 @@ def create_template(template_name, day, page_id):
             user_id=current_user.id)
         db.session.add(workout_template)
         db.session.commit()
-        print(template.num_days)
         if int(day) != template.num_days:
             return redirect(
                 url_for('weights.create_template',

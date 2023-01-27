@@ -119,7 +119,6 @@ def edit_log(page_id):
     else:
         workout_form = WorkoutForm()
     if wellness_form.validate_on_submit():
-        print('wellness_form validate on submit')
         log.focus = wellness_form.focus.data
         log.mood = wellness_form.mood.data
         log.energy = wellness_form.energy.data
@@ -140,7 +139,6 @@ def edit_log(page_id):
         return redirect(url_for('dashboard.log', page_id=page_id))
 
     if workout_form.validate_on_submit():
-        print('workout_form validate on submit')
         workout = Workout.query.filter_by(day_id=page_id).first()
         if not workout:
             workout = Workout()

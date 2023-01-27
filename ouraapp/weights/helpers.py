@@ -17,12 +17,6 @@ dir_path = os.path.dirname(os.path.realpath(__file__))
 def get_next_base_workout(workout_id, template_id):
     # logger.debug(f'current_template.id = {get_current_template().id}')
     logger.debug(f'day_num = {workout_id}')
-    # logger.debug(
-    #     f'type_current_template.id = {type(get_current_template().id)}')
-    # logger.debug(f'type_current_template.id = {type(get_workout_id())}')
-    # logger.debug(
-    #     f'query result = {BaseWorkout.query.filter_by(day_num=get_workout_id(), template_id=get_current_template().id).first()}'
-    # )
     return BaseWorkout.query.filter_by(day_num=workout_id,
                                        template_id=template_id).first()
 
@@ -52,7 +46,6 @@ def check_improvement(this_week, last_week_id):
 
 
 def clear_exercises(page_id):
-    print('removing exercises')
     weights_obj = Weights.query.filter_by(day_id=page_id,
                                           user_id=current_user.id).first()
     if weights_obj.exercises:
@@ -94,11 +87,9 @@ def get_workout_id():
         weights = Weights.query.order_by(Weights.id).filter_by(user_id=current_user.id, template_id=current_template.id).all()
         idx = -1
         while not weights[idx].workout_id and len(weights) + idx > 0:
-            print('template_id not found')
             db.session.delete(weights[idx])
             idx -= 1
         db.session.commit()
-        print(f'weights[idx] = {weights[idx]}')
 
         last_workout = weights[idx]
         if last_workout.workout_id:
@@ -120,11 +111,9 @@ def get_workout_week_num():
         weights = Weights.query.order_by(Weights.id).filter_by(user_id=current_user.id, template_id=current_template.id).all()
         idx = -1
         while not weights[idx].workout_week and len(weights) + idx > 0:
-            print('template_id not found')
             db.session.delete(weights[idx])
             idx -= 1
         db.session.commit()
-        print(f'weights[idx] = {weights[idx]}')
 
         last_workout = weights[idx]
         if last_workout.workout_id == num_days:

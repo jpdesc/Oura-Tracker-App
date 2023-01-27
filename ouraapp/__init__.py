@@ -3,11 +3,15 @@ import logging
 from flask import Flask
 from .extensions import migrate, bootstrap, login_manager, db, mail
 from .helpers import update_days_db
+import flask_monitoringdashboard as dashboard_monitor
 
 
 def create_app():
     app = Flask(__name__)
     app.config.from_pyfile('../config.py')
+    print(f'current directory contents: {os.listdir()}')
+    dashboard_monitor.config.init_from(file='config.cfg')
+
     with app.app_context():
         db.init_app(app)
         migrate.init_app(app, db)
@@ -15,6 +19,7 @@ def create_app():
         mail.init_app(app)
         login_manager.init_app(app)
         login_manager.login_view = 'login'
+        dashboard_monitor.bind(app)
         update_days_db()
         from ouraapp.auth import bp as auth_bp
         app.register_blueprint(auth_bp)

@@ -18,6 +18,9 @@ class Weights(db.Model):
     exercise_objs = db.relationship('Exercise', backref='weights')
     from_base = db.Column(db.Boolean)
 
+    def get_workout_num(self):
+        return self.workout_id * self.workout_week
+
 
 def check_last_week_excs(exercise_name, last_week_id):
     exercise_prev = Exercise.query.filter_by(exercise_name=exercise_name,
@@ -41,7 +44,6 @@ def get_last_week_excs(weights_id, exercise_name):
                 template_id=this_week.template_id).first()
             exercise_prev = check_last_week_excs(exercise_name, last_week.id)
             weeks_subtract += 1
-        print(exercise_prev)
         return exercise_prev
     return None
 

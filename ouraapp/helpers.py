@@ -6,7 +6,6 @@ from sqlalchemy import func
 
 def update_days_db():
     last_id = db.session.query(func.max(Day.id)).scalar()
-    print(last_id)
     if last_id:
         next_id = last_id + 1
         last_day_obj = Day.query.filter(Day.id == last_id).first()

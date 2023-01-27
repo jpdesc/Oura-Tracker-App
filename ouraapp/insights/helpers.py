@@ -152,7 +152,6 @@ def format_filters(form):
 
 
 def convert_seconds(seconds):
-    print(seconds)
     hour = seconds // 3600
     seconds %= 3600
     minutes = seconds // 60

@@ -23,20 +23,12 @@ def pull_oura_data():
     # logger.debug(
     #     f'current_user.oura_access_token = {current_user.oura_access_token}')
     oura_token = current_user.oura_access_token
-    print(oura_token)
     oura_client = OuraClient(personal_access_token=oura_token)
     start_date = date(2022, 1, 1)
     sleep_summary = oura_client.sleep_summary(start=str(start_date))
     readiness_summary = oura_client.readiness_summary(start=str(start_date))
     sleep_json = json.dumps(sleep_summary)
     readiness_json = json.dumps(readiness_summary)
-    # print(f'pull_oura_data output: {[sleep_json, readiness_json]}')
-    # sleep_obj = open('sleep_data.txt', 'w')
-    # readiness_obj = open('readiness_data.txt', 'w')
-    # sleep_obj.write(sleep_json)
-    # readiness_obj.write(readiness_json)
-    # sleep_obj.close()
-    # readiness_obj.close()
     return [sleep_json, readiness_json]
 
 
@@ -150,7 +142,6 @@ def setup_oura_data():
 
 def send_async_email(app, msg):
     with app.app_context():
-        print(msg)
         mail.send(msg)
 
 

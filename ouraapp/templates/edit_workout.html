@@ -24,7 +24,9 @@
 
 {% if from_base==True %}
 <div class="heading">
-    <h5>Week {{weights.workout_week}}, Day {{weights.workout_id}}</h5>
+    <span><button id="left" class="toggle btn-toggle"><i class="fa-solid fa-chevron-left"></i></button></span>
+    <span>Week {{weights.workout_week}}, Day {{weights.workout_id}}</span>
+    <span><button id="right" class="toggle btn-toggle"><i class="fa-solid fa-chevron-right"></i></button></span>
 </div>
 {% else %}
 <div class="heading">
@@ -76,14 +78,18 @@
 
 
 </form>
-
-
-
-
 </div>
 
 
+<script>
+    document.getElementById("left").onclick = function () {
+        location.href = '{{ url_for('weights.edit_weights', page_id=page_id, from_base=True, toggle=-1) }}'
+    }
 
+    document.getElementById("right").onclick = function () {
+        location.href = '{{ url_for('weights.edit_weights', page_id=page_id, from_base=True, toggle=1) }}'
+    }
+</script>
 
 
 <script src="https://unpkg.com/gridjs/dist/gridjs.umd.js"></script>

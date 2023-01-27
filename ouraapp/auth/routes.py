@@ -18,7 +18,6 @@ def load_user(user_id):
     '''Check if user is logged in on every page load.'''
     if user_id is not None:
         return User.query.get(int(user_id))
-    print('user_id is None')
     return None
 
 
