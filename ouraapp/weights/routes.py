@@ -100,12 +100,14 @@ def edit_weights(page_id, from_base):
     if not weights:
         if from_base == True:
             workout_id = get_workout_id()
+            workout_week=get_workout_week_num()
             weights = Weights(day_id=page_id,
                           user_id=current_user.id,
                           template_id=template.id,
                           workout_id=workout_id,
-                          workout_week=get_workout_week_num(),
+                          workout_week=workout_week,
                           og_workout_id=workout_id,
+                          og_workout_week=workout_week,
                           from_base=True)
         else:
             weights = Weights(day_id=page_id,

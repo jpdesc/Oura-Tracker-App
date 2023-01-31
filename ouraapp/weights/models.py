@@ -13,6 +13,7 @@ class Weights(db.Model):
     workout_id = db.Column(db.Integer)
     workout_week = db.Column(db.Integer)
     og_workout_id = db.Column(db.Integer)
+    og_workout_week = db.Column(db.Integer)
     template_id = db.Column(db.Integer, db.ForeignKey('template.id'))
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
     base_id = db.Column(db.Integer, db.ForeignKey('base_workout.id'))
