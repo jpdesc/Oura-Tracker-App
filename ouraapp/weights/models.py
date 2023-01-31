@@ -1,5 +1,5 @@
 from ouraapp.extensions import db
-
+from flask_login import current_user
 
 class Weights(db.Model):
     __tablename__ = 'weights'
@@ -12,6 +12,7 @@ class Weights(db.Model):
     subbed = db.Column(db.String)
     workout_id = db.Column(db.Integer)
     workout_week = db.Column(db.Integer)
+    og_workout_id = db.Column(db.Integer)
     template_id = db.Column(db.Integer, db.ForeignKey('template.id'))
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
     base_id = db.Column(db.Integer, db.ForeignKey('base_workout.id'))
@@ -20,6 +21,12 @@ class Weights(db.Model):
 
     def get_workout_num(self):
         return self.workout_id * self.workout_week
+
+    def get_num_days(self):
+        template = Template.query.filter_by(user_id=current_user.id).order_by(
+                    Template.id.desc()).first()
+        return template.num_days
+
 
 
 def check_last_week_excs(exercise_name, last_week_id):

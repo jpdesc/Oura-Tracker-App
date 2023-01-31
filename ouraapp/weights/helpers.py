@@ -2,7 +2,7 @@
 import os
 # import re
 # from google.oauth2 import service_account
-# from googleapiclient.discovery import build
+
 from flask_login import current_user
 from ouraapp.models import db
 from .models import Weights, Template, BaseWorkout, Exercise
@@ -19,6 +19,10 @@ def get_next_base_workout(workout_id, template_id):
     logger.debug(f'day_num = {workout_id}')
     return BaseWorkout.query.filter_by(day_num=workout_id,
                                        template_id=template_id).first()
+
+def get_weights_obj(page_id):
+    weights = Weights.query.filter_by(user_id=current_user.id, day_id=page_id).first()
+    return weights
 
 
 def check_improvement(this_week, last_week_id):
@@ -46,8 +50,7 @@ def check_improvement(this_week, last_week_id):
 
 
 def clear_exercises(page_id):
-    weights_obj = Weights.query.filter_by(day_id=page_id,
-                                          user_id=current_user.id).first()
+    weights_obj = get_weights_obj(page_id)
     if weights_obj.exercises:
         for exercise in weights_obj.exercises:
             db.session.delete(exercise)
@@ -123,6 +126,35 @@ def get_workout_week_num():
     else:
         week = 1
     return week
+
+def apply_toggle(weights, toggle):
+    workout_num = weights.get_workout_num()
+    total_days = weights.get_num_days()
+    new_workout_num = workout_num + toggle
+    next_week = total_days * weights.workout_week < new_workout_num
+    prev_week = total_days * (weights.workout_week - 1) >= new_workout_num
+
+    if next_week:
+        weights.workout_week = weights.workout_week + 1
+        weights.workout_id = 1
+    elif prev_week and weights.workout_week > 1:
+        weights.workout_week = weights.workout_week - 1
+        weights.workout_id = total_days
+    else:
+        weights.workout_id = weights.workout_id + toggle
+    db.session.add(weights)
+    db.session.commit()
+
+
+def delete_exercises(weights_id):
+    Exercise.query.filter_by(weights_id = weights_id).delete()
+    db.session.commit()
+# def load_template(weights):
+
+    # weights.workout_id
+    # print(new_workout_num)
+    # print(new_workout_num // total_days)
+    # print(new_workout_num % total_days)
 
 
 def get_current_template():

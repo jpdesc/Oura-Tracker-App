@@ -1,5 +1,7 @@
 from flask import render_template, redirect, url_for, request, flash
-from .helpers import check_improvement, get_next_base_workout, clear_exercises, ensure_workout_log_exists, get_current_template, get_workout_id, get_workout_week_num
+from .helpers import check_improvement, get_next_base_workout, clear_exercises, \
+ensure_workout_log_exists, get_current_template, get_workout_id, \
+get_workout_week_num, get_weights_obj, apply_toggle, delete_exercises
 from .models import Weights, Template, BaseWorkout, Exercise
 from ouraapp.dashboard.models import Workout
 from flask_login import login_required, current_user
@@ -58,30 +60,36 @@ def weights(page_id):
                            page_id=page_id,
                            exercise_list=exercise_list)
 
-# @bp.route('/edit_weights', defaults={'toggle': None}, methods=['GET', 'POST'])
-@bp.route('/edit_weights/from_base:<from_base>/<page_id>/<int:workout_num>/toggle_id',
+
+@bp.route('/toggle_workout/<page_id>/<toggle>',
           methods=['GET', 'POST'])
 @login_required
-def edit_weights(page_id, from_base, workout_num):
+def toggle_workout(page_id, toggle):
+
+
+    weights = get_weights_obj(page_id)
+    delete_exercises(weights.id)
+    apply_toggle(weights, int(toggle))
+
+    return redirect(url_for('weights.edit_weights', page_id=page_id, from_base='True'))
+
+
+# @bp.route('/edit_weights', defaults={'toggle': None}, methods=['GET', 'POST'])
+@bp.route('/edit_weights/from_base:<from_base>/<page_id>',
+          methods=['GET', 'POST'])
+@login_required
+def edit_weights(page_id, from_base):
     # logger.debug(f'page_id = {page_id}')
     template = get_current_template()
-    num_days = template.num_days
-    workout_id = workout_num % num_days
 
     if from_base == 'True':
         from_base = True
     else:
         from_base = False
 
-        #Then I need to create a function that will delete the weights object and any exercises. Else proceed with line below.
-    weights = Weights.query.filter_by(user_id=current_user.id,
-                                      day_id=page_id).first()
-    if weights.workout_id != workout_id:
-        weights.workout_id = workout_id
-
+    weights = get_weights_obj(page_id)
 
     if weights:
-
         if from_base != weights.from_base:
             from_base = weights.from_base
         db.session.add(weights)
@@ -91,11 +99,13 @@ def edit_weights(page_id, from_base, workout_num):
     # logger.debug(f'weights_obj = {weights}')
     if not weights:
         if from_base == True:
+            workout_id = get_workout_id()
             weights = Weights(day_id=page_id,
                           user_id=current_user.id,
                           template_id=template.id,
-                          workout_id=get_workout_id(),
+                          workout_id=workout_id,
                           workout_week=get_workout_week_num(),
+                          og_workout_id=workout_id,
                           from_base=True)
         else:
             weights = Weights(day_id=page_id,
@@ -103,9 +113,6 @@ def edit_weights(page_id, from_base, workout_num):
                                 from_base=False)
         db.session.add(weights)
         db.session.commit()
-        # logger.debug(
-        #     f'workout_week = {weights.workout_week}, workout_id={weights.workout_id}, template_id={weights.template_id}'
-        # )
 
     if not weights.exercise_objs and from_base is True:
         if not weights.template_id:
@@ -116,6 +123,7 @@ def edit_weights(page_id, from_base, workout_num):
         #     f'weights.workout_id = {weights.workout_id}, weights.template_id= {weights.template_id}'
         # )
         base = get_next_base_workout(weights.workout_id, weights.template_id)
+        print(base.day_num)
         # logger.debug(f'base = {base}')
         try:
             workout_params = json.loads(base.workout_params)
@@ -142,8 +150,6 @@ def edit_weights(page_id, from_base, workout_num):
     form = WeightsForm(soreness=workout.soreness, grade=workout.grade)
 
     return render_template('edit_workout.html',
-                           num_days=num_days,
-                           toggle=num_days,
                            form=form,
                            page_id=page_id,
                            from_base=from_base,
