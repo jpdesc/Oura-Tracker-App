@@ -24,17 +24,21 @@
 
 {% if from_base==True %}
 <div class="heading">
+    {% if allow_toggle[0] == True %}
     <span>
         <button id="left" class="toggle btn-toggle">
             <i class="fa-solid fa-chevron-left"></i>
         </button>
+    {% endif %}
     </span>
     <span>Week {{weights.workout_week}}, Day {{weights.workout_id}}</span>
+    {% if allow_toggle[1] == True %}
     <span>
         <button id="right" class="toggle btn-toggle">
             <i class="fa-solid fa-chevron-right"></i>
         </button>
     </span>
+    {% endif %}
 </div>
 {% else %}
 <div class="heading">
@@ -93,7 +97,8 @@
     let right = document.getElementById("right");
     let left = document.getElementById("left");
 
-    right.addEventListener('click', () => {
+    if (right) {
+        right.addEventListener('click', () => {
         var xhr = new XMLHttpRequest();
         event.preventDefault();
         $.ajax({
@@ -109,13 +114,13 @@
           document.write(response)
           console.log(xhr.responseURL)
           window.history.pushState(undefined, '', xhr.responseURL)
-          grid.forceRender()
           window.location.reload();
         });
-
     });
+}
 
-     left.addEventListener('click', () => {
+    if (left) {
+        left.addEventListener('click', () => {
         var xhr = new XMLHttpRequest();
         event.preventDefault();
         $.ajax({
@@ -131,10 +136,11 @@
           document.write(response)
           console.log(xhr.responseURL)
           window.history.pushState(undefined, '', xhr.responseURL)
-          grid.forceRender()
           window.location.reload();
         });
-});
+    });
+}
+
 
 </script>
 

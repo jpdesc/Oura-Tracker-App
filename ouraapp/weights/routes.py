@@ -1,7 +1,8 @@
 from flask import render_template, redirect, url_for, request, flash
 from .helpers import check_improvement, get_next_base_workout, clear_exercises, \
 ensure_workout_log_exists, get_current_template, get_workout_id, \
-get_workout_week_num, get_weights_obj, apply_toggle, delete_exercises
+get_workout_week_num, get_weights_obj, apply_toggle, delete_exercises, \
+    allow_toggle_check
 from .models import Weights, Template, BaseWorkout, Exercise
 from ouraapp.dashboard.models import Workout
 from flask_login import login_required, current_user
@@ -65,8 +66,6 @@ def weights(page_id):
           methods=['GET', 'POST'])
 @login_required
 def toggle_workout(page_id, toggle):
-
-
     weights = get_weights_obj(page_id)
     delete_exercises(weights.id)
     apply_toggle(weights, int(toggle))
@@ -92,8 +91,8 @@ def edit_weights(page_id, from_base):
     if weights:
         if from_base != weights.from_base:
             from_base = weights.from_base
-        db.session.add(weights)
-        db.session.commit()
+            db.session.add(weights)
+            db.session.commit()
 
     show_rep_range = False
     # logger.debug(f'weights_obj = {weights}')
@@ -156,7 +155,8 @@ def edit_weights(page_id, from_base):
                            page_id=page_id,
                            from_base=from_base,
                            weights=weights,
-                           show_rep_range=show_rep_range
+                           show_rep_range=show_rep_range,
+                           allow_toggle=allow_toggle_check(weights)
                            )
 
 

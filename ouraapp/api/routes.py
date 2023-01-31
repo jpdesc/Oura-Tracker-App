@@ -16,6 +16,7 @@ def data(page_id):
 
     query = Weights.query.filter_by(user_id=current_user.id,
                                     day_id=page_id).first()
+    print([exercise.to_dict() for exercise in query.exercise_objs])
     return {
         'data': [exercise.to_dict() for exercise in query.exercise_objs],
     }

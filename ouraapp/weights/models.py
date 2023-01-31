@@ -21,7 +21,13 @@ class Weights(db.Model):
     from_base = db.Column(db.Boolean)
 
     def get_workout_num(self):
-        return self.workout_id * self.workout_week
+        return self.get_num_days() * (self.workout_week - 1) + self.workout_id
+
+    def get_og_workout_num(self):
+        return self.get_num_days() * (self.og_workout_week - 1) + self.og_workout_id
+
+    def get_max_workout_num(self):
+        return self.get_og_workout_num() + self.get_num_days() - 1
 
     def get_num_days(self):
         template = Template.query.filter_by(user_id=current_user.id).order_by(

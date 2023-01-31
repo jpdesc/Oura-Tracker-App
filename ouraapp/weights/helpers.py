@@ -133,7 +133,8 @@ def apply_toggle(weights, toggle):
     new_workout_num = workout_num + toggle
     next_week = total_days * weights.workout_week < new_workout_num
     prev_week = total_days * (weights.workout_week - 1) >= new_workout_num
-
+    print(next_week)
+    print(prev_week)
     if next_week:
         weights.workout_week = weights.workout_week + 1
         weights.workout_id = 1
@@ -141,13 +142,29 @@ def apply_toggle(weights, toggle):
         weights.workout_week = weights.workout_week - 1
         weights.workout_id = total_days
     else:
-        weights.workout_id = weights.workout_id + toggle
+        if weights.workout_week > 1:
+            weights.workout_id = weights.workout_id + toggle
     db.session.add(weights)
     db.session.commit()
 
+def allow_toggle_check(weights):
+    og_workout_num = weights.get_og_workout_num()
+    workout_num = weights.get_workout_num()
+    max_workout_num = weights.get_max_workout_num()
+
+    left = True
+    right = True
+
+    if workout_num <= og_workout_num:
+        left = False
+    elif workout_num >= max_workout_num:
+        right = False
+    return left, right
+
+
 
 def delete_exercises(weights_id):
-    Exercise.query.filter_by(weights_id = weights_id).delete()
+    Exercise.query.filter_by(weights_id=weights_id).delete()
     db.session.commit()
 # def load_template(weights):
 
