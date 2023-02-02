@@ -10,7 +10,7 @@ class Tag(db.Model):
     __tablename__ = 'tag'
     id = db.Column(db.Integer, primary_key=True, unique=True)
     day_id = db.Column(db.Integer)
-    tag = db.Column(db.String, unique=True)
+    tag = db.Column(db.String)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
 
     def __repr__(self):
