@@ -6,3 +6,4 @@ __pycache__
 *.update
 local_backup.sh
 ouraapp.log
+*.db
