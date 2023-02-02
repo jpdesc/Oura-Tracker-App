@@ -4,9 +4,14 @@ from wtforms.widgets import TextArea
 from wtforms.validators import DataRequired, InputRequired
 from .models import Tag
 from wtforms_sqlalchemy.fields import QuerySelectMultipleField
+from flask_login import current_user
+import logging
+
+logger = logging.getLogger("ouraapp")
 
 
 def tag_query():
+    logger.debug(f'tag_query test: {Tag.query.order_by(Tag.tag).filter(Tag.user_id == current_user.id)}')
     return Tag.query.order_by(Tag.tag)
 
 
