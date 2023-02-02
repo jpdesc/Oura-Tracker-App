@@ -12,7 +12,7 @@ logger = logging.getLogger("ouraapp")
 
 def tag_query():
     logger.debug(f'tag_query test: {Tag.query.order_by(Tag.tag).filter(Tag.user_id == current_user.id)}')
-    return Tag.query.order_by(Tag.tag)
+    return Tag.query.order_by(Tag.tag).filter(Tag.user_id == current_user.id)
 
 
 class JournalForm(FlaskForm):
