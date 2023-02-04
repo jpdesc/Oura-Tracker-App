@@ -33,7 +33,7 @@ def profile(edit):
         db.session.add(user)
         db.session.commit()
 
-        return redirect(url_for('profile', edit=0))
+        return redirect(url_for('profile.profile', edit=0))
 
     return render_template('profile.html',
                            form=form,
